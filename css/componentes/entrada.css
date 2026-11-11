@@ -1,0 +1,160 @@
+/*
+ * Obsidiana · entrada de texto y área de texto.
+ *
+ *   <input class="ob-entrada" placeholder="Número de pedido">
+ *   <textarea class="ob-area" rows="4"></textarea>
+ *
+ * Con icono, prefijo, sufijo o acción, se envuelve en .ob-entrada-caja:
+ *   <div class="ob-entrada-caja">
+ *     <span class="ob-entrada-caja__icono" data-icono="buscar"></span>
+ *     <input class="ob-entrada" type="search" placeholder="Buscar">
+ *     <span class="ob-entrada-caja__sufijo">USD</span>
+ *   </div>
+ *
+ * Estados: :hover · :focus (anillo de 3 px acento-suave) · aria-invalid="true" · :disabled ·
+ * readonly (borde discontinuo: valor calculado). Compacta: --sm. Cifras a la derecha: --cifras.
+ */
+
+/* Receta de campo compartida: entrada, área y disparadores con aspecto de campo */
+.ob-entrada,
+.ob-area,
+.ob-selector__disparador,
+select.ob-selector {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: var(--alto-control);
+  padding: 0 var(--esp-2-5);
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--r-control);
+  background-color: var(--campo);
+  color: var(--texto-1);
+  font-size: var(--txt-cuerpo);
+  line-height: var(--txt-cuerpo-alto);
+  box-shadow: var(--sombra-control);
+  transition:
+    border-color var(--t-hover) var(--curva),
+    box-shadow var(--t-hover) var(--curva),
+    background-color var(--t-hover) var(--curva);
+}
+.ob-entrada:hover:not(:disabled),
+.ob-area:hover:not(:disabled),
+.ob-selector__disparador:hover:not(:disabled),
+select.ob-selector:hover:not(:disabled) {
+  border-color: var(--linea-hover);
+  background-color: var(--campo-hover);
+}
+.ob-entrada:focus,
+.ob-area:focus,
+.ob-selector__disparador:focus-visible,
+.ob-selector__disparador[aria-expanded="true"],
+select.ob-selector:focus-visible {
+  outline: none;
+  border-color: var(--acento);
+  box-shadow:
+    var(--sombra-control),
+    0 0 0 3px var(--acento-suave);
+}
+.ob-entrada[aria-invalid="true"],
+.ob-area[aria-invalid="true"],
+.ob-selector__disparador[aria-invalid="true"],
+select.ob-selector[aria-invalid="true"] {
+  border-color: var(--rojo);
+}
+.ob-entrada[aria-invalid="true"]:focus,
+.ob-area[aria-invalid="true"]:focus,
+.ob-selector__disparador[aria-invalid="true"]:focus-visible {
+  box-shadow:
+    var(--sombra-control),
+    0 0 0 3px var(--anillo-error);
+}
+.ob-entrada:disabled,
+.ob-area:disabled,
+.ob-selector__disparador:disabled,
+select.ob-selector:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+/* Solo lectura: valor calculado */
+.ob-entrada:read-only:not(:disabled),
+.ob-area:read-only:not(:disabled) {
+  border-style: dashed;
+  background-color: transparent;
+  color: var(--texto-2);
+  box-shadow: none;
+}
+.ob-entrada:read-only:focus,
+.ob-area:read-only:focus {
+  border-color: var(--linea-hover);
+  box-shadow: none;
+}
+
+.ob-entrada--sm {
+  height: var(--alto-control-compacto);
+  font-size: var(--txt-etiqueta);
+}
+.ob-entrada--cifras {
+  text-align: right;
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-entrada--codigo {
+  font-family: var(--fuente-codigo);
+  font-size: var(--txt-codigo);
+  font-feature-settings: normal;
+}
+
+.ob-area {
+  height: auto;
+  min-height: 80px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  resize: vertical;
+}
+
+/* Caja con icono, prefijo, sufijo o acción */
+.ob-entrada-caja {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+.ob-entrada-caja__icono {
+  position: absolute;
+  left: var(--esp-2-5);
+  display: flex;
+  color: var(--texto-3);
+  pointer-events: none;
+}
+.ob-entrada-caja__prefijo,
+.ob-entrada-caja__sufijo {
+  position: absolute;
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+  pointer-events: none;
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-entrada-caja__prefijo {
+  left: var(--esp-2-5);
+}
+.ob-entrada-caja__sufijo {
+  right: var(--esp-2-5);
+}
+.ob-entrada-caja__accion {
+  position: absolute;
+  right: 2px;
+  display: flex;
+}
+.ob-entrada-caja:has(.ob-entrada-caja__icono) .ob-entrada {
+  padding-left: var(--esp-8);
+}
+.ob-entrada-caja:has(.ob-entrada-caja__prefijo) .ob-entrada {
+  padding-left: 44px;
+}
+.ob-entrada-caja:has(.ob-entrada-caja__sufijo, .ob-entrada-caja__accion) .ob-entrada {
+  padding-right: var(--esp-10);
+}
+.ob-entrada-caja:has(.ob-entrada:disabled) :is(.ob-entrada-caja__icono, .ob-entrada-caja__sufijo) {
+  opacity: 0.5;
+}

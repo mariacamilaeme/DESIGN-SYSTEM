@@ -1,0 +1,1821 @@
+<!doctype html>
+<html lang="es" data-theme="oscuro">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Obsidiana · Catálogo</title>
+    <meta name="description" content="Catálogo vivo del sistema de diseño Obsidiana: tokens, tipografía, iconos, primitivas, componentes, datos, movimiento y patrones.">
+    <!-- Tema antes del primer pintado: evita el parpadeo -->
+    <script>
+      try {
+        var t = localStorage.getItem("obsidiana:tema");
+        document.documentElement.setAttribute("data-theme", t === "claro" ? "claro" : "oscuro");
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "oscuro");
+      }
+    </script>
+    <link rel="stylesheet" href="css/obsidiana.css">
+    <link rel="stylesheet" href="iconos/iconos.css">
+    <style>
+      /* Solo para el catálogo (prefijo cat-): composición de las páginas de muestra */
+      .cat-seccion { display: flex; flex-direction: column; gap: var(--esp-4); }
+      .cat-seccion + .cat-seccion { margin-top: var(--esp-10); }
+      .cat-seccion__cabeza { display: flex; flex-direction: column; gap: var(--esp-1); }
+      .cat-seccion__titulo { font-size: var(--txt-cifra-2); line-height: var(--txt-cifra-2-alto); font-weight: 600; letter-spacing: var(--txt-cifra-2-espacio); color: var(--texto-1); }
+      .cat-seccion__texto { max-width: 760px; color: var(--texto-2); }
+      .cat-demo { display: flex; flex-direction: column; min-width: 0; }
+      .cat-demo__area { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-3); padding: var(--esp-5) var(--esp-4-5); min-width: 0; }
+      .cat-demo__area--col { flex-direction: column; align-items: stretch; }
+      .cat-demo__area--centro { justify-content: center; min-height: 148px; }
+      .cat-demo__area > [data-demo] { display: contents; }
+      .cat-demo__area--col > [data-demo] { display: flex; flex-direction: column; gap: var(--esp-3); }
+      .cat-matriz { display: grid; grid-template-columns: 112px repeat(6, minmax(0, 1fr)); align-items: center; gap: var(--esp-3) var(--esp-4); width: 100%; }
+      .cat-matriz__cab { font-size: var(--txt-mini); line-height: var(--txt-mini-alto); color: var(--texto-3); }
+      .cat-matriz__fila { font-size: var(--txt-etiqueta); font-weight: 500; color: var(--texto-2); }
+      .cat-estado { display: flex; flex-direction: column; align-items: flex-start; gap: var(--esp-2); min-width: 0; }
+      .cat-estado__nombre { font-size: var(--txt-mini); line-height: var(--txt-mini-alto); color: var(--texto-3); }
+      .cat-fila { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-3); }
+      .cat-etiqueta { font-size: var(--txt-etiqueta); line-height: var(--txt-etiqueta-alto); font-weight: 500; color: var(--texto-3); }
+      .cat-bloque { display: flex; flex-direction: column; gap: var(--esp-3); min-width: 0; }
+      .cat-ancho { width: 100%; }
+      .cat-principio { display: flex; flex-direction: column; gap: var(--esp-2); padding: var(--esp-4-5); }
+      .cat-principio__marca { display: grid; width: 32px; height: 32px; place-items: center; margin-bottom: var(--esp-2); border: 1px solid var(--linea); border-radius: var(--r-control); background: var(--sup-2); color: var(--texto-2); }
+      .cat-principio__titulo { font-size: var(--txt-titulo-tarjeta); line-height: var(--txt-titulo-tarjeta-alto); font-weight: 600; letter-spacing: var(--txt-titulo-tarjeta-espacio); }
+      .cat-principio__texto { color: var(--texto-2); }
+      .cat-temas { display: grid; grid-template-columns: 1fr 1fr; gap: var(--esp-4); }
+      .cat-tema { padding: var(--esp-5); border-radius: var(--r-tarjeta); background: var(--lienzo); border: 1px solid var(--linea); color: var(--texto-1); }
+      .cat-tema__cabeza { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--esp-4); }
+      .cat-muestras { display: grid; grid-template-columns: 1fr 1fr; gap: var(--esp-3) var(--esp-4); }
+      .cat-muestras__grupo { grid-column: 1 / -1; margin-top: var(--esp-2); font-size: var(--txt-etiqueta); color: var(--texto-3); }
+      .cat-muestras__grupo:first-child { margin-top: 0; }
+      .cat-muestra { display: flex; align-items: center; gap: var(--esp-3); min-width: 0; padding: 2px; border-radius: var(--r-control); text-align: left; transition: background-color var(--t-hover) ease; }
+      .cat-muestra:hover { background: var(--lavado); }
+      .cat-muestra__color { flex: none; width: 32px; height: 32px; border-radius: var(--r-control); box-shadow: inset 0 0 0 1px var(--linea-fuerte); }
+      .cat-muestra__nombre { display: block; font-family: var(--fuente-codigo); font-size: 12px; line-height: 16px; color: var(--texto-1); }
+      .cat-muestra__valor { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--fuente-codigo); font-size: 11px; line-height: 15px; color: var(--texto-3); }
+      .cat-radios { display: flex; flex-wrap: wrap; gap: var(--esp-5); }
+      .cat-radio { display: flex; flex-direction: column; gap: var(--esp-2); }
+      .cat-radio__caja { width: 88px; height: 64px; border: 1px solid var(--linea-fuerte); background: var(--sup-2); }
+      .cat-sombras { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--esp-5); }
+      .cat-sombra__caja { height: 88px; border-radius: var(--r-tarjeta); background: var(--sup-1); }
+      .cat-escala { display: flex; flex-direction: column; gap: var(--esp-2); }
+      .cat-escala__fila { display: grid; grid-template-columns: 96px 64px 1fr; align-items: center; gap: var(--esp-3); }
+      .cat-escala__barra { height: 8px; border-radius: 2px; background: var(--acento-suave); box-shadow: inset 0 0 0 1px var(--borde-acento); }
+      .cat-tipo { display: grid; grid-template-columns: 180px minmax(0, 1fr) 220px; align-items: baseline; gap: var(--esp-6); padding: var(--esp-4) var(--esp-4-5); border-bottom: 1px solid var(--linea); }
+      .cat-tipo:last-child { border-bottom: 0; }
+      .cat-tipo__spec { font-family: var(--fuente-codigo); font-size: 11.5px; line-height: 16px; color: var(--texto-3); }
+      .cat-iconos { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: var(--esp-2); }
+      .cat-icono { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--esp-2-5); height: 96px; padding: var(--esp-2); border: 1px solid var(--linea); border-radius: var(--r-interno); background: var(--sup-2); color: var(--texto-2); transition: border-color var(--t-hover) ease, color var(--t-hover) ease, background-color var(--t-hover) ease, transform var(--t-pulsar) var(--curva); }
+      .cat-icono:hover { border-color: var(--linea-fuerte); color: var(--texto-1); background: var(--sup-3); }
+      .cat-icono:active { transform: scale(0.98); }
+      .cat-icono__nombre { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--fuente-codigo); font-size: 11px; line-height: 14px; color: var(--texto-3); }
+      .cat-mov { display: flex; flex-direction: column; min-height: 100%; }
+      .cat-mov__escena { display: flex; flex: 1; align-items: center; justify-content: center; min-height: 168px; padding: var(--esp-5); }
+      .cat-especificacion { font-size: var(--txt-etiqueta); line-height: var(--txt-etiqueta-alto); color: var(--texto-3); }
+      .cat-pantalla { overflow: hidden; border: 1px solid var(--linea); border-radius: var(--r-tarjeta); }
+      .cat-pantalla__interior { padding: var(--esp-7) var(--esp-6) var(--esp-6); }
+      .cat-columnas { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: var(--esp-4); }
+      .cat-nota { display: flex; align-items: center; gap: var(--esp-2); font-size: var(--txt-etiqueta); line-height: var(--txt-etiqueta-alto); color: var(--texto-3); }
+      .cat-hover.ob-boton--primario { background-color: var(--acento-relleno-hover); }
+      .cat-hover.ob-boton--secundario { border-color: var(--linea-hover); background-color: var(--boton-2-hover); }
+      .cat-hover.ob-boton--fantasma { background-color: var(--lavado-2); color: var(--texto-1); }
+      .cat-hover.ob-boton--destructivo { background-color: var(--rojo-relleno-hover); }
+      .cat-foco { outline: 2px solid var(--acento); outline-offset: 2px; }
+      .cat-foco-campo { border-color: var(--acento) !important; box-shadow: var(--sombra-control), 0 0 0 3px var(--acento-suave) !important; }
+      .cat-matriz .ob-boton { pointer-events: none; }
+      .cat-marca-simbolo path { vector-effect: non-scaling-stroke; }
+      @media (max-width: 1320px) { .cat-tipo { grid-template-columns: 150px minmax(0, 1fr); } .cat-tipo__spec { grid-column: 2; } }
+    </style>
+  </head>
+  <body>
+    <a class="ob-saltar" href="#contenido">Saltar al contenido</a>
+
+    <div class="ob-app" data-ob-app>
+      <!-- Barra lateral -->
+      <aside class="ob-lateral" aria-label="Navegación principal">
+        <div class="ob-lateral__marca">
+          <a class="ob-lateral__logo" href="#inicio" aria-label="Obsidiana, ir al inicio">
+            <span class="ob-lateral__simbolo">
+              <svg class="cat-marca-simbolo" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+                <path d="M13 2.6 22.4 9.2 18.9 22.2H7.1L3.6 9.2Z" fill="currentColor" fill-opacity=".07" stroke="currentColor" stroke-opacity=".6" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M13 2.6 10.2 12.6 7.1 22.2M10.2 12.6 18.9 22.2M10.2 12.6 3.6 9.2" stroke="currentColor" stroke-opacity=".3" stroke-width="1" stroke-linejoin="round"/>
+                <path d="M13 2.6 22.4 9.2" stroke="var(--lateral-acento)" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="ob-lateral__logo-texto">Obsidiana</span>
+          </a>
+          <button type="button" class="ob-lateral__plegar" data-ob-plegar data-solo="desplegada" aria-label="Plegar barra lateral" data-ob-pista="Plegar barra lateral" data-pista-atajo="Ctrl B" data-pista-lado="right">
+            <span data-icono="lateral" data-tamano="16"></span>
+          </button>
+        </div>
+
+        <nav class="ob-lateral__nav" aria-label="Secciones del catálogo">
+          <div class="ob-lateral__grupo">
+            <span class="ob-lateral__separador" aria-hidden="true"></span>
+            <div class="ob-lateral__grupo-titulo">Fundamentos</div>
+            <a class="ob-lateral__enlace" href="#inicio" aria-current="page" data-ob-pista="Inicio" data-pista-solo="plegada" data-pista-lado="right" data-claves="principios empezar instalar">
+              <span class="ob-lateral__icono" data-icono="inicio" data-tamano="16"></span><span class="ob-lateral__texto">Inicio</span>
+            </a>
+            <a class="ob-lateral__enlace" href="#tokens" data-ob-pista="Tokens" data-pista-solo="plegada" data-pista-lado="right" data-claves="colores radios sombras medidas variables">
+              <span class="ob-lateral__icono" data-icono="capas" data-tamano="16"></span><span class="ob-lateral__texto">Tokens</span><span class="ob-lateral__contador" data-cat-contador="tokens"></span>
+            </a>
+            <a class="ob-lateral__enlace" href="#tipografia" data-ob-pista="Tipografía" data-pista-solo="plegada" data-pista-lado="right" data-claves="fuentes inter geist mono escala">
+              <span class="ob-lateral__icono" data-icono="documento" data-tamano="16"></span><span class="ob-lateral__texto">Tipografía</span>
+            </a>
+            <a class="ob-lateral__enlace" href="#iconos" data-ob-pista="Iconos" data-pista-solo="plegada" data-pista-lado="right" data-claves="svg juego">
+              <span class="ob-lateral__icono" data-icono="estrella" data-tamano="16"></span><span class="ob-lateral__texto">Iconos</span><span class="ob-lateral__contador" data-cat-contador="iconos"></span>
+            </a>
+          </div>
+          <div class="ob-lateral__grupo">
+            <span class="ob-lateral__separador" aria-hidden="true"></span>
+            <div class="ob-lateral__grupo-titulo">Componentes</div>
+            <a class="ob-lateral__enlace" href="#primitivas" data-ob-pista="Primitivas" data-pista-solo="plegada" data-pista-lado="right" data-claves="botones campos controles">
+              <span class="ob-lateral__icono" data-icono="ajustes" data-tamano="16"></span><span class="ob-lateral__texto">Primitivas</span><span class="ob-lateral__contador" data-cat-contador="primitivas"></span>
+            </a>
+            <a class="ob-lateral__enlace" href="#componentes" data-ob-pista="Componentes" data-pista-solo="plegada" data-pista-lado="right" data-claves="menús ventanas avisos pestañas">
+              <span class="ob-lateral__icono" data-icono="panel" data-tamano="16"></span><span class="ob-lateral__texto">Componentes</span><span class="ob-lateral__contador" data-cat-contador="componentes"></span>
+            </a>
+            <a class="ob-lateral__enlace" href="#datos" data-ob-pista="Datos" data-pista-solo="plegada" data-pista-lado="right" data-claves="tabla cifras gráficas tarjetas">
+              <span class="ob-lateral__icono" data-icono="tabla" data-tamano="16"></span><span class="ob-lateral__texto">Datos</span><span class="ob-lateral__contador" data-cat-contador="datos"></span>
+            </a>
+          </div>
+          <div class="ob-lateral__grupo">
+            <span class="ob-lateral__separador" aria-hidden="true"></span>
+            <div class="ob-lateral__grupo-titulo">Experiencia</div>
+            <a class="ob-lateral__enlace" href="#movimiento" data-ob-pista="Movimiento" data-pista-solo="plegada" data-pista-lado="right" data-claves="animaciones curvas duraciones">
+              <span class="ob-lateral__icono" data-icono="rayo" data-tamano="16"></span><span class="ob-lateral__texto">Movimiento</span>
+            </a>
+            <a class="ob-lateral__enlace" href="#patrones" data-ob-pista="Patrones" data-pista-solo="plegada" data-pista-lado="right" data-claves="pantallas lista panel ejemplo">
+              <span class="ob-lateral__icono" data-icono="columnas" data-tamano="16"></span><span class="ob-lateral__texto">Patrones</span>
+            </a>
+          </div>
+        </nav>
+
+        <div class="ob-lateral__pie">
+          <div class="ob-lateral__nota" data-ob-pista="Funciona sin conexión · fuentes e iconos locales" data-pista-solo="plegada" data-pista-lado="right" tabindex="-1">
+            <span data-icono="equipo" data-tamano="16"></span>
+            <span class="ob-lateral__nota-cuerpo">
+              <span class="ob-lateral__nota-titulo">Funciona sin conexión</span>
+              <span class="ob-lateral__nota-texto">Versión 1.0 · 11 nov 2026</span>
+            </span>
+          </div>
+          <button type="button" class="ob-lateral__plegar" data-ob-plegar data-solo="plegada" aria-label="Desplegar barra lateral" data-ob-pista="Desplegar barra lateral" data-pista-atajo="Ctrl B" data-pista-lado="right">
+            <span data-icono="lateral" data-tamano="16"></span>
+          </button>
+          <button type="button" class="ob-lateral__accion" id="cat-movimiento" aria-pressed="false" data-ob-pista="Reducir movimiento" data-pista-solo="plegada" data-pista-lado="right">
+            <span data-icono="rayo" data-tamano="16"></span><span class="ob-lateral__accion-texto">Reducir movimiento</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Contenido -->
+      <div class="ob-app__principal ob-lienzo">
+        <header class="ob-superior">
+          <nav class="ob-miga" aria-label="Ubicación">
+            <ol>
+              <li><a class="ob-miga__enlace" href="#inicio">Obsidiana</a></li>
+              <li class="ob-miga__sep" aria-hidden="true"><span data-icono="chevron-derecha" data-tamano="14"></span></li>
+              <li><span class="ob-miga__actual" aria-current="page" data-ob-miga-actual>Inicio</span></li>
+            </ol>
+          </nav>
+
+          <button type="button" class="ob-buscador" data-ob-paleta-abrir aria-label="Buscar o ir a… (Ctrl K)" aria-keyshortcuts="Control+K">
+            <span data-icono="buscar" data-tamano="16"></span>
+            <span class="ob-buscador__texto">Buscar componentes, tokens o iconos</span>
+            <span class="ob-buscador__atajo"><kbd class="ob-tecla ob-tecla--sm">Ctrl</kbd><kbd class="ob-tecla ob-tecla--sm">K</kbd></span>
+          </button>
+
+          <div class="ob-superior__acciones">
+            <button type="button" class="ob-boton ob-boton--fantasma" data-ob-menu="menu-recursos" style="gap: 6px; padding-right: 8px">
+              <span data-icono="documento" data-tamano="16" style="color: var(--texto-3)"></span>Recursos<span class="ob-boton__chevron"><span data-icono="chevron-abajo" data-tamano="14"></span></span>
+            </button>
+            <div class="ob-menu" id="menu-recursos" data-alinear="end" style="width: 320px" hidden>
+              <div class="ob-menu__etiqueta">Para empezar una herramienta nueva</div>
+              <button type="button" class="ob-menu__elemento" role="menuitem" data-cat-copiar="enlaces">
+                <span data-icono="copiar" data-tamano="16"></span>
+                <span class="ob-menu__cuerpo"><span>Copiar enlaces de CSS y JS</span><span class="ob-menu__descripcion">Las dos líneas que van en el &lt;head&gt;</span></span>
+              </button>
+              <button type="button" class="ob-menu__elemento" role="menuitem" data-cat-copiar="tema">
+                <span data-icono="luna" data-tamano="16"></span>
+                <span class="ob-menu__cuerpo"><span>Copiar fragmento de tema</span><span class="ob-menu__descripcion">Evita el parpadeo al cargar</span></span>
+              </button>
+              <div class="ob-menu__separador" role="separator"></div>
+              <button type="button" class="ob-menu__elemento" role="menuitem" data-cat-ir="tokens">
+                <span data-icono="capas" data-tamano="16"></span><span class="ob-menu__texto">Ver todos los tokens</span>
+              </button>
+            </div>
+            <span class="ob-superior__divisor" aria-hidden="true"></span>
+            <div class="ob-tema" role="group" aria-label="Tema" data-ob-tema>
+              <button type="button" class="ob-tema__opcion" data-tema="claro" aria-label="Tema claro" data-ob-pista="Tema claro" data-pista-lado="bottom"><span data-icono="sol" data-tamano="14"></span></button>
+              <button type="button" class="ob-tema__opcion" data-tema="oscuro" aria-label="Tema oscuro" data-ob-pista="Tema oscuro" data-pista-lado="bottom"><span data-icono="luna" data-tamano="14"></span></button>
+            </div>
+          </div>
+        </header>
+
+        <main class="ob-app__contenido" id="contenido" tabindex="-1">
+          <div data-ob-vistas>
+            <!-- ============================== INICIO ============================== -->
+            <div class="ob-pagina" data-vista="inicio" data-titulo="Inicio">
+              <header class="ob-pagina__encabezado">
+                <div class="ob-pagina__titulos">
+                  <h1 class="ob-pagina__titulo">Obsidiana</h1>
+                  <p class="ob-pagina__contexto">Sistema de diseño para herramientas internas · CSS y JavaScript sin dependencias</p>
+                </div>
+                <div class="ob-pagina__acciones">
+                  <button type="button" class="ob-boton ob-boton--secundario" data-cat-copiar="enlaces"><span data-icono="copiar" data-tamano="16"></span>Copiar enlaces</button>
+                  <a class="ob-boton ob-boton--primario" href="#patrones"><span data-icono="columnas" data-tamano="16"></span>Ver patrones</a>
+                </div>
+              </header>
+
+              <div class="ob-pila">
+                <div class="ob-tira" role="group" aria-label="Contenido del sistema" style="--columnas: 5">
+                  <div class="ob-tira__elemento"><span class="ob-tira__etiqueta"><span data-icono="capas" data-tamano="14"></span>Tokens</span><span class="ob-tira__valor"><span class="ob-tira__numero" data-cat-total="tokens">0</span><span class="ob-tira__secundario">en dos temas</span></span></div>
+                  <div class="ob-tira__elemento"><span class="ob-tira__etiqueta"><span data-icono="ajustes" data-tamano="14"></span>Componentes</span><span class="ob-tira__valor"><span class="ob-tira__numero" data-cat-total="componentes">0</span><span class="ob-tira__secundario">con su HTML</span></span></div>
+                  <div class="ob-tira__elemento"><span class="ob-tira__etiqueta"><span data-icono="estrella" data-tamano="14"></span>Iconos</span><span class="ob-tira__valor"><span class="ob-tira__numero" data-cat-total="iconos">0</span><span class="ob-tira__secundario">trazo de 1,5 px</span></span></div>
+                  <div class="ob-tira__elemento"><span class="ob-tira__etiqueta"><span data-icono="rayo" data-tamano="14"></span>Animaciones</span><span class="ob-tira__valor"><span class="ob-tira__numero" data-cat-total="animaciones">0</span><span class="ob-tira__secundario">una curva</span></span></div>
+                  <div class="ob-tira__elemento"><span class="ob-tira__etiqueta"><span class="ob-glifo" data-forma="lleno" style="--ob-glifo: var(--verde)"></span>Dependencias</span><span class="ob-tira__valor"><span class="ob-tira__numero">0</span><span class="ob-tira__secundario">sin red ni CDN</span></span></div>
+                </div>
+
+                <div class="ob-rejilla" style="--columnas: 3">
+                  <section class="ob-tarjeta cat-principio">
+                    <span class="cat-principio__marca"><span data-icono="rayo" data-tamano="16"></span></span>
+                    <h2 class="cat-principio__titulo">La luz es el material</h2>
+                    <p class="cat-principio__texto">Fondo oscuro y profundo; la luz se usa con avaricia: una línea, un punto, un borde. Lo que brilla es lo que importa.</p>
+                  </section>
+                  <section class="ob-tarjeta cat-principio">
+                    <span class="cat-principio__marca"><span data-icono="capas" data-tamano="16"></span></span>
+                    <h2 class="cat-principio__titulo">Profundidad real</h2>
+                    <p class="cat-principio__texto">Cuatro niveles de superficie con degradado casi imperceptible, borde de 1 px y realce en el canto superior. Grano del 2 % sobre el lienzo.</p>
+                  </section>
+                  <section class="ob-tarjeta cat-principio" data-filo="encendido">
+                    <span class="cat-principio__marca"><span data-icono="enlace" data-tamano="16"></span></span>
+                    <h2 class="cat-principio__titulo">Bordes vivos</h2>
+                    <p class="cat-principio__texto">Lo enfocado, seleccionado o activo recibe un filo de luz en degradado, nunca un borde plano de color. Como esta tarjeta.</p>
+                  </section>
+                  <section class="ob-tarjeta cat-principio">
+                    <span class="cat-principio__marca"><span data-icono="documento" data-tamano="16"></span></span>
+                    <h2 class="cat-principio__titulo">Tipografía con aire</h2>
+                    <p class="cat-principio__texto">Inter con eje óptico e interletraje por tamaño; cifras tabulares; unidades pequeñas y atenuadas sobre la línea base.</p>
+                  </section>
+                  <section class="ob-tarjeta cat-principio">
+                    <span class="cat-principio__marca"><span data-icono="flecha" data-tamano="16"></span></span>
+                    <h2 class="cat-principio__titulo">Movimiento con intención</h2>
+                    <p class="cat-principio__texto">Cada animación responde a una acción y muestra qué cambió. Solo transform, opacidad y trazos; una curva; sin rebotes.</p>
+                  </section>
+                  <section class="ob-tarjeta cat-principio">
+                    <span class="cat-principio__marca"><span data-icono="tabla" data-tamano="16"></span></span>
+                    <h2 class="cat-principio__titulo">Ningún dato cortado</h2>
+                    <p class="cat-principio__texto">Las tablas se desplazan con la primera columna fija y sombra de borde. Un valor vacío siempre es «—».</p>
+                  </section>
+                </div>
+
+                <div class="cat-columnas">
+                  <section class="ob-tarjeta">
+                    <header class="ob-tarjeta__encabezado">
+                      <span class="ob-tarjeta__icono" data-icono="documento" data-tamano="16"></span>
+                      <h2 class="ob-tarjeta__titulo">Cómo empezar</h2>
+                      <span class="ob-tarjeta__meta">Tres pasos</span>
+                    </header>
+                    <div class="ob-tarjeta__cuerpo">
+                      <ol class="ob-pasos ob-pasos--vertical">
+                        <li class="ob-paso" data-estado="completado"><span class="ob-paso__marca"></span><span class="ob-paso__texto"><span class="ob-paso__titulo">Copia la carpeta del sistema</span><span class="ob-paso__descripcion">tokens, fuentes, css, js e iconos, junto a tu HTML</span></span></li>
+                        <li class="ob-paso" data-estado="actual" aria-current="step"><span class="ob-paso__marca"></span><span class="ob-paso__texto"><span class="ob-paso__titulo">Enlaza la hoja de estilos y el script</span><span class="ob-paso__descripcion">Más el fragmento de tema en el &lt;head&gt;</span></span></li>
+                        <li class="ob-paso" data-estado="pendiente"><span class="ob-paso__marca"></span><span class="ob-paso__texto"><span class="ob-paso__titulo">Copia el armazón de «Patrones»</span><span class="ob-paso__descripcion">Y sustituye los datos de ejemplo por los tuyos</span></span></li>
+                      </ol>
+                    </div>
+                    <details class="ob-bloque-codigo" open>
+                      <summary class="ob-bloque-codigo__cabeza"><span class="ob-bloque-codigo__chevron" data-icono="chevron-derecha" data-tamano="14"></span>HTML mínimo<button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm ob-bloque-codigo__copiar" data-ob-copiar>Copiar</button></summary>
+                      <pre class="ob-bloque-codigo__pre"><code id="cat-codigo-inicio"></code></pre>
+                    </details>
+                  </section>
+
+                  <section class="ob-tarjeta">
+                    <header class="ob-tarjeta__encabezado">
+                      <span class="ob-tarjeta__icono" data-icono="alerta" data-tamano="16"></span>
+                      <h2 class="ob-tarjeta__titulo">Lo que nunca se hace</h2>
+                      <span class="ob-tarjeta__meta">Una infracción invalida la pantalla</span>
+                    </header>
+                    <div class="ob-tarjeta__cuerpo">
+                      <ul class="ob-lista ob-lista--lineas">
+                        <li class="ob-lista__elemento"><span class="ob-glifo" data-forma="guion" style="color: var(--rojo)"></span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo">Serif, cursivas y títulos editoriales</p><p class="ob-lista__subtitulo">font-style: normal en todo</p></div></li>
+                        <li class="ob-lista__elemento"><span class="ob-glifo" data-forma="guion" style="color: var(--rojo)"></span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo">Emojis, degradados llamativos, glassmorphism</p><p class="ob-lista__subtitulo">Un único desenfoque: el velo de las ventanas</p></div></li>
+                        <li class="ob-lista__elemento"><span class="ob-glifo" data-forma="guion" style="color: var(--rojo)"></span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo">Mayúsculas decorativas con interletraje ancho</p><p class="ob-lista__subtitulo">Solo oraciones con mayúscula inicial</p></div></li>
+                        <li class="ob-lista__elemento"><span class="ob-glifo" data-forma="guion" style="color: var(--rojo)"></span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo">Rebotes y bucles decorativos</p><p class="ob-lista__subtitulo">Salvo el pulso de algo en curso y las cargas</p></div></li>
+                        <li class="ob-lista__elemento"><span class="ob-glifo" data-forma="guion" style="color: var(--rojo)"></span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo">Maquetación de marketing</p><p class="ob-lista__subtitulo">Sin portadas, lemas ni textos de relleno</p></div></li>
+                        <li class="ob-lista__elemento"><span class="ob-glifo" data-forma="guion" style="color: var(--rojo)"></span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo">Colores o medidas escritos a mano</p><p class="ob-lista__subtitulo">Todo sale de tokens.css</p></div></li>
+                      </ul>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================== TOKENS ============================== -->
+            <div class="ob-pagina" data-vista="tokens" data-titulo="Tokens" hidden>
+              <header class="ob-pagina__encabezado">
+                <div class="ob-pagina__titulos">
+                  <h1 class="ob-pagina__titulo">Tokens</h1>
+                  <p class="ob-pagina__contexto">Variables de tokens/tokens.css · también en tokens.json (DTCG) y tokens/tailwind.css</p>
+                </div>
+                <div class="ob-pagina__acciones">
+                  <span class="cat-nota"><span data-icono="info" data-tamano="14"></span>Pulsa una muestra para copiar su variable</span>
+                </div>
+              </header>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza">
+                  <h2 class="cat-seccion__titulo">Color</h2>
+                  <p class="cat-seccion__texto">Cada panel reescribe los tokens con su propio data-theme, así se ven los dos temas a la vez. Los valores se leen en vivo del CSS.</p>
+                </div>
+                <div class="cat-temas">
+                  <div class="cat-tema ob-lienzo" data-theme="oscuro">
+                    <div class="cat-tema__cabeza"><h3 class="ob-t-titulo-tarjeta">Tema oscuro</h3><code class="ob-codigo ob-texto-3">data-theme="oscuro"</code></div>
+                    <div class="cat-muestras" data-cat-muestras></div>
+                  </div>
+                  <div class="cat-tema ob-lienzo" data-theme="claro">
+                    <div class="cat-tema__cabeza"><h3 class="ob-t-titulo-tarjeta">Tema claro</h3><code class="ob-codigo ob-texto-3">data-theme="claro"</code></div>
+                    <div class="cat-muestras" data-cat-muestras></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza">
+                  <h2 class="cat-seccion__titulo">Forma y profundidad</h2>
+                  <p class="cat-seccion__texto">Radios: 8 los controles, 12 lo que va dentro de una tarjeta, 14 las tarjetas y 18 las ventanas. En el tema claro las tarjetas se separan del lienzo con sombra suave.</p>
+                </div>
+                <div class="cat-columnas" style="grid-template-columns: 1fr 1fr">
+                  <section class="ob-tarjeta">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Radios</h3><span class="ob-tarjeta__meta">--r-*</span></header>
+                    <div class="ob-tarjeta__cuerpo"><div class="cat-radios" data-cat-radios></div></div>
+                  </section>
+                  <section class="ob-tarjeta">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Sombras</h3><span class="ob-tarjeta__meta">--sombra-*</span></header>
+                    <div class="ob-tarjeta__cuerpo">
+                      <div class="cat-sombras">
+                        <div class="cat-bloque"><div class="cat-sombra__caja" style="box-shadow: var(--sombra-tarjeta); border: 1px solid var(--linea)"></div><span class="cat-estado__nombre">--sombra-tarjeta</span></div>
+                        <div class="cat-bloque"><div class="cat-sombra__caja" style="box-shadow: var(--sombra-control); border: 1px solid var(--linea-fuerte); border-radius: var(--r-control); background: var(--boton-2)"></div><span class="cat-estado__nombre">--sombra-control</span></div>
+                        <div class="cat-bloque"><div class="cat-sombra__caja ob-flotante" style="border-radius: var(--r-interno)"></div><span class="cat-estado__nombre">--sombra-flotante</span></div>
+                        <div class="cat-bloque"><div class="cat-sombra__caja" style="box-shadow: var(--sombra-boton-acento); background: var(--acento-relleno); border-radius: var(--r-control)"></div><span class="cat-estado__nombre">--sombra-boton-acento</span></div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza">
+                  <h2 class="cat-seccion__titulo">Medidas, espacio y capas</h2>
+                  <p class="cat-seccion__texto">Retícula de 4 px. Controles de 32 px (compactos de 28), filas de 44, encabezados de tabla de 36. Herramienta densa: de 1180 a 1680 px de trabajo.</p>
+                </div>
+                <div class="ob-rejilla" style="--columnas: 3">
+                  <section class="ob-tarjeta">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Espaciado</h3><span class="ob-tarjeta__meta">--esp-*</span></header>
+                    <div class="ob-tarjeta__cuerpo"><div class="cat-escala" data-cat-espacios></div></div>
+                  </section>
+                  <section class="ob-tarjeta">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Medidas</h3><span class="ob-tarjeta__meta">--alto-* · --ancho-*</span></header>
+                    <div class="ob-tarjeta__cuerpo"><dl class="ob-descripcion ob-descripcion--filas" data-cat-medidas></dl></div>
+                  </section>
+                  <section class="ob-tarjeta">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Capas y movimiento</h3><span class="ob-tarjeta__meta">--z-* · --t-*</span></header>
+                    <div class="ob-tarjeta__cuerpo"><dl class="ob-descripcion ob-descripcion--filas" data-cat-capas></dl></div>
+                  </section>
+                </div>
+              </section>
+            </div>
+
+            <!-- ============================== TIPOGRAFÍA ============================== -->
+            <div class="ob-pagina" data-vista="tipografia" data-titulo="Tipografía" hidden>
+              <header class="ob-pagina__encabezado">
+                <div class="ob-pagina__titulos">
+                  <h1 class="ob-pagina__titulo">Tipografía</h1>
+                  <p class="ob-pagina__contexto">Inter Variable con eje óptico para todo · Geist Mono para códigos y referencias</p>
+                </div>
+              </header>
+              <div class="ob-pila">
+                <section class="ob-tarjeta">
+                  <header class="ob-tarjeta__encabezado"><h2 class="ob-tarjeta__titulo">Escala</h2><span class="ob-tarjeta__meta">Tamaño / interlínea · peso · interletraje</span></header>
+                  <div>
+                    <div class="cat-tipo"><span class="cat-etiqueta">Título de página</span><span class="ob-t-titulo">Pedidos de noviembre</span><span class="cat-tipo__spec">22/28 · 600 · −0,018em · --txt-titulo</span></div>
+                    <div class="cat-tipo"><span class="cat-etiqueta">Título de ventana</span><span class="ob-t-titulo-ventana">Altamira · pedido PE-26014</span><span class="cat-tipo__spec">17/24 · 600 · −0,012em · --txt-titulo-ventana</span></div>
+                    <div class="cat-tipo"><span class="cat-etiqueta">Cifra principal</span><span class="ob-t-cifra ob-cifras" style="font-weight: 500"><span class="ob-t-cuerpo ob-texto-3" style="letter-spacing: 0; font-weight: 500">USD</span> 3.284.120</span><span class="cat-tipo__spec">34/38 · 550 · −0,028em · --txt-cifra</span></div>
+                    <div class="cat-tipo"><span class="cat-etiqueta">Cifra secundaria</span><span class="ob-t-cifra-2 ob-cifras" style="font-weight: 500">1.560,5 <span class="ob-t-etiqueta ob-texto-3" style="letter-spacing: 0">t</span></span><span class="cat-tipo__spec">20/26 · 600 · −0,02em · --txt-cifra-2</span></div>
+                    <div class="cat-tipo"><span class="cat-etiqueta">Título de tarjeta</span><span class="ob-t-titulo-tarjeta">Requiere tu atención</span><span class="cat-tipo__spec">14/20 · 600 · −0,006em · --txt-titulo-tarjeta</span></div>
+                    <div class="cat-tipo"><span class="cat-etiqueta">Texto</span><span class="ob-t-cuerpo">Los pedidos llegan desde el formulario y se confirman en un día hábil.</span><span class="cat-tipo__spec">13/20 · 400 · 0 · --txt-cuerpo</span></div>
+                    <div class="cat-tipo"><span class="cat-etiqueta">Texto destacado</span><span class="ob-t-destacado">Nordika confirmó la entrega</span><span class="cat-tipo__spec">13/20 · 500 · 0</span></div>
+                    <div class="cat-tipo"><span class="cat-etiqueta">Etiqueta</span><span class="ob-t-etiqueta ob-texto-2" style="font-weight: 500">Fecha de entrega</span><span class="cat-tipo__spec">12/16 · 500 · 0,002em · --txt-etiqueta</span></div>
+                    <div class="cat-tipo"><span class="cat-etiqueta">Etiqueta de columna</span><span class="ob-t-columna">Valor del pedido</span><span class="cat-tipo__spec">11,5/16 · 500 · 0,01em · texto-3 · --txt-columna</span></div>
+                    <div class="cat-tipo"><span class="cat-etiqueta">Código</span><span class="ob-codigo">PE-26014 · REF-A7-0042</span><span class="cat-tipo__spec">12,5/18 · 450 · Geist Mono · --txt-codigo</span></div>
+                    <div class="cat-tipo"><span class="cat-etiqueta">Mini y micro</span><span><span class="ob-t-mini ob-texto-3">Hace 3 minutos</span> · <span class="ob-t-micro ob-texto-3">128</span></span><span class="cat-tipo__spec">11/14 y 10/12 · --txt-mini · --txt-micro</span></div>
+                  </div>
+                </section>
+
+                <div class="ob-rejilla" style="--columnas: 3">
+                  <section class="ob-tarjeta">
+                    <header class="ob-tarjeta__encabezado"><h2 class="ob-tarjeta__titulo">Inter Variable</h2><span class="ob-tarjeta__meta">100–900 · opsz</span></header>
+                    <div class="ob-tarjeta__cuerpo cat-bloque">
+                      <span style="font-size: 40px; line-height: 44px; font-weight: 500; letter-spacing: -0.03em">Aa Ñn 0123</span>
+                      <span class="ob-texto-2">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ<br>abcdefghijklmnñopqrstuvwxyz áéíóú ü ¿?¡!</span>
+                      <span class="cat-especificacion">Rasgos cv11 y ss03 (a de un piso, 1 sin base) y eje óptico automático.</span>
+                    </div>
+                  </section>
+                  <section class="ob-tarjeta">
+                    <header class="ob-tarjeta__encabezado"><h2 class="ob-tarjeta__titulo">Geist Mono Variable</h2><span class="ob-tarjeta__meta">100–900</span></header>
+                    <div class="ob-tarjeta__cuerpo cat-bloque">
+                      <span style="font-family: var(--fuente-codigo); font-size: 34px; line-height: 44px; font-weight: 450">PE-26014</span>
+                      <span class="ob-codigo ob-texto-2">REF-A7-0042 · 2026-11-14 · #4C8DFF<br>const tema = "oscuro";</span>
+                      <span class="cat-especificacion">Solo para referencias, códigos y valores técnicos. Nunca para texto corrido.</span>
+                    </div>
+                  </section>
+                  <section class="ob-tarjeta">
+                    <header class="ob-tarjeta__encabezado"><h2 class="ob-tarjeta__titulo">Cifras</h2><span class="ob-tarjeta__meta">.ob-cifras</span></header>
+                    <div class="ob-tarjeta__cuerpo cat-bloque">
+                      <div class="ob-descripcion ob-descripcion--filas" style="--columnas: 1">
+                        <div class="ob-descripcion__par"><dt>Proporcionales</dt><dd style="font-feature-settings: var(--rasgos-texto)">1.111.111 · 8.888.888</dd></div>
+                        <div class="ob-descripcion__par"><dt>Tabulares</dt><dd class="ob-cifras">1.111.111 · 8.888.888</dd></div>
+                        <div class="ob-descripcion__par"><dt>Con unidad</dt><dd class="ob-cifras">USD 1.090.148 · 176.351 t</dd></div>
+                      </div>
+                      <span class="cat-especificacion">Las cifras de dinero se escriben completas, con separadores; nunca abreviadas con «$» y «M».</span>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================== ICONOS ============================== -->
+            <div class="ob-pagina" data-vista="iconos" data-titulo="Iconos" hidden>
+              <header class="ob-pagina__encabezado">
+                <div class="ob-pagina__titulos">
+                  <h1 class="ob-pagina__titulo">Iconos</h1>
+                  <p class="ob-pagina__contexto"><span data-cat-iconos-conteo>0 iconos</span> · retícula de 24 px · trazo de 1,5 px con relleno al 12 % · pulsa uno para copiar su nombre</p>
+                </div>
+              </header>
+              <div class="ob-pila">
+                <div class="ob-barra-herramientas" role="toolbar" aria-label="Buscar iconos">
+                  <div class="ob-entrada-caja ob-barra-herramientas__busqueda">
+                    <span class="ob-entrada-caja__icono" data-icono="buscar" data-tamano="16"></span>
+                    <input class="ob-entrada" type="search" id="cat-iconos-buscar" placeholder="Buscar icono" aria-label="Buscar icono" autocomplete="off">
+                  </div>
+                  <div class="ob-segmentado" role="radiogroup" aria-label="Tamaño" data-ob-segmentado id="cat-iconos-tamano">
+                    <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="false" data-valor="16">16</button>
+                    <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="true" data-valor="20">20</button>
+                    <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="false" data-valor="24">24</button>
+                  </div>
+                  <div class="ob-barra-herramientas__derecha"><span class="ob-barra-herramientas__texto" data-cat-iconos-visibles></span></div>
+                </div>
+                <section class="ob-tarjeta">
+                  <div class="ob-tarjeta__cuerpo">
+                    <div class="cat-iconos" id="cat-iconos"></div>
+                  </div>
+                  <details class="ob-bloque-codigo">
+                    <summary class="ob-bloque-codigo__cabeza"><span class="ob-bloque-codigo__chevron" data-icono="chevron-derecha" data-tamano="14"></span>HTML<button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm ob-bloque-codigo__copiar" data-ob-copiar>Copiar</button></summary>
+                    <pre class="ob-bloque-codigo__pre"><code>&lt;script src="iconos/iconos.js"&gt;&lt;/script&gt;
+&lt;span data-icono="exportar" data-tamano="16"&gt;&lt;/span&gt;
+
+// Desde JavaScript: devuelve el SVG en texto
+Obsidiana.icono("exportar", { tamano: 20 });</code></pre>
+                  </details>
+                </section>
+              </div>
+            </div>
+
+            <!-- ============================== PRIMITIVAS ============================== -->
+            <div class="ob-pagina" data-vista="primitivas" data-titulo="Primitivas" hidden>
+              <header class="ob-pagina__encabezado">
+                <div class="ob-pagina__titulos">
+                  <h1 class="ob-pagina__titulo">Primitivas</h1>
+                  <p class="ob-pagina__contexto">Cada control tiene reposo, hover, foco, activo, deshabilitado y, cuando aplica, cargando y listo</p>
+                </div>
+              </header>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Botones</h2><p class="cat-seccion__texto">Altura 32 (compacto 28, grande 36). Al pulsar, escala 0,98. La secuencia guardar → progreso → confirmado no cambia el ancho del botón. Los estados de hover y foco se muestran forzados para compararlos.</p></div>
+
+                <section class="ob-tarjeta cat-demo" data-cat-titulo="Estados de botón">
+                  <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Estados</h3><span class="ob-tarjeta__meta">data-estado="reposo | cargando | listo"</span></header>
+                  <div class="cat-demo__area">
+                    <div class="cat-matriz" id="cat-matriz-botones"></div>
+                  </div>
+                </section>
+
+                <div class="ob-rejilla" style="--columnas: 2">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Variantes y tamaños de botón">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Variantes y tamaños</h3><span class="ob-tarjeta__meta">.ob-boton--*</span></header>
+                    <div class="cat-demo__area"><div data-demo>
+<button type="button" class="ob-boton ob-boton--primario"><span data-icono="nuevo" data-tamano="16"></span>Nuevo pedido</button>
+<button type="button" class="ob-boton ob-boton--secundario"><span data-icono="exportar" data-tamano="16"></span>Exportar</button>
+<button type="button" class="ob-boton ob-boton--fantasma">Cancelar</button>
+<button type="button" class="ob-boton ob-boton--destructivo-suave"><span data-icono="eliminar" data-tamano="16"></span>Eliminar</button>
+<button type="button" class="ob-boton ob-boton--primario ob-boton--sm">Compacto</button>
+<button type="button" class="ob-boton ob-boton--primario ob-boton--lg">Grande</button>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Solo icono y grupo de botones">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Solo icono y grupo</h3><span class="ob-tarjeta__meta">aria-label obligatorio</span></header>
+                    <div class="cat-demo__area"><div data-demo>
+<button type="button" class="ob-boton ob-boton--icono" aria-label="Editar" data-ob-pista="Editar"><span data-icono="editar" data-tamano="16"></span></button>
+<button type="button" class="ob-boton ob-boton--icono" aria-label="Duplicar" data-ob-pista="Duplicar"><span data-icono="copiar" data-tamano="16"></span></button>
+<button type="button" class="ob-boton ob-boton--icono ob-boton--borde" aria-label="Columnas" data-ob-pista="Columnas"><span data-icono="columnas" data-tamano="16"></span></button>
+<button type="button" class="ob-boton ob-boton--icono" aria-label="Más opciones" data-ob-pista="Más opciones"><span data-icono="mas-opciones" data-tamano="16"></span></button>
+<button type="button" class="ob-boton ob-boton--icono" aria-label="Eliminar" disabled><span data-icono="eliminar" data-tamano="16"></span></button>
+<div class="ob-grupo-botones" role="group" aria-label="Periodo">
+  <button type="button" class="ob-boton ob-boton--secundario">Día</button>
+  <button type="button" class="ob-boton ob-boton--secundario">Semana</button>
+  <button type="button" class="ob-boton ob-boton--secundario">Mes</button>
+</div>
+                    </div></div>
+                  </section>
+                </div>
+
+                <section class="ob-tarjeta cat-demo" data-cat-titulo="Guardar sin cambiar de tamaño">
+                  <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Guardar: reposo → progreso → confirmado</h3><span class="ob-tarjeta__meta">Obsidiana.boton.guardar(boton, promesa)</span></header>
+                  <div class="cat-demo__area"><div data-demo>
+<button type="button" class="ob-boton ob-boton--primario" id="cat-guardar" data-texto-listo="Guardado">Guardar cambios</button>
+<button type="button" class="ob-boton ob-boton--secundario" id="cat-exportar" data-texto-cargando="Exportando" data-texto-listo="Exportado"><span data-icono="descargar" data-tamano="16"></span>Exportar a Excel</button>
+                  </div><span class="cat-nota" style="margin-left: auto">Pulsa los botones: el ancho se mantiene en las tres caras</span></div>
+                </section>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Campos</h2><p class="cat-seccion__texto">Borde de 1 px, fondo de campo y realce; al enfocar, borde de acento y anillo de 3 px. Solo lectura con borde discontinuo para valores calculados.</p></div>
+
+                <section class="ob-tarjeta cat-demo" data-cat-titulo="Estados de campo">
+                  <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Estados</h3><span class="ob-tarjeta__meta">.ob-entrada</span></header>
+                  <div class="cat-demo__area"><div data-demo>
+<div class="ob-formulario cat-ancho" style="--columnas: 5">
+  <label class="cat-estado"><input class="ob-entrada" placeholder="Número de pedido"><span class="cat-estado__nombre">Reposo</span></label>
+  <label class="cat-estado"><input class="ob-entrada ob-entrada--codigo cat-foco-campo" value="PE-26014"><span class="cat-estado__nombre">Foco</span></label>
+  <label class="cat-estado"><input class="ob-entrada" value="26-14" aria-invalid="true"><span class="cat-estado__nombre">Inválido</span></label>
+  <label class="cat-estado"><input class="ob-entrada" value="PE-26014" disabled><span class="cat-estado__nombre">Deshabilitado</span></label>
+  <label class="cat-estado"><input class="ob-entrada" value="2026-11-24" readonly><span class="cat-estado__nombre">Solo lectura (calculado)</span></label>
+</div>
+                  </div></div>
+                </section>
+
+                <section class="ob-tarjeta cat-demo" data-cat-titulo="Campo con etiqueta, ayuda y error">
+                  <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Campo con etiqueta, icono, prefijo y sufijo</h3><span class="ob-tarjeta__meta">.ob-campo · .ob-entrada-caja</span></header>
+                  <div class="cat-demo__area"><div data-demo>
+<div class="ob-formulario cat-ancho" style="--columnas: 4">
+  <div class="ob-campo">
+    <label class="ob-etiqueta" for="c-buscar">Buscar</label>
+    <div class="ob-entrada-caja">
+      <span class="ob-entrada-caja__icono" data-icono="buscar" data-tamano="16"></span>
+      <input class="ob-entrada" id="c-buscar" type="search" placeholder="Pedido, cliente o referencia">
+    </div>
+  </div>
+  <div class="ob-campo">
+    <div class="ob-campo__cabeza"><label class="ob-etiqueta" for="c-valor">Valor del pedido</label><span class="ob-campo__marca">Dinero</span></div>
+    <div class="ob-entrada-caja">
+      <input class="ob-entrada ob-entrada--cifras" id="c-valor" value="1.284.500,00">
+      <span class="ob-entrada-caja__sufijo">USD</span>
+    </div>
+  </div>
+  <div class="ob-campo">
+    <label class="ob-etiqueta" for="c-cantidad">Cantidad</label>
+    <div class="ob-entrada-caja">
+      <input class="ob-entrada ob-entrada--cifras" id="c-cantidad" value="1.560,5" aria-describedby="c-cantidad-ayuda">
+      <span class="ob-entrada-caja__sufijo">kg</span>
+    </div>
+    <p class="ob-campo__ayuda" id="c-cantidad-ayuda">Se muestra con un decimal</p>
+  </div>
+  <div class="ob-campo">
+    <label class="ob-etiqueta" for="c-correo">Correo de contacto</label>
+    <input class="ob-entrada" id="c-correo" value="compras@altamira" aria-invalid="true" aria-describedby="c-correo-error">
+    <p class="ob-campo__error" id="c-correo-error" role="alert">Falta el dominio: escribe, por ejemplo, compras@altamira.co</p>
+  </div>
+  <div class="ob-campo ob-formulario__ancho">
+    <div class="ob-campo__cabeza"><label class="ob-etiqueta" for="c-notas">Notas para el equipo</label><span class="ob-campo__marca">Opcional</span></div>
+    <textarea class="ob-area" id="c-notas" rows="3" placeholder="Condiciones especiales, horarios de entrega…"></textarea>
+  </div>
+</div>
+                  </div></div>
+                </section>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Selección</h2><p class="cat-seccion__texto">El selector y el combobox se escriben como un &lt;select&gt; nativo: funcionan sin JavaScript y en formularios; con él, se ven y se manejan con el teclado como el resto del sistema.</p></div>
+
+                <div class="ob-rejilla" style="--columnas: 2">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Selector y combobox">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Selector y combobox con búsqueda</h3><span class="ob-tarjeta__meta">data-ob-selector</span></header>
+                    <div class="cat-demo__area"><div data-demo>
+<div class="ob-formulario cat-ancho" style="--columnas: 2">
+  <div class="ob-campo">
+    <label class="ob-etiqueta" for="c-estado">Estado</label>
+    <div class="ob-selector-caja">
+      <select class="ob-selector" id="c-estado" data-ob-selector>
+        <option value="">Seleccionar</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="en-proceso" selected>En proceso</option>
+        <option value="en-curso">En curso</option>
+        <option value="completado">Completado</option>
+        <option value="anulado">Anulado</option>
+      </select>
+    </div>
+  </div>
+  <div class="ob-campo">
+    <label class="ob-etiqueta" for="c-cliente">Cliente</label>
+    <div class="ob-selector-caja">
+      <select class="ob-selector" id="c-cliente" data-ob-selector="buscar" data-marcador-busqueda="Buscar cliente">
+        <option value="">Elegir cliente</option>
+        <option value="altamira" data-meta="128">Altamira</option>
+        <option value="nordika" data-meta="94">Nordika</option>
+        <option value="brisa" data-meta="61">Brisa Textil</option>
+        <option value="corvel" data-meta="47">Corvel Industrial</option>
+        <option value="lumen" data-meta="33">Lumen Andino</option>
+        <option value="ferrovia" data-meta="21">Ferrovía Sur</option>
+        <option value="tessera" data-meta="12">Tessera Diseño</option>
+      </select>
+    </div>
+  </div>
+</div>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Campo de fecha">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Fecha con calendario</h3><span class="ob-tarjeta__meta">data-ob-fecha · aaaa-mm-dd</span></header>
+                    <div class="cat-demo__area"><div data-demo>
+<div class="ob-formulario cat-ancho" style="--columnas: 2">
+  <div class="ob-campo">
+    <label class="ob-etiqueta" for="c-entrega">Fecha de entrega</label>
+    <div class="ob-fecha" data-ob-fecha data-valor="2026-11-14" data-nombre="entrega">
+      <input class="ob-entrada" id="c-entrega">
+    </div>
+  </div>
+  <div class="ob-campo">
+    <label class="ob-etiqueta" for="c-revision">Próxima revisión</label>
+    <div class="ob-fecha" data-ob-fecha>
+      <input class="ob-entrada" id="c-revision" aria-describedby="c-revision-ayuda">
+    </div>
+    <p class="ob-campo__ayuda" id="c-revision-ayuda">Escribe dd/mm/aaaa o elige en el calendario</p>
+  </div>
+</div>
+                    </div></div>
+                  </section>
+                </div>
+
+                <div class="ob-rejilla" style="--columnas: 3">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Casilla y radio">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Casilla y radio</h3><span class="ob-tarjeta__meta">Nativos</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<label class="ob-control"><span class="ob-casilla"><input type="checkbox" checked></span>Recordar filtros</label>
+<label class="ob-control"><span class="ob-casilla"><input type="checkbox" data-indeterminada></span>Seleccionar todo</label>
+<label class="ob-control"><span class="ob-casilla"><input type="checkbox" disabled></span>Bloqueado</label>
+<fieldset class="ob-grupo-controles" style="flex-direction: row; gap: 20px">
+  <legend class="ob-etiqueta">Densidad</legend>
+  <label class="ob-control"><span class="ob-radio"><input type="radio" name="densidad" checked></span>Normal</label>
+  <label class="ob-control"><span class="ob-radio"><input type="radio" name="densidad"></span>Compacta</label>
+</fieldset>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Interruptor">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Interruptor</h3><span class="ob-tarjeta__meta">role="switch"</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<label class="ob-control"><span class="ob-interruptor"><input type="checkbox" role="switch" checked></span>Avisos por correo</label>
+<label class="ob-control"><span class="ob-interruptor"><input type="checkbox" role="switch"></span>
+  <span class="ob-control__texto">Resumen semanal<span class="ob-control__descripcion">Cada lunes a las 8:00</span></span>
+</label>
+<label class="ob-control"><span class="ob-interruptor"><input type="checkbox" role="switch" disabled></span>Sincronizar (no disponible)</label>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Control segmentado y deslizador">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Segmentado y deslizador</h3><span class="ob-tarjeta__meta">Indicador que se desliza</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<div class="ob-segmentado" role="radiogroup" aria-label="Vista" data-ob-segmentado>
+  <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="true">Activos</button>
+  <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="false">Inactivos</button>
+  <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="false">Todos</button>
+</div>
+<div class="ob-deslizador-caja">
+  <input type="range" class="ob-deslizador" min="0" max="100" value="62" aria-label="Margen mínimo" data-ob-deslizador data-salida="#c-margen" data-sufijo=" %">
+  <output class="ob-deslizador-caja__salida" id="c-margen">62 %</output>
+</div>
+                    </div></div>
+                  </section>
+                </div>
+
+                <section class="ob-tarjeta cat-demo" data-cat-titulo="Carga de archivo">
+                  <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Carga de archivo</h3><span class="ob-tarjeta__meta">data-ob-archivo · arrastra o elige</span></header>
+                  <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<label class="ob-archivo" data-ob-archivo>
+  <input type="file" class="ob-solo-lector" accept=".xlsx,.csv" multiple>
+  <span class="ob-archivo__icono"><span data-icono="subir" data-tamano="20"></span></span>
+  <span class="ob-archivo__titulo">Arrastra el archivo aquí o <span class="ob-archivo__enlace">elígelo</span></span>
+  <span class="ob-archivo__ayuda">Excel o CSV, hasta 20 MB</span>
+</label>
+<ul class="ob-archivo__lista"></ul>
+                  </div></div>
+                </section>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Señales</h2><p class="cat-seccion__texto">Las píldoras de estado se distinguen por la forma, no solo por el color: anillo, medio círculo, rombo, círculo lleno y guion.</p></div>
+
+                <div class="ob-rejilla" style="--columnas: 2">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Píldora de estado">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Píldoras de estado</h3><span class="ob-tarjeta__meta">data-estado · forma distinta</span></header>
+                    <div class="cat-demo__area"><div data-demo>
+<span class="ob-pildora" data-estado="pendiente"><span class="ob-glifo"></span>Pendiente</span>
+<span class="ob-pildora" data-estado="en-proceso"><span class="ob-glifo"></span>En proceso</span>
+<span class="ob-pildora" data-estado="en-curso" data-pulso><span class="ob-glifo"></span>En curso</span>
+<span class="ob-pildora" data-estado="completado"><span class="ob-glifo"></span>Completado</span>
+<span class="ob-pildora" data-estado="anulado"><span class="ob-glifo"></span>Anulado</span>
+<span class="ob-pildora" data-estado="vencido"><span class="ob-glifo"></span>Vencido hace 3 días</span>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Insignia y contador">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Insignias y contadores</h3><span class="ob-tarjeta__meta">data-tono</span></header>
+                    <div class="cat-demo__area"><div data-demo>
+<span class="ob-insignia">Borrador</span>
+<span class="ob-insignia" data-tono="acento">Nuevo</span>
+<span class="ob-insignia" data-tono="verde"><span class="ob-glifo" data-forma="punto"></span>Activo</span>
+<span class="ob-insignia" data-tono="ambar"><span class="ob-glifo" data-forma="punto"></span>Hoy</span>
+<span class="ob-insignia" data-tono="rojo"><span class="ob-glifo" data-forma="punto"></span>Urgente</span>
+<span class="ob-insignia" data-tono="borde">v1.0</span>
+<span class="ob-contador">3</span>
+<span class="ob-contador ob-contador--suave">128</span>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Ficha con cierre">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Fichas con cierre</h3><span class="ob-tarjeta__meta">.ob-ficha</span></header>
+                    <div class="cat-demo__area"><div data-demo>
+<span class="ob-ficha"><span class="ob-ficha__categoria">Cliente</span><span class="ob-ficha__valor">Altamira</span><button type="button" class="ob-ficha__cerrar" aria-label="Quitar filtro Cliente"><span data-icono="cerrar" data-tamano="12"></span></button></span>
+<span class="ob-ficha"><span class="ob-ficha__categoria">Estado</span><span class="ob-ficha__valor">En curso y 2 más</span><button type="button" class="ob-ficha__cerrar" aria-label="Quitar filtro Estado"><span data-icono="cerrar" data-tamano="12"></span></button></span>
+<span class="ob-ficha ob-ficha--neutra"><span class="ob-ficha__valor">Prioridad alta</span><button type="button" class="ob-ficha__cerrar" aria-label="Quitar etiqueta Prioridad alta"><span data-icono="cerrar" data-tamano="12"></span></button></span>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Avatar y teclas">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Avatares y teclas</h3><span class="ob-tarjeta__meta">.ob-avatar · .ob-tecla</span></header>
+                    <div class="cat-demo__area"><div data-demo>
+<span class="ob-avatar ob-avatar--sm" title="Ana Navarro">AN</span>
+<span class="ob-avatar" data-tono="2" title="Bruno Salas">BS</span>
+<span class="ob-avatar ob-avatar--lg" data-tono="3" title="Carla Ríos">CR</span>
+<span class="ob-avatares" aria-label="5 personas">
+  <span class="ob-avatar" data-tono="4">DM</span><span class="ob-avatar" data-tono="5">EL</span><span class="ob-avatar">FP</span><span class="ob-avatar" data-tono="2">+2</span>
+</span>
+<span class="ob-teclas"><kbd class="ob-tecla">Ctrl</kbd><kbd class="ob-tecla">K</kbd></span>
+<kbd class="ob-tecla">Esc</kbd>
+<kbd class="ob-tecla ob-tecla--sm">Enter</kbd>
+                    </div></div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Carga y progreso</h2><p class="cat-seccion__texto">Los esqueletos tienen la forma del contenido real y nunca pasan del ancho de su caja. El brillo recorre una vez cada 1,4 s; con movimiento reducido se detiene.</p></div>
+                <div class="ob-rejilla" style="--columnas: 3">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Barra y anillo de progreso">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Progreso</h3><span class="ob-tarjeta__meta">Barra y anillo</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<div class="ob-progreso-caja">
+  <div class="ob-progreso-caja__cabeza"><span>Importando pedidos</span><span>64 %</span></div>
+  <div class="ob-progreso" role="progressbar" aria-label="Importando pedidos" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100" style="--valor: 0.64"><span class="ob-progreso__barra"></span></div>
+</div>
+<div class="ob-progreso ob-progreso--fina" data-estado="indeterminado" role="progressbar" aria-label="Preparando"><span class="ob-progreso__barra"></span></div>
+<div class="cat-fila">
+  <span class="ob-anillo-caja">
+    <svg class="ob-anillo ob-anillo--lg" viewBox="0 0 36 36" style="--valor: 0.72" role="img" aria-label="72 %"><circle class="ob-anillo__carril" cx="18" cy="18" r="15" pathLength="100"/><circle class="ob-anillo__arco" cx="18" cy="18" r="15" pathLength="100"/></svg>
+    <span class="ob-anillo-caja__valor">72 %</span>
+  </span>
+  <svg class="ob-anillo" viewBox="0 0 36 36" data-tono="verde" style="--valor: 1" role="img" aria-label="Completo"><circle class="ob-anillo__carril" cx="18" cy="18" r="15" pathLength="100"/><circle class="ob-anillo__arco" cx="18" cy="18" r="15" pathLength="100"/></svg>
+  <svg class="ob-anillo ob-anillo--sm" viewBox="0 0 36 36" data-tono="ambar" style="--valor: 0.35" role="img" aria-label="35 %"><circle class="ob-anillo__carril" cx="18" cy="18" r="15" pathLength="100"/><circle class="ob-anillo__arco" cx="18" cy="18" r="15" pathLength="100"/></svg>
+</div>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Esqueletos">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Esqueletos</h3><span class="ob-tarjeta__meta">Con la forma del contenido</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<div class="ob-esqueletos" aria-busy="true" aria-label="Cargando">
+  <span class="ob-esqueleto ob-esqueleto--titulo" style="width: 40%"></span>
+  <span class="ob-esqueleto ob-esqueleto--cifra" style="width: 64px"></span>
+  <span class="ob-esqueleto" style="width: 92%"></span>
+  <span class="ob-esqueleto" style="width: 76%"></span>
+  <div class="cat-fila"><span class="ob-esqueleto ob-esqueleto--circulo" style="width: 28px; height: 28px"></span><span class="ob-esqueleto" style="width: 120px"></span></div>
+</div>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Indicador de carga y separador">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Indicador y separador</h3><span class="ob-tarjeta__meta">.ob-indicador · .ob-separador</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<div class="cat-fila ob-texto-2">
+  <span class="ob-indicador" role="status" aria-label="Cargando"></span>
+  <span class="ob-indicador ob-indicador--lg" role="status" aria-label="Cargando"></span>
+  <span class="cat-nota">Sincronizando con el servidor…</span>
+</div>
+<hr class="ob-separador">
+<div class="ob-separador-texto">o importa un archivo</div>
+<div class="cat-fila" style="height: 24px">Pedidos<span class="ob-separador ob-separador--vertical"></span>Clientes<span class="ob-separador ob-separador--vertical"></span>Informes</div>
+                    </div></div>
+                  </section>
+                </div>
+              </section>
+            </div>
+
+            <!-- ============================== COMPONENTES ============================== -->
+            <div class="ob-pagina" data-vista="componentes" data-titulo="Componentes" hidden>
+              <header class="ob-pagina__encabezado">
+                <div class="ob-pagina__titulos">
+                  <h1 class="ob-pagina__titulo">Componentes</h1>
+                  <p class="ob-pagina__contexto">Flotantes, ventanas, navegación y avisos · teclado completo y foco que vuelve a su sitio</p>
+                </div>
+              </header>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Flotantes</h2><p class="cat-seccion__texto">Menús y popovers nacen de su disparador (escala 0,97 → 1 en 140 ms), se colocan solos y voltean al llegar a un borde. Escape los cierra y devuelve el foco.</p></div>
+                <div class="ob-rejilla" style="--columnas: 3">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Menú desplegable">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Menú desplegable</h3><span class="ob-tarjeta__meta">data-ob-menu</span></header>
+                    <div class="cat-demo__area cat-demo__area--centro"><div data-demo>
+<button type="button" class="ob-boton ob-boton--secundario" data-ob-menu="menu-exportar">
+  <span data-icono="exportar" data-tamano="16"></span>Exportar<span class="ob-boton__chevron"><span data-icono="chevron-abajo" data-tamano="14"></span></span>
+</button>
+<div class="ob-menu" id="menu-exportar" hidden>
+  <div class="ob-menu__etiqueta">Formato</div>
+  <button type="button" class="ob-menu__elemento" role="menuitem"><span data-icono="tabla" data-tamano="16"></span><span class="ob-menu__texto">Excel (.xlsx)</span><span class="ob-menu__meta">Ctrl E</span></button>
+  <button type="button" class="ob-menu__elemento" role="menuitem"><span data-icono="documento" data-tamano="16"></span><span class="ob-menu__texto">PDF para imprimir</span></button>
+  <div class="ob-menu__separador" role="separator"></div>
+  <button type="button" class="ob-menu__elemento" role="menuitemcheckbox" aria-checked="true"><span class="ob-menu__texto">Incluir columnas ocultas</span></button>
+  <div class="ob-menu__separador" role="separator"></div>
+  <button type="button" class="ob-menu__elemento ob-menu__elemento--peligro" role="menuitem"><span data-icono="eliminar" data-tamano="16"></span><span class="ob-menu__texto">Borrar exportaciones</span></button>
+</div>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Popover">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Popover</h3><span class="ob-tarjeta__meta">data-ob-popover</span></header>
+                    <div class="cat-demo__area cat-demo__area--centro"><div data-demo>
+<button type="button" class="ob-boton ob-boton--secundario" data-ob-popover="pop-compartir"><span data-icono="compartir" data-tamano="16"></span>Compartir</button>
+<div class="ob-popover" id="pop-compartir" aria-labelledby="pop-compartir-titulo" style="width: 320px" hidden>
+  <p class="ob-popover__titulo" id="pop-compartir-titulo">Compartir el pedido</p>
+  <p class="ob-popover__texto">Quien tenga el enlace podrá verlo, pero no editarlo.</p>
+  <div class="ob-entrada-caja" style="margin-top: 12px">
+    <input class="ob-entrada ob-entrada--codigo" value="obsidiana.local/p/PE-26014" readonly aria-label="Enlace">
+    <span class="ob-entrada-caja__accion"><button type="button" class="ob-boton ob-boton--icono ob-boton--sm" aria-label="Copiar enlace" data-ob-copiar data-texto="obsidiana.local/p/PE-26014"><span data-icono="copiar" data-tamano="16"></span></button></span>
+  </div>
+  <div class="ob-popover__pie"><button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" data-ob-cerrar>Cerrar</button></div>
+</div>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Pista (tooltip)">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Pista</h3><span class="ob-tarjeta__meta">data-ob-pista · 450 ms, luego al instante</span></header>
+                    <div class="cat-demo__area cat-demo__area--centro"><div data-demo>
+<button type="button" class="ob-boton ob-boton--icono ob-boton--borde" aria-label="Actualizar" data-ob-pista="Actualizar" data-pista-atajo="Ctrl R"><span data-icono="actualizar" data-tamano="16"></span></button>
+<button type="button" class="ob-boton ob-boton--icono ob-boton--borde" aria-label="Filtrar" data-ob-pista="Filtrar" data-pista-secundario="3 activos"><span data-icono="filtro" data-tamano="16"></span></button>
+<button type="button" class="ob-boton ob-boton--icono ob-boton--borde" aria-label="Imprimir" data-ob-pista="Imprimir" data-pista-lado="bottom"><span data-icono="imprimir" data-tamano="16"></span></button>
+                    </div></div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Ventanas</h2><p class="cat-seccion__texto">Un único desenfoque de fondo (6 px) detrás de las capas modales. La ventana nace del punto pulsado; el foco queda atrapado dentro y vuelve al disparador al cerrar.</p></div>
+                <div class="ob-rejilla" style="--columnas: 4">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Ventana de detalle">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Ventana de detalle</h3><span class="ob-tarjeta__meta">920 px</span></header>
+                    <div class="cat-demo__area cat-demo__area--centro"><div data-demo>
+<button type="button" class="ob-boton ob-boton--secundario" data-ob-abrir="ventana-pedido">Abrir pedido</button>
+<div class="ob-ventana" id="ventana-pedido" hidden>
+  <div class="ob-ventana__encabezado">
+    <div class="ob-ventana__titulos">
+      <div class="ob-ventana__antetitulo"><span class="ob-codigo">PE-26014</span>·<span class="ob-pildora" data-estado="en-curso"><span class="ob-glifo"></span>En curso</span></div>
+      <h2 class="ob-ventana__titulo">Altamira · Paneles acústicos</h2>
+    </div>
+    <div class="ob-ventana__acciones">
+      <button type="button" class="ob-boton ob-boton--icono" aria-label="Más opciones"><span data-icono="mas-opciones" data-tamano="16"></span></button>
+      <button type="button" class="ob-boton ob-boton--icono" aria-label="Cerrar" data-ob-cerrar><span data-icono="cerrar" data-tamano="16"></span></button>
+    </div>
+  </div>
+  <div class="ob-ventana__cuerpo">
+    <div class="ob-ventana__carril">
+      <div class="ob-ventana__pestanas" role="tablist" aria-label="Secciones" data-ob-pestanas>
+        <button type="button" class="ob-ventana__pestana" role="tab" aria-selected="true" aria-controls="vp-general"><span data-icono="documento" data-tamano="16"></span>General</button>
+        <button type="button" class="ob-ventana__pestana" role="tab" aria-selected="false" aria-controls="vp-entrega"><span data-icono="calendario" data-tamano="16"></span>Entrega</button>
+        <button type="button" class="ob-ventana__pestana" role="tab" aria-selected="false" aria-controls="vp-adjuntos"><span data-icono="adjunto" data-tamano="16"></span>Adjuntos<span class="ob-ventana__cuenta">3/7</span></button>
+      </div>
+      <dl class="ob-ventana__resumen">
+        <div><dt>Cantidad</dt><dd>412 unidades</dd></div>
+        <div><dt>Valor</dt><dd>USD 258.175</dd></div>
+        <div><dt>Entrega</dt><dd>13 dic 2026</dd></div>
+      </dl>
+    </div>
+    <div class="ob-ventana__contenido">
+      <div class="ob-ventana__panel" id="vp-general">
+        <div class="ob-formulario" style="--columnas: 2">
+          <div class="ob-campo ob-formulario__ancho"><label class="ob-etiqueta" for="vp-cliente">Cliente</label><input class="ob-entrada" id="vp-cliente" value="Altamira"></div>
+          <div class="ob-campo"><label class="ob-etiqueta" for="vp-producto">Producto</label><input class="ob-entrada" id="vp-producto" value="Paneles acústicos"></div>
+          <div class="ob-campo"><label class="ob-etiqueta" for="vp-cantidad">Cantidad</label><div class="ob-entrada-caja"><input class="ob-entrada ob-entrada--cifras" id="vp-cantidad" value="412"><span class="ob-entrada-caja__sufijo">u</span></div></div>
+        </div>
+      </div>
+      <div class="ob-ventana__panel" id="vp-entrega" hidden>
+        <ol class="ob-linea-tiempo">
+          <li class="ob-hito" data-tono="verde"><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">Pedido confirmado</p><p class="ob-hito__meta">02 nov 2026 · 09:14</p></div></li>
+          <li class="ob-hito" data-tono="vivo" data-pulso><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">En fabricación</p><p class="ob-hito__meta">Desde el 06 nov</p></div></li>
+          <li class="ob-hito"><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">Entrega prevista</p><p class="ob-hito__meta">13 dic 2026</p></div></li>
+        </ol>
+      </div>
+      <div class="ob-ventana__panel" id="vp-adjuntos" hidden>
+        <p class="ob-texto-2">3 de 7 documentos recibidos.</p>
+      </div>
+    </div>
+  </div>
+  <div class="ob-ventana__pie">
+    <span class="ob-ventana__nota"><kbd class="ob-tecla ob-tecla--sm">Esc</kbd>para cerrar</span>
+    <div class="ob-ventana__pie-acciones">
+      <button type="button" class="ob-boton ob-boton--secundario" data-ob-cerrar>Cancelar</button>
+      <button type="button" class="ob-boton ob-boton--primario">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Diálogo">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Diálogo</h3><span class="ob-tarjeta__meta">480 px</span></header>
+                    <div class="cat-demo__area cat-demo__area--centro"><div data-demo>
+<button type="button" class="ob-boton ob-boton--secundario" data-ob-abrir="dialogo-nota">Nueva nota</button>
+<div class="ob-dialogo" id="dialogo-nota" hidden>
+  <div class="ob-dialogo__encabezado">
+    <h2 class="ob-dialogo__titulo">Nueva nota</h2>
+    <p class="ob-dialogo__descripcion">La verán todas las personas del proyecto.</p>
+  </div>
+  <div class="ob-dialogo__cuerpo">
+    <div class="ob-campo"><label class="ob-etiqueta" for="dn-texto">Nota</label><textarea class="ob-area" id="dn-texto" rows="4"></textarea></div>
+  </div>
+  <div class="ob-dialogo__pie">
+    <span class="ob-dialogo__nota">Se guarda como borrador</span>
+    <div class="ob-dialogo__pie-acciones">
+      <button type="button" class="ob-boton ob-boton--secundario" data-ob-cerrar>Cancelar</button>
+      <button type="button" class="ob-boton ob-boton--primario" data-ob-cerrar>Publicar</button>
+    </div>
+  </div>
+  <button type="button" class="ob-boton ob-boton--icono ob-boton--sm ob-dialogo__cerrar" aria-label="Cerrar" data-ob-cerrar><span data-icono="cerrar" data-tamano="16"></span></button>
+</div>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Diálogo de alerta">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Diálogo de alerta</h3><span class="ob-tarjeta__meta">Hay que elegir</span></header>
+                    <div class="cat-demo__area cat-demo__area--centro"><div data-demo>
+<button type="button" class="ob-boton ob-boton--destructivo-suave" data-ob-abrir="alerta-anular">Anular pedido</button>
+<div class="ob-dialogo ob-dialogo--alerta ob-dialogo--peligro" id="alerta-anular" role="alertdialog" hidden>
+  <div class="ob-dialogo__encabezado">
+    <span class="ob-dialogo__icono"><span data-icono="alerta" data-tamano="18"></span></span>
+    <div class="ob-dialogo__textos">
+      <h2 class="ob-dialogo__titulo">¿Anular el pedido PE-26014?</h2>
+      <p class="ob-dialogo__descripcion">El cliente recibirá un aviso y el pedido dejará de contar en los informes. Se puede reactivar durante 30 días.</p>
+    </div>
+  </div>
+  <div class="ob-dialogo__pie">
+    <div class="ob-dialogo__pie-acciones">
+      <button type="button" class="ob-boton ob-boton--secundario" data-ob-cerrar>Cancelar</button>
+      <button type="button" class="ob-boton ob-boton--destructivo" data-ob-cerrar>Anular pedido</button>
+    </div>
+  </div>
+</div>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Panel lateral (cajón)">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Panel lateral</h3><span class="ob-tarjeta__meta">Entra y sale por la derecha</span></header>
+                    <div class="cat-demo__area cat-demo__area--centro"><div data-demo>
+<button type="button" class="ob-boton ob-boton--secundario" data-ob-abrir="cajon-actividad"><span data-icono="historial" data-tamano="16"></span>Actividad</button>
+<div class="ob-cajon" id="cajon-actividad" hidden>
+  <div class="ob-cajon__encabezado">
+    <div class="ob-cajon__titulos"><h2 class="ob-cajon__titulo">Actividad</h2><p class="ob-cajon__descripcion">Últimos cambios del proyecto Nordika</p></div>
+    <button type="button" class="ob-boton ob-boton--icono" aria-label="Cerrar" data-ob-cerrar><span data-icono="cerrar" data-tamano="16"></span></button>
+  </div>
+  <div class="ob-cajon__cuerpo">
+    <ol class="ob-linea-tiempo">
+      <li class="ob-hito" data-tono="acento"><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">Ana Navarro aprobó el presupuesto</p><p class="ob-hito__meta">Hoy · 10:42</p></div></li>
+      <li class="ob-hito" data-tono="verde"><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">Entrega parcial recibida</p><p class="ob-hito__meta">Ayer · 16:05</p><p class="ob-hito__texto">120 de 400 unidades.</p></div></li>
+      <li class="ob-hito"><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">Proyecto creado</p><p class="ob-hito__meta">04 nov 2026</p></div></li>
+    </ol>
+  </div>
+  <div class="ob-cajon__pie"><button type="button" class="ob-boton ob-boton--secundario" data-ob-cerrar>Cerrar</button></div>
+</div>
+                    </div></div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Organizar contenido</h2><p class="cat-seccion__texto">El indicador de las pestañas se desliza con la curva del resorte 420/36. Flechas, Inicio y Fin mueven el foco; la activación es automática.</p></div>
+                <div class="ob-rejilla" style="--columnas: 2">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Pestañas">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Pestañas</h3><span class="ob-tarjeta__meta">Línea y píldora</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<div class="ob-pestanas" role="tablist" aria-label="Detalle del cliente" data-ob-pestanas>
+  <button type="button" class="ob-pestana" role="tab" aria-selected="true" aria-controls="pt-resumen">Resumen</button>
+  <button type="button" class="ob-pestana" role="tab" aria-selected="false" aria-controls="pt-pedidos">Pedidos<span class="ob-pestana__cuenta">128</span></button>
+  <button type="button" class="ob-pestana" role="tab" aria-selected="false" aria-controls="pt-contactos">Contactos</button>
+  <button type="button" class="ob-pestana" role="tab" aria-selected="false" aria-controls="pt-notas" disabled>Notas</button>
+</div>
+<div class="ob-panel-pestana ob-texto-2" id="pt-resumen">Altamira compra desde 2019; su volumen creció un 18 % este año.</div>
+<div class="ob-panel-pestana ob-texto-2" id="pt-pedidos" hidden>128 pedidos, 6 en curso.</div>
+<div class="ob-panel-pestana ob-texto-2" id="pt-contactos" hidden>Compras: Laura Méndez · Finanzas: Iván Reyes.</div>
+<div class="ob-panel-pestana" id="pt-notas" hidden></div>
+<div class="ob-pestanas ob-pestanas--pildora" role="tablist" aria-label="Periodo" data-ob-pestanas>
+  <button type="button" class="ob-pestana" role="tab" aria-selected="false">Semana</button>
+  <button type="button" class="ob-pestana" role="tab" aria-selected="true">Mes</button>
+  <button type="button" class="ob-pestana" role="tab" aria-selected="false">Trimestre</button>
+  <button type="button" class="ob-pestana" role="tab" aria-selected="false">Año</button>
+</div>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Acordeón">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Acordeón</h3><span class="ob-tarjeta__meta">data-ob-acordeon="uno"</span></header>
+                    <div class="cat-demo__area cat-demo__area--col" style="padding-top: 8px; padding-bottom: 8px"><div data-demo>
+<div class="ob-acordeon" data-ob-acordeon="uno">
+  <div class="ob-acordeon__elemento">
+    <h4><button type="button" class="ob-acordeon__disparador" aria-expanded="true" aria-controls="ac-pago">Condiciones de pago</button></h4>
+    <div class="ob-acordeon__panel" id="ac-pago" role="region"><div class="ob-acordeon__contenido"><p>30 % de anticipo al confirmar y el saldo a 60 días de la entrega.</p></div></div>
+  </div>
+  <div class="ob-acordeon__elemento">
+    <h4><button type="button" class="ob-acordeon__disparador" aria-expanded="false" aria-controls="ac-entrega">Plazos de entrega</button></h4>
+    <div class="ob-acordeon__panel" id="ac-entrega" role="region"><div class="ob-acordeon__contenido"><p>De 4 a 6 semanas desde el anticipo, según la cantidad.</p></div></div>
+  </div>
+  <div class="ob-acordeon__elemento">
+    <h4><button type="button" class="ob-acordeon__disparador" aria-expanded="false" aria-controls="ac-garantia">Garantía</button></h4>
+    <div class="ob-acordeon__panel" id="ac-garantia" role="region"><div class="ob-acordeon__contenido"><p>Dos años sobre defectos de fabricación.</p></div></div>
+  </div>
+</div>
+                    </div></div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Avisos</h2><p class="cat-seccion__texto">Los avisos salen abajo a la derecha, como mucho cuatro. Una línea fina muestra el tiempo que les queda (se detiene al pasar el cursor) o el progreso de una operación larga.</p></div>
+                <div class="ob-rejilla" style="--columnas: 2">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Avisos (toasts)">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Avisos</h3><span class="ob-tarjeta__meta">Obsidiana.aviso({ … })</span></header>
+                    <div class="cat-demo__area"><div data-demo>
+<button type="button" class="ob-boton ob-boton--secundario" data-cat-aviso="exito"><span data-icono="exito" data-tamano="16"></span>Éxito</button>
+<button type="button" class="ob-boton ob-boton--secundario" data-cat-aviso="error"><span data-icono="error" data-tamano="16"></span>Error</button>
+<button type="button" class="ob-boton ob-boton--secundario" data-cat-aviso="deshacer"><span data-icono="retorno" data-tamano="16"></span>Con acción</button>
+<button type="button" class="ob-boton ob-boton--secundario" data-cat-aviso="progreso"><span data-icono="descargar" data-tamano="16"></span>Con progreso</button>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Aviso en línea (banner)">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Aviso en línea</h3><span class="ob-tarjeta__meta">.ob-banner · data-tono</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<div class="ob-banner" data-tono="ambar" role="status">
+  <span class="ob-banner__icono"><span data-icono="alerta" data-tamano="16"></span></span>
+  <div class="ob-banner__cuerpo"><p class="ob-banner__titulo">3 pedidos sin fecha de entrega</p><p class="ob-banner__texto">Complétala para que aparezcan en el calendario.</p></div>
+  <div class="ob-banner__acciones"><button type="button" class="ob-boton ob-boton--secundario ob-boton--sm">Revisar</button></div>
+</div>
+<div class="ob-banner" role="status">
+  <span class="ob-banner__icono"><span data-icono="info" data-tamano="16"></span></span>
+  <div class="ob-banner__cuerpo"><p class="ob-banner__texto">Los cambios se guardan en este equipo. Descarga un respaldo cada semana.</p></div>
+</div>
+                    </div></div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Navegación</h2><p class="cat-seccion__texto">Miga de pan, paginación, pasos y línea de tiempo. La paleta de comandos se abre con Ctrl K desde cualquier sitio, también desde un campo.</p></div>
+                <div class="ob-rejilla" style="--columnas: 2">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Miga de pan y paginación">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Miga de pan y paginación</h3><span class="ob-tarjeta__meta">Obsidiana.paginacion(nav, { pagina, total })</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<nav class="ob-miga" aria-label="Ubicación">
+  <ol>
+    <li><a class="ob-miga__enlace" href="#componentes">Obsidiana</a></li>
+    <li class="ob-miga__sep" aria-hidden="true"><span data-icono="chevron-derecha" data-tamano="14"></span></li>
+    <li><a class="ob-miga__enlace" href="#componentes"><span data-icono="reportes" data-tamano="16"></span>Informes</a></li>
+    <li class="ob-miga__sep" aria-hidden="true"><span data-icono="chevron-derecha" data-tamano="14"></span></li>
+    <li><span class="ob-miga__actual" aria-current="page">Cartera</span></li>
+  </ol>
+</nav>
+<nav class="ob-paginacion" id="cat-paginacion" aria-label="Paginación"></nav>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Pasos (stepper)">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Pasos</h3><span class="ob-tarjeta__meta">aria-current="step"</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<ol class="ob-pasos" aria-label="Importación">
+  <li class="ob-paso" data-estado="completado"><span class="ob-paso__marca"></span><span class="ob-paso__texto"><span class="ob-paso__titulo">Archivo</span><span class="ob-paso__descripcion">pedidos.xlsx</span></span></li>
+  <li class="ob-paso" data-estado="actual" aria-current="step"><span class="ob-paso__marca"></span><span class="ob-paso__texto"><span class="ob-paso__titulo">Columnas</span><span class="ob-paso__descripcion">12 de 14</span></span></li>
+  <li class="ob-paso" data-estado="pendiente"><span class="ob-paso__marca"></span><span class="ob-paso__texto"><span class="ob-paso__titulo">Confirmar</span><span class="ob-paso__descripcion">Revisión final</span></span></li>
+</ol>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Línea de tiempo">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Línea de tiempo</h3><span class="ob-tarjeta__meta">.ob-hito · data-tono</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<ol class="ob-linea-tiempo">
+  <li class="ob-hito" data-tono="verde"><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">Pago recibido</p><p class="ob-hito__meta">12 nov 2026 · USD 77.452</p></div></li>
+  <li class="ob-hito" data-tono="vivo" data-pulso><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">En camino a Lima</p><p class="ob-hito__meta">Llega en 4 días</p></div></li>
+  <li class="ob-hito"><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">Entrega y firma</p><p class="ob-hito__meta">Prevista el 18 nov</p></div></li>
+</ol>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Paleta de comandos">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Paleta de comandos</h3><span class="ob-tarjeta__meta">Obsidiana.paleta.registrar(grupo)</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<button type="button" class="ob-buscador" data-ob-paleta-abrir style="width: 100%">
+  <span data-icono="buscar" data-tamano="16"></span>
+  <span class="ob-buscador__texto">Buscar o ir a…</span>
+  <span class="ob-buscador__atajo"><kbd class="ob-tecla ob-tecla--sm">Ctrl</kbd><kbd class="ob-tecla ob-tecla--sm">K</kbd></span>
+</button>
+<p class="cat-especificacion">Sin término muestra «Ir a» y «Acciones»; con término, los grupos de datos van primero, ordenados por la mejor coincidencia. Sin animación: se usa decenas de veces al día.</p>
+                    </div></div>
+                  </section>
+                </div>
+              </section>
+            </div>
+
+            <!-- ============================== DATOS ============================== -->
+            <div class="ob-pagina" data-vista="datos" data-titulo="Datos" hidden>
+              <header class="ob-pagina__encabezado">
+                <div class="ob-pagina__titulos">
+                  <h1 class="ob-pagina__titulo">Datos</h1>
+                  <p class="ob-pagina__contexto">Tarjetas, cifras, tablas, listas y gráficas · todos los datos son ficticios</p>
+                </div>
+              </header>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Superficies y cifras</h2><p class="cat-seccion__texto">La cifra principal (34 px) es para el panel; en las pantallas de trabajo se usa la tira de cifras (20 px). Las unidades van pequeñas y atenuadas sobre la línea base. Los dígitos ruedan al entrar y al cambiar.</p></div>
+
+                <section class="ob-tarjeta cat-demo" data-cat-titulo="Grupo de cifras">
+                  <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Cifra principal en grupo</h3><span class="ob-tarjeta__meta">.ob-grupo-cifras · data-ob-cifra</span></header>
+                  <div class="cat-demo__area" style="padding: 0; display: block"><div data-demo>
+<section class="ob-grupo-cifras" aria-label="Resumen del mes" style="--columnas: 4; border: 0; border-radius: 0; box-shadow: none; background: none">
+  <div class="ob-cifra">
+    <div class="ob-cifra__etiqueta"><span data-icono="documento" data-tamano="16"></span>Pedidos activos</div>
+    <div class="ob-cifra__fila"><div class="ob-cifra__valor"><span class="ob-cifra__numero" data-ob-cifra="128">128</span></div></div>
+    <div class="ob-cifra__contexto">42 en curso, 31 en proceso</div>
+  </div>
+  <div class="ob-cifra">
+    <div class="ob-cifra__etiqueta"><span data-icono="peso" data-tamano="16"></span>Volumen del mes</div>
+    <div class="ob-cifra__fila">
+      <div class="ob-cifra__valor"><span class="ob-cifra__numero" data-ob-cifra="26151.4" data-decimales="1">26.151,4</span><span class="ob-cifra__unidad">kg</span></div>
+      <div class="ob-cifra__grafica"><span class="ob-sparkline" data-ob-grafica="sparkline" data-tono="vivo" data-valores="12,14,13,17,16,19,22,21,24,26"></span></div>
+    </div>
+    <div class="ob-cifra__contexto"><span class="ob-delta" data-tono="verde">+1.560,0 kg</span>esta semana</div>
+  </div>
+  <div class="ob-cifra">
+    <div class="ob-cifra__etiqueta"><span data-icono="cartera" data-tamano="16"></span>Por cobrar</div>
+    <div class="ob-cifra__fila"><div class="ob-cifra__valor"><span class="ob-cifra__prefijo">USD</span><span class="ob-cifra__numero" data-ob-cifra="3284120">3.284.120</span></div></div>
+    <div class="ob-cifra__contexto">8 clientes · corte 10 nov</div>
+  </div>
+  <div class="ob-cifra">
+    <div class="ob-cifra__etiqueta"><span data-icono="reloj" data-tamano="16"></span>Vencido más de 30 días</div>
+    <div class="ob-cifra__fila"><div class="ob-cifra__valor"><span class="ob-cifra__prefijo">USD</span><span class="ob-cifra__numero" data-ob-cifra="715340">715.340</span></div></div>
+    <div class="ob-cifra__contexto"><span class="ob-delta" data-tono="rojo">21,8 %</span>de la cartera</div>
+  </div>
+</section>
+                  </div></div>
+                </section>
+
+                <section class="ob-tarjeta cat-demo" data-cat-titulo="Tira de cifras">
+                  <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Tira de cifras que filtra</h3><span class="ob-tarjeta__meta">data-ob-tira · aria-pressed</span></header>
+                  <div class="cat-demo__area" style="display: block"><div data-demo>
+<div class="ob-tira" role="group" aria-label="Filtrar por estado" data-ob-tira style="--columnas: 6">
+  <button type="button" class="ob-tira__elemento" aria-pressed="true" data-valor="todos">
+    <span class="ob-tira__etiqueta">Todos</span>
+    <span class="ob-tira__valor"><span class="ob-tira__numero" data-ob-cifra="447">447</span><span class="ob-tira__secundario">pedidos</span></span>
+  </button>
+  <button type="button" class="ob-tira__elemento" aria-pressed="false" data-valor="pendiente">
+    <span class="ob-tira__etiqueta"><span class="ob-glifo" data-forma="anillo" style="--ob-glifo: var(--ambar)"></span>Pendientes</span>
+    <span class="ob-tira__valor"><span class="ob-tira__numero" data-ob-cifra="7">7</span><span class="ob-tira__secundario">1.208 kg</span></span>
+  </button>
+  <button type="button" class="ob-tira__elemento" aria-pressed="false" data-valor="en-proceso">
+    <span class="ob-tira__etiqueta"><span class="ob-glifo" data-forma="medio" style="--ob-glifo: var(--acento)"></span>En proceso</span>
+    <span class="ob-tira__valor"><span class="ob-tira__numero" data-ob-cifra="42">42</span><span class="ob-tira__secundario">9.840 kg</span></span>
+  </button>
+  <button type="button" class="ob-tira__elemento" aria-pressed="false" data-valor="en-curso">
+    <span class="ob-tira__etiqueta"><span class="ob-glifo" data-forma="rombo" style="--ob-glifo: var(--vivo)"></span>En curso</span>
+    <span class="ob-tira__valor"><span class="ob-tira__numero" data-ob-cifra="22">22</span><span class="ob-tira__secundario">5.102 kg</span></span>
+  </button>
+  <button type="button" class="ob-tira__elemento" aria-pressed="false" data-valor="completado">
+    <span class="ob-tira__etiqueta"><span class="ob-glifo" data-forma="lleno" style="--ob-glifo: var(--verde)"></span>Completados</span>
+    <span class="ob-tira__valor"><span class="ob-tira__numero" data-ob-cifra="358">358</span><span class="ob-tira__secundario">de 447</span></span>
+  </button>
+  <button type="button" class="ob-tira__elemento" aria-pressed="false" data-valor="saldo">
+    <span class="ob-tira__etiqueta">Saldo pendiente</span>
+    <span class="ob-tira__valor"><span class="ob-tira__numero"><span class="ob-tira__prefijo">USD</span><span data-ob-cifra="1090148">1.090.148</span></span></span>
+  </button>
+</div>
+                  </div></div>
+                </section>
+
+                <div class="ob-rejilla" style="--columnas: 3">
+                  <section class="ob-tarjeta cat-demo" id="cat-tarjeta-filo" data-cat-titulo="Tarjeta con filo de luz">
+                    <header class="ob-tarjeta__encabezado">
+                      <h3 class="ob-tarjeta__titulo">Tarjeta con filo de luz</h3>
+                      <div class="ob-tarjeta__acciones"><label class="ob-control"><span class="ob-interruptor"><input type="checkbox" role="switch" id="cat-filo" aria-label="Encender el filo de luz"></span></label></div>
+                    </header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<section class="ob-tarjeta" data-filo="encendido">
+  <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Proyecto Nordika</h3><span class="ob-tarjeta__meta">6 entregas</span></header>
+  <div class="ob-tarjeta__cuerpo ob-texto-2">El filo marca lo enfocado, seleccionado o activo.</div>
+</section>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Cifra secundaria">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Cifra secundaria</h3><span class="ob-tarjeta__meta">.ob-cifra--secundaria</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<div class="ob-cifra ob-cifra--secundaria">
+  <div class="ob-cifra__etiqueta">Ticket medio</div>
+  <div class="ob-cifra__fila">
+    <div class="ob-cifra__valor"><span class="ob-cifra__prefijo">USD</span><span class="ob-cifra__numero" data-ob-cifra="7345">7.345</span></div>
+    <div class="ob-cifra__grafica"><span class="ob-sparkline" data-ob-grafica="sparkline" data-valores="8,7,7.5,6.8,7.2,7.9,7.3"></span></div>
+  </div>
+  <div class="ob-cifra__contexto"><span class="ob-delta" data-tono="rojo">−3,1 %</span>frente a octubre</div>
+</div>
+                    </div></div>
+                  </section>
+
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Lista de descripción">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Lista de descripción</h3><span class="ob-tarjeta__meta">Pares etiqueta y valor</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<dl class="ob-descripcion" style="--columnas: 2">
+  <div class="ob-descripcion__par"><dt>Cliente</dt><dd>Altamira</dd></div>
+  <div class="ob-descripcion__par"><dt>Referencia</dt><dd data-codigo>PE-26014</dd></div>
+  <div class="ob-descripcion__par"><dt>Valor</dt><dd data-cifras>USD 258.175</dd></div>
+  <div class="ob-descripcion__par"><dt>Responsable</dt><dd class="ob-vacio-valor">—</dd></div>
+</dl>
+                    </div></div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Tabla de datos</h2><p class="cat-seccion__texto">Encabezado fijo, primera columna fija con sombra de borde al desplazar, filo de luz en la fila elegida, orden por columna, columnas redimensionables y teclado (flechas, Inicio, Fin, Enter). Ningún dato se recorta: hay desplazamiento horizontal.</p></div>
+
+                <section class="ob-tarjeta cat-demo" data-cat-titulo="Tabla de datos con filtros">
+                  <div class="cat-demo__area" style="padding: 14px 18px; border-bottom: 1px solid var(--linea)"><div data-demo>
+<div class="ob-barra-herramientas cat-ancho" role="toolbar" aria-label="Filtrar pedidos">
+  <div class="ob-entrada-caja ob-barra-herramientas__busqueda">
+    <span class="ob-entrada-caja__icono" data-icono="buscar" data-tamano="16"></span>
+    <input class="ob-entrada" type="search" id="cat-tabla-buscar" placeholder="Buscar pedido, cliente o ciudad" aria-label="Buscar pedidos">
+  </div>
+  <button type="button" class="ob-boton ob-boton--secundario" id="boton-filtros" data-ob-popover="filtros-pedidos">
+    <span data-icono="filtro" data-tamano="16"></span>Filtros<span class="ob-boton__contador" hidden>0</span>
+  </button>
+  <div class="ob-fichas" id="fichas-pedidos"></div>
+  <div class="ob-barra-herramientas__derecha">
+    <span class="ob-barra-herramientas__texto" id="cat-tabla-conteo"></span>
+    <div class="ob-segmentado ob-segmentado--sm" role="radiogroup" aria-label="Densidad" data-ob-segmentado id="cat-densidad">
+      <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="true" data-valor="normal">Normal</button>
+      <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="false" data-valor="compacta">Compacta</button>
+    </div>
+  </div>
+</div>
+<div class="ob-popover ob-popover--sin-relleno ob-filtros" id="filtros-pedidos" aria-label="Filtros" data-ob-filtros data-fichas="#fichas-pedidos" data-contador="#boton-filtros .ob-boton__contador" hidden>
+  <div class="ob-filtros__cuerpo">
+    <div class="ob-filtros__categorias">
+      <button type="button" class="ob-filtros__categoria" data-categoria="estado" aria-selected="true"><span data-icono="etiqueta" data-tamano="16"></span><span class="ob-filtros__categoria-texto">Estado</span></button>
+      <button type="button" class="ob-filtros__categoria" data-categoria="ciudad"><span data-icono="puerto" data-tamano="16"></span><span class="ob-filtros__categoria-texto">Ciudad</span></button>
+      <button type="button" class="ob-filtros__categoria" data-categoria="cliente"><span data-icono="clientes" data-tamano="16"></span><span class="ob-filtros__categoria-texto">Cliente</span></button>
+    </div>
+    <div class="ob-filtros__panel" data-categoria="estado">
+      <label class="ob-filtros__opcion"><span class="ob-casilla"><input type="checkbox" value="pendiente"></span><span class="ob-filtros__opcion-texto">Pendiente</span><span class="ob-filtros__cuenta" data-cuenta="pendiente"></span></label>
+      <label class="ob-filtros__opcion"><span class="ob-casilla"><input type="checkbox" value="en-proceso"></span><span class="ob-filtros__opcion-texto">En proceso</span><span class="ob-filtros__cuenta" data-cuenta="en-proceso"></span></label>
+      <label class="ob-filtros__opcion"><span class="ob-casilla"><input type="checkbox" value="en-curso"></span><span class="ob-filtros__opcion-texto">En curso</span><span class="ob-filtros__cuenta" data-cuenta="en-curso"></span></label>
+      <label class="ob-filtros__opcion"><span class="ob-casilla"><input type="checkbox" value="completado"></span><span class="ob-filtros__opcion-texto">Completado</span><span class="ob-filtros__cuenta" data-cuenta="completado"></span></label>
+      <label class="ob-filtros__opcion"><span class="ob-casilla"><input type="checkbox" value="anulado"></span><span class="ob-filtros__opcion-texto">Anulado</span><span class="ob-filtros__cuenta" data-cuenta="anulado"></span></label>
+    </div>
+    <div class="ob-filtros__panel" data-categoria="ciudad" data-cat-opciones="ciudad"></div>
+    <div class="ob-filtros__panel" data-categoria="cliente" data-cat-opciones="cliente"></div>
+  </div>
+  <div class="ob-filtros__pie">
+    <span class="ob-filtros__resumen">Sin filtros activos</span>
+    <button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" data-ob-filtros-limpiar>Limpiar</button>
+    <button type="button" class="ob-boton ob-boton--primario ob-boton--sm" data-ob-cerrar>Listo</button>
+  </div>
+</div>
+                  </div></div>
+                  <div data-demo>
+<div class="ob-tabla-marco" data-ob-tabla data-seleccionable id="cat-tabla-marco" style="height: 420px">
+  <div class="ob-tabla-desplazable">
+    <table class="ob-tabla" aria-label="Pedidos" data-redimensionable id="cat-tabla">
+      <colgroup><col style="width: 132px"><col style="width: 200px"><col style="width: 150px"><col style="width: 156px"><col style="width: 132px"><col style="width: 120px"><col style="width: 140px"><col style="width: 160px"><col style="width: 150px"></colgroup>
+      <thead>
+        <tr>
+          <th scope="col" data-fija><button type="button" class="ob-tabla__orden">Pedido</button></th>
+          <th scope="col"><button type="button" class="ob-tabla__orden">Cliente</button></th>
+          <th scope="col"><button type="button" class="ob-tabla__orden">Estado</button></th>
+          <th scope="col"><button type="button" class="ob-tabla__orden">Producto</button></th>
+          <th scope="col" data-alineacion="derecha"><button type="button" class="ob-tabla__orden">Cantidad</button></th>
+          <th scope="col" data-alineacion="derecha" aria-sort="descending"><button type="button" class="ob-tabla__orden">Valor USD</button></th>
+          <th scope="col"><button type="button" class="ob-tabla__orden">Ciudad</button></th>
+          <th scope="col"><button type="button" class="ob-tabla__orden">Responsable</button></th>
+          <th scope="col"><button type="button" class="ob-tabla__orden">Entrega</button></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-fila>
+          <td data-fija data-codigo><div class="ob-tabla__celda-fija">PE-26014</div></td>
+          <td>Altamira</td>
+          <td><span class="ob-pildora" data-estado="en-curso"><span class="ob-glifo"></span>En curso</span></td>
+          <td data-tono="secundario">Paneles acústicos</td>
+          <td data-alineacion="derecha">412</td>
+          <td data-alineacion="derecha">258.175</td>
+          <td data-tono="secundario">Lima</td>
+          <td></td>
+          <td data-tono="secundario">13 dic 2026</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <footer class="ob-tabla__pie">
+    <span class="ob-tabla__conteo" aria-live="polite"><b>1–12</b> de 48 pedidos</span>
+    <div class="ob-tabla__pie-derecha">
+      <div class="ob-tabla__por-pagina">Por página
+        <div class="ob-selector-caja ob-selector-caja--sm"><select class="ob-selector" data-ob-selector aria-label="Filas por página"><option>12</option><option>25</option><option>50</option></select></div>
+      </div>
+      <nav class="ob-paginacion" id="cat-tabla-paginacion" aria-label="Paginación"></nav>
+    </div>
+  </footer>
+</div>
+                  </div>
+                </section>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Estados vacíos y listas</h2><p class="cat-seccion__texto">Un estado vacío es una invitación a actuar: un dibujo que se traza una vez, una frase que dice qué pasa y una acción.</p></div>
+                <div class="ob-rejilla" style="--columnas: 3">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Estado vacío">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Sin datos todavía</h3><button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" style="margin-left: auto" data-cat-repetir-vacio><span data-icono="actualizar" data-tamano="14"></span>Repetir</button></header>
+                    <div class="cat-demo__area" style="display: block; padding: 0"><div data-demo>
+<div class="ob-vacio ob-vacio--compacto">
+  <svg class="ob-vacio__dibujo" viewBox="0 0 120 88" aria-hidden="true">
+    <rect class="ob-vacio__fondo" x="14" y="10" width="92" height="68" rx="10"/>
+    <path class="ob-trazar" pathLength="1" d="M24 10h72a10 10 0 0 1 10 10v48a10 10 0 0 1-10 10H24a10 10 0 0 1-10-10V20a10 10 0 0 1 10-10Z"/>
+    <path class="ob-trazar" pathLength="1" style="--ob-retraso: 150ms" d="M14 28h92"/>
+    <path class="ob-trazar" pathLength="1" style="--ob-retraso: 300ms" d="M28 42h40M28 54h28M28 66h34"/>
+    <path class="ob-trazar ob-vacio__acento" pathLength="1" style="--ob-retraso: 450ms" d="M84 42h8"/>
+  </svg>
+  <div class="ob-vacio__textos">
+    <p class="ob-vacio__titulo">Aún no hay pedidos</p>
+    <p class="ob-vacio__descripcion">Importa un archivo para cargar los pedidos del mes.</p>
+  </div>
+  <div class="ob-vacio__accion"><button type="button" class="ob-boton ob-boton--primario"><span data-icono="importar" data-tamano="16"></span>Importar archivo</button></div>
+</div>
+                    </div></div>
+                  </section>
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Estado vacío de búsqueda">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Sin resultados</h3><span class="ob-tarjeta__meta">Obsidiana.vacio.dibujo("busqueda")</span></header>
+                    <div class="cat-demo__area" style="display: block; padding: 0">
+                      <div class="ob-vacio ob-vacio--compacto" data-cat-vacio="busqueda">
+                        <div class="ob-vacio__textos"><p class="ob-vacio__titulo">Sin resultados</p><p class="ob-vacio__descripcion">Ningún pedido coincide con «Quanta».</p></div>
+                        <div class="ob-vacio__accion"><button type="button" class="ob-boton ob-boton--secundario">Quitar filtros</button></div>
+                      </div>
+                    </div>
+                  </section>
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Lista">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Lista</h3><span class="ob-tarjeta__meta">Entrada escalonada</span></header>
+                    <div class="cat-demo__area cat-demo__area--col" style="padding: 8px"><div data-demo>
+<div class="ob-lista" data-ob-escalonar>
+  <a class="ob-lista__elemento" href="#datos">
+    <span class="ob-lista__icono"><span data-icono="documento" data-tamano="16"></span></span>
+    <div class="ob-lista__cuerpo"><p class="ob-lista__titulo">PE-26014 · Altamira</p><p class="ob-lista__subtitulo">412 u · entrega 13 dic</p></div>
+    <div class="ob-lista__fin"><span class="ob-pildora" data-estado="en-curso"><span class="ob-glifo"></span>En curso</span></div>
+  </a>
+  <a class="ob-lista__elemento" href="#datos" aria-current="true">
+    <span class="ob-lista__icono"><span data-icono="documento" data-tamano="16"></span></span>
+    <div class="ob-lista__cuerpo"><p class="ob-lista__titulo">PE-26015 · Nordika</p><p class="ob-lista__subtitulo">120 u · entrega 20 nov</p></div>
+    <div class="ob-lista__fin"><span class="ob-pildora" data-estado="pendiente"><span class="ob-glifo"></span>Pendiente</span></div>
+  </a>
+  <a class="ob-lista__elemento" href="#datos">
+    <span class="ob-lista__icono"><span data-icono="documento" data-tamano="16"></span></span>
+    <div class="ob-lista__cuerpo"><p class="ob-lista__titulo">PE-26016 · Brisa Textil</p><p class="ob-lista__subtitulo">2.040 u · entregado</p></div>
+    <div class="ob-lista__fin"><span class="ob-pildora" data-estado="completado"><span class="ob-glifo"></span>Completado</span></div>
+  </a>
+</div>
+                    </div></div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="cat-seccion">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Gráficas</h2><p class="cat-seccion__texto">Recetas en SVG sin librería: una tinta por serie, rejilla de 1 px y etiquetas a 11 px. Al pasar el cursor, una guía y la pista dicen el valor exacto.</p></div>
+                <div class="ob-rejilla" style="--columnas: 3">
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Gráfica de barras">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Barras</h3><span class="ob-tarjeta__meta">Pedidos por mes</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<div class="ob-grafica" data-ob-grafica="barras" data-valores="38,42,35,51,47,58,62,55,49,66,71" data-etiquetas="Ene,Feb,Mar,Abr,May,Jun,Jul,Ago,Sep,Oct,Nov" data-unidad="pedidos" style="height: 180px" role="img" aria-label="Pedidos por mes: de 38 en enero a 71 en noviembre"></div>
+                    </div></div>
+                  </section>
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Gráfica de líneas y área">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Líneas y área</h3><span class="ob-tarjeta__meta">Ingresos frente al año anterior</span></header>
+                    <div class="cat-demo__area cat-demo__area--col"><div data-demo>
+<div class="ob-grafica" data-ob-grafica="lineas" data-valores="182,195,176,214,233,228,251,262,248,279,301" data-comparacion="160,171,168,180,194,201,207,215,222,230,236" data-etiquetas="Ene,Feb,Mar,Abr,May,Jun,Jul,Ago,Sep,Oct,Nov" data-prefijo="USD" style="height: 180px" role="img" aria-label="Ingresos mensuales en miles de USD, por encima del año anterior"></div>
+<div class="ob-leyenda"><span class="ob-leyenda__elemento"><span class="ob-leyenda__muestra"></span>2026</span><span class="ob-leyenda__elemento"><span class="ob-leyenda__muestra" style="--ob-tono: var(--texto-4)"></span>2025</span></div>
+                    </div></div>
+                  </section>
+                  <section class="ob-tarjeta cat-demo" data-cat-titulo="Gráfica de anillo">
+                    <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Anillo</h3><span class="ob-tarjeta__meta">Pedidos por estado</span></header>
+                    <div class="cat-demo__area"><div data-demo>
+<div data-ob-grafica="anillo" data-valores="358,42,22,7" data-series="5,1,2,3"data-etiquetas="Completados,En proceso,En curso,Pendientes" data-centro="447" data-centro-etiqueta="pedidos" data-tamano="132" role="img" aria-label="447 pedidos: 358 completados, 42 en proceso, 22 en curso y 7 pendientes"></div>
+<div class="ob-leyenda ob-leyenda--vertical" style="flex: 1; min-width: 150px">
+  <span class="ob-leyenda__elemento" data-serie="5"><span class="ob-leyenda__muestra"></span>Completados<span class="ob-leyenda__valor">358</span></span>
+  <span class="ob-leyenda__elemento" data-serie="1"><span class="ob-leyenda__muestra"></span>En proceso<span class="ob-leyenda__valor">42</span></span>
+  <span class="ob-leyenda__elemento" data-serie="2"><span class="ob-leyenda__muestra"></span>En curso<span class="ob-leyenda__valor">22</span></span>
+  <span class="ob-leyenda__elemento" data-serie="3"><span class="ob-leyenda__muestra"></span>Pendientes<span class="ob-leyenda__valor">7</span></span>
+</div>
+                    </div></div>
+                  </section>
+                </div>
+              </section>
+            </div>
+
+            <!-- ============================== MOVIMIENTO ============================== -->
+            <div class="ob-pagina" data-vista="movimiento" data-titulo="Movimiento" hidden>
+              <header class="ob-pagina__encabezado">
+                <div class="ob-pagina__titulos">
+                  <h1 class="ob-pagina__titulo">Movimiento</h1>
+                  <p class="ob-pagina__contexto">Cada animación responde a una acción y muestra qué cambió · curva cubic-bezier(0.16, 1, 0.3, 1) · sin sobreimpulso</p>
+                </div>
+                <div class="ob-pagina__acciones">
+                  <button type="button" class="ob-boton ob-boton--secundario" id="cat-repetir-todo"><span data-icono="actualizar" data-tamano="16"></span>Repetir todas</button>
+                </div>
+              </header>
+
+              <div class="ob-rejilla" style="--columnas: 3" id="cat-movimiento">
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Cambio de vista">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">Cambio de vista</h2><span class="cat-especificacion">Fundido con 6 px · 180 ms</span></div><button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" style="margin-left: auto" data-cat-repetir="vista"><span data-icono="actualizar" data-tamano="14"></span>Repetir</button></header>
+                  <div class="cat-mov__escena"><div class="ob-tarjeta-interna ob-entrar cat-ancho" data-cat-escena="vista" style="padding: 16px"><p class="ob-t-titulo-tarjeta">Pedidos</p><p class="ob-t-etiqueta ob-texto-3" style="margin-top: 4px">48 pedidos · 6 en curso</p></div></div>
+                </section>
+
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Indicador que se desliza">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">Indicador que se desliza</h2><span class="cat-especificacion">Resorte 420 / 36 · 320 ms · FLIP</span></div><button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" style="margin-left: auto" data-cat-repetir="indicador"><span data-icono="actualizar" data-tamano="14"></span>Repetir</button></header>
+                  <div class="cat-mov__escena">
+                    <div class="ob-segmentado" role="radiogroup" aria-label="Demostración" data-ob-segmentado data-cat-escena="indicador">
+                      <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="true">Activos</button>
+                      <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="false">Inactivos</button>
+                      <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="false">Todos los pedidos</button>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Entrada escalonada de listas">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">Entrada de listas</h2><span class="cat-especificacion">Escalonado de 24 ms · máximo 8</span></div><button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" style="margin-left: auto" data-cat-repetir="lista"><span data-icono="actualizar" data-tamano="14"></span>Repetir</button></header>
+                  <div class="cat-mov__escena">
+                    <div class="ob-lista ob-lista--tarjetas cat-ancho" data-cat-escena="lista" data-ob-escalonar>
+                      <div class="ob-lista__elemento"><span class="ob-codigo">PE-26014</span><span class="ob-lista__fin"><span class="ob-pildora" data-estado="en-curso"><span class="ob-glifo"></span>En curso</span></span></div>
+                      <div class="ob-lista__elemento"><span class="ob-codigo">PE-26015</span><span class="ob-lista__fin"><span class="ob-pildora" data-estado="en-proceso"><span class="ob-glifo"></span>En proceso</span></span></div>
+                      <div class="ob-lista__elemento"><span class="ob-codigo">PE-26016</span><span class="ob-lista__fin"><span class="ob-pildora" data-estado="completado"><span class="ob-glifo"></span>Completado</span></span></div>
+                      <div class="ob-lista__elemento"><span class="ob-codigo">PE-26017</span><span class="ob-lista__fin"><span class="ob-pildora" data-estado="pendiente"><span class="ob-glifo"></span>Pendiente</span></span></div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Cifras que cuentan">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">Cifras</h2><span class="cat-especificacion">Rodillo de dígitos · 600 ms al entrar y al cambiar</span></div><button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" style="margin-left: auto" data-cat-repetir="cifra"><span data-icono="actualizar" data-tamano="14"></span>Cambiar</button></header>
+                  <div class="cat-mov__escena">
+                    <div class="ob-cifra">
+                      <div class="ob-cifra__etiqueta">Por cobrar</div>
+                      <div class="ob-cifra__fila"><div class="ob-cifra__valor"><span class="ob-cifra__prefijo">USD</span><span class="ob-cifra__numero" data-ob-cifra="3284120" data-cat-escena="cifra">3.284.120</span></div></div>
+                      <div class="ob-cifra__contexto">8 clientes</div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Trazos que se dibujan">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">Trazos</h2><span class="cat-especificacion">De 0 a 1 en 900 ms, una vez · área con fundido</span></div><button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" style="margin-left: auto" data-cat-repetir="trazo"><span data-icono="actualizar" data-tamano="14"></span>Repetir</button></header>
+                  <div class="cat-mov__escena"><div class="ob-grafica cat-ancho" data-cat-escena="trazo" data-ob-grafica="lineas" data-valores="12,18,15,24,22,31,29,36" data-etiquetas="1,2,3,4,5,6,7,8" data-unidad="u" style="height: 120px" aria-hidden="true"></div></div>
+                </section>
+
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Guardar">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">Guardar</h2><span class="cat-especificacion">Reposo → progreso → confirmado, mismo ancho</span></div><button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" style="margin-left: auto" data-cat-repetir="guardar"><span data-icono="actualizar" data-tamano="14"></span>Repetir</button></header>
+                  <div class="cat-mov__escena"><button type="button" class="ob-boton ob-boton--primario" data-cat-escena="guardar" data-texto-listo="Guardado">Guardar cambios</button></div>
+                </section>
+
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Ventana que nace de su origen">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">Ventana desde su origen</h2><span class="cat-especificacion">Escala 0,98 → 1 + fundido · 220 ms · velo de 6 px</span></div></header>
+                  <div class="cat-mov__escena" style="justify-content: space-between">
+                    <button type="button" class="ob-boton ob-boton--secundario" data-ob-abrir="cat-dialogo-origen">Desde aquí</button>
+                    <button type="button" class="ob-boton ob-boton--secundario" data-ob-abrir="cat-dialogo-origen">O desde aquí</button>
+                  </div>
+                </section>
+
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Filo de luz que aparece">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">Filo de luz</h2><span class="cat-especificacion">Fundido de 240 ms al seleccionar o enfocar</span></div><button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" style="margin-left: auto" data-cat-repetir="filo"><span data-icono="actualizar" data-tamano="14"></span>Alternar</button></header>
+                  <div class="cat-mov__escena"><div class="ob-tarjeta-interna cat-ancho" tabindex="0" data-cat-escena="filo" data-filo="encendido" style="padding: 16px"><p class="ob-t-destacado">Proyecto Nordika</p><p class="ob-t-etiqueta ob-texto-3" style="margin-top: 2px">Pulsa Tab para enfocarla</p></div></div>
+                </section>
+
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Iconos al pasar el cursor">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">Iconos al pasar el cursor</h2><span class="cat-especificacion">Microanimación con sentido · una vez</span></div><button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" style="margin-left: auto" data-cat-repetir="iconos"><span data-icono="actualizar" data-tamano="14"></span>Repetir</button></header>
+                  <div class="cat-mov__escena">
+                    <div class="cat-fila" data-cat-escena="iconos">
+                      <span class="ob-icono-vivo cat-icono" style="width: 64px; height: 64px"><span data-icono="descargar" data-tamano="20"></span></span>
+                      <span class="ob-icono-vivo cat-icono" style="width: 64px; height: 64px"><span data-icono="documento" data-tamano="20"></span></span>
+                      <span class="ob-icono-vivo cat-icono" style="width: 64px; height: 64px"><span data-icono="sol" data-tamano="20"></span></span>
+                      <span class="ob-icono-vivo cat-icono" style="width: 64px; height: 64px"><span data-icono="actualizar" data-tamano="20"></span></span>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Respuesta al pulsar">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">Respuesta al pulsar</h2><span class="cat-especificacion">Escala 0,98 · 100 ms · los iconos 0,96</span></div></header>
+                  <div class="cat-mov__escena cat-fila" style="gap: 12px">
+                    <button type="button" class="ob-boton ob-boton--primario ob-boton--lg">Mantén pulsado</button>
+                    <button type="button" class="ob-boton ob-boton--icono ob-boton--borde ob-boton--lg" aria-label="Favorito"><span data-icono="estrella" data-tamano="16"></span></button>
+                  </div>
+                </section>
+
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Pulso de algo en curso">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">En curso</h2><span class="cat-especificacion">Único bucle permitido · 2,4 s · opacidad 0,5 → 1</span></div></header>
+                  <div class="cat-mov__escena">
+                    <div class="cat-fila">
+                      <span style="position: relative; display: grid; width: 24px; height: 24px; place-items: center"><span class="ob-pulso" style="position: absolute; inset: 0; border-radius: 50%; background: var(--fondo-vivo)"></span><span style="width: 8px; height: 8px; border-radius: 50%; background: var(--vivo)"></span></span>
+                      <span class="ob-texto-2">En camino a Lima · 62 % del recorrido</span>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="ob-tarjeta cat-mov" data-cat-titulo="Transición de tema">
+                  <header class="ob-tarjeta__encabezado"><div class="cat-bloque" style="gap: 0"><h2 class="ob-tarjeta__titulo">Transición de tema</h2><span class="cat-especificacion">View Transitions · fundido cruzado de 260 ms</span></div></header>
+                  <div class="cat-mov__escena"><button type="button" class="ob-boton ob-boton--secundario" data-cat-alternar-tema><span data-icono="sol" data-tamano="16"></span>Cambiar de tema</button></div>
+                </section>
+              </div>
+
+              <div class="ob-dialogo" id="cat-dialogo-origen" hidden>
+                <div class="ob-dialogo__encabezado"><h2 class="ob-dialogo__titulo">Nació del botón que pulsaste</h2><p class="ob-dialogo__descripcion">El punto de origen de la escala es el lugar del clic: la ventana parece salir de ahí.</p></div>
+                <div class="ob-dialogo__pie"><div class="ob-dialogo__pie-acciones"><button type="button" class="ob-boton ob-boton--primario" data-ob-cerrar>Entendido</button></div></div>
+                <button type="button" class="ob-boton ob-boton--icono ob-boton--sm ob-dialogo__cerrar" aria-label="Cerrar" data-ob-cerrar><span data-icono="cerrar" data-tamano="16"></span></button>
+              </div>
+
+              <section class="cat-seccion" style="margin-top: 40px">
+                <div class="cat-seccion__cabeza"><h2 class="cat-seccion__titulo">Tabla de movimiento</h2><p class="cat-seccion__texto">Con movimiento reducido (sistema o el interruptor del pie de la barra lateral) se quitan desplazamientos, escalas, rodillos y bucles; se conservan fundidos breves.</p></div>
+                <section class="ob-tarjeta">
+                  <div class="ob-tabla-marco">
+                    <div class="ob-tabla-desplazable">
+                      <table class="ob-tabla ob-tabla--auto" aria-label="Tabla de movimiento">
+                        <thead><tr><th scope="col">Uso</th><th scope="col">Especificación</th><th scope="col">Token</th><th scope="col">Cuándo no</th></tr></thead>
+                        <tbody>
+                          <tr><td>Cambio de vista</td><td data-tono="secundario">Fundido + 6 px, 180 ms</td><td data-codigo>--t-vista</td><td data-tono="tenue">Filtros y paginación</td></tr>
+                          <tr><td>Indicadores</td><td data-tono="secundario">Resorte 420/36 (linear()), 320 ms</td><td data-codigo>--curva-resorte</td><td data-tono="tenue">Al cambiar de tamaño</td></tr>
+                          <tr><td>Ventana y diálogo</td><td data-tono="secundario">Escala 0,98 → 1 + fundido, 220 ms; salida 140 ms</td><td data-codigo>--t-ventana</td><td data-tono="tenue">Paleta de comandos</td></tr>
+                          <tr><td>Menús y popovers</td><td data-tono="secundario">Escala 0,97 → 1 desde su origen, 140 ms</td><td data-codigo>--t-menu</td><td data-tono="tenue">Pistas seguidas (al instante)</td></tr>
+                          <tr><td>Panel lateral</td><td data-tono="secundario">Desde el borde derecho, 260 ms; sale por el mismo sitio</td><td data-codigo>--t-cajon</td><td data-tono="tenue">—</td></tr>
+                          <tr><td>Avisos</td><td data-tono="secundario">Transición de 8 px y escala 0,98, 240 ms; los demás se recolocan (FLIP)</td><td data-codigo>--t-aviso</td><td data-tono="tenue">—</td></tr>
+                          <tr><td>Listas</td><td data-tono="secundario">Escalonado de 24 ms, máximo 8</td><td data-codigo>--escalonado</td><td data-tono="tenue">Listas largas al filtrar</td></tr>
+                          <tr><td>Cifras</td><td data-tono="secundario">Rodillo de dígitos, 600 ms</td><td data-codigo>--t-cifra</td><td data-tono="tenue">Mientras se escribe en una búsqueda</td></tr>
+                          <tr><td>Hover</td><td data-tono="secundario">120 ms</td><td data-codigo>--t-hover</td><td data-tono="tenue">—</td></tr>
+                          <tr><td>Pulsar</td><td data-tono="secundario">Escala 0,98, 100 ms</td><td data-codigo>--escala-pulsar</td><td data-tono="tenue">—</td></tr>
+                          <tr><td>Tema</td><td data-tono="secundario">View Transitions, 260 ms; sin soporte, al instante</td><td data-codigo>--t-tema</td><td data-tono="tenue">Movimiento reducido</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </section>
+              </section>
+            </div>
+
+            <!-- ============================== PATRONES ============================== -->
+            <div class="ob-pagina" data-vista="patrones" data-titulo="Patrones" hidden>
+              <header class="ob-pagina__encabezado">
+                <div class="ob-pagina__titulos">
+                  <h1 class="ob-pagina__titulo">Patrones</h1>
+                  <p class="ob-pagina__contexto">Dos pantallas completas de ejemplo para copiar: una lista de trabajo y un panel</p>
+                </div>
+                <div class="ob-pagina__acciones">
+                  <div class="ob-pestanas ob-pestanas--pildora" role="tablist" aria-label="Patrón" data-ob-pestanas>
+                    <button type="button" class="ob-pestana" role="tab" aria-selected="true" aria-controls="patron-lista">Pantalla de lista</button>
+                    <button type="button" class="ob-pestana" role="tab" aria-selected="false" aria-controls="patron-panel">Panel</button>
+                  </div>
+                </div>
+              </header>
+
+              <!-- Patrón: pantalla de lista -->
+              <div class="ob-panel-pestana" id="patron-lista">
+                <div class="cat-pantalla ob-lienzo">
+                  <div class="cat-pantalla__interior">
+                    <header class="ob-pagina__encabezado">
+                      <div class="ob-pagina__titulos">
+                        <h2 class="ob-pagina__titulo">Pedidos</h2>
+                        <p class="ob-pagina__contexto"><span id="pl-conteo">48 pedidos</span> · noviembre de 2026</p>
+                      </div>
+                      <div class="ob-pagina__acciones">
+                        <button type="button" class="ob-boton ob-boton--secundario" id="pl-actualizar"><span data-icono="actualizar" data-tamano="16"></span>Actualizar</button>
+                        <button type="button" class="ob-boton ob-boton--secundario" data-ob-menu="pl-exportar"><span data-icono="exportar" data-tamano="16"></span>Exportar<span class="ob-boton__chevron"><span data-icono="chevron-abajo" data-tamano="14"></span></span></button>
+                        <div class="ob-menu" id="pl-exportar" data-alinear="end" hidden>
+                          <button type="button" class="ob-menu__elemento" role="menuitem"><span data-icono="tabla" data-tamano="16"></span><span class="ob-menu__texto">Excel con los filtros actuales</span></button>
+                          <button type="button" class="ob-menu__elemento" role="menuitem"><span data-icono="documento" data-tamano="16"></span><span class="ob-menu__texto">PDF para imprimir</span></button>
+                        </div>
+                        <button type="button" class="ob-boton ob-boton--primario"><span data-icono="nuevo" data-tamano="16"></span>Nuevo pedido</button>
+                      </div>
+                    </header>
+                    <div class="ob-pila">
+                      <div class="ob-tira" role="group" aria-label="Filtrar por estado" data-ob-tira id="pl-tira" style="--columnas: 6"></div>
+                      <div class="ob-barra-herramientas" role="toolbar" aria-label="Filtrar pedidos">
+                        <div class="ob-entrada-caja ob-barra-herramientas__busqueda">
+                          <span class="ob-entrada-caja__icono" data-icono="buscar" data-tamano="16"></span>
+                          <input class="ob-entrada" type="search" id="pl-buscar" placeholder="Buscar pedido, cliente o ciudad" aria-label="Buscar pedidos">
+                        </div>
+                        <div class="ob-fichas" id="pl-fichas"></div>
+                        <div class="ob-barra-herramientas__derecha">
+                          <div class="ob-segmentado" role="radiogroup" aria-label="Periodo" data-ob-segmentado>
+                            <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="false">2025</button>
+                            <button type="button" class="ob-segmentado__opcion" role="radio" aria-checked="true">2026</button>
+                          </div>
+                          <button type="button" class="ob-boton ob-boton--icono ob-boton--borde" aria-label="Columnas" data-ob-pista="Columnas"><span data-icono="columnas" data-tamano="16"></span></button>
+                        </div>
+                      </div>
+                      <section class="ob-tarjeta" style="overflow: hidden">
+                        <div class="ob-tabla-marco" data-ob-tabla data-seleccionable id="pl-tabla-marco">
+                          <div class="ob-tabla-desplazable" style="max-height: 486px">
+                            <table class="ob-tabla" aria-label="Pedidos de noviembre" id="pl-tabla">
+                              <colgroup><col style="width: 132px"><col style="width: 220px"><col style="width: 150px"><col style="width: 180px"><col style="width: 120px"><col style="width: 140px"><col style="width: 130px"><col style="width: 150px"></colgroup>
+                              <thead><tr>
+                                <th scope="col" data-fija><button type="button" class="ob-tabla__orden">Pedido</button></th>
+                                <th scope="col"><button type="button" class="ob-tabla__orden">Cliente</button></th>
+                                <th scope="col"><button type="button" class="ob-tabla__orden">Estado</button></th>
+                                <th scope="col"><button type="button" class="ob-tabla__orden">Producto</button></th>
+                                <th scope="col" data-alineacion="derecha"><button type="button" class="ob-tabla__orden">Cantidad</button></th>
+                                <th scope="col" data-alineacion="derecha"><button type="button" class="ob-tabla__orden">Valor USD</button></th>
+                                <th scope="col"><button type="button" class="ob-tabla__orden">Ciudad</button></th>
+                                <th scope="col"><button type="button" class="ob-tabla__orden">Entrega</button></th>
+                              </tr></thead>
+                              <tbody></tbody>
+                            </table>
+                          </div>
+                          <footer class="ob-tabla__pie">
+                            <span class="ob-tabla__conteo" id="pl-pie-conteo"></span>
+                            <div class="ob-tabla__pie-derecha"><nav class="ob-paginacion" id="pl-paginacion" aria-label="Paginación"></nav></div>
+                          </footer>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Patrón: panel -->
+              <div class="ob-panel-pestana" id="patron-panel" hidden>
+                <div class="cat-pantalla ob-lienzo">
+                  <div class="cat-pantalla__interior">
+                    <header class="ob-pagina__encabezado">
+                      <div class="ob-pagina__titulos">
+                        <h2 class="ob-pagina__titulo">Panel</h2>
+                        <p class="ob-pagina__contexto">Lo que requiere tu atención hoy · 11/11/2026</p>
+                      </div>
+                      <div class="ob-pagina__acciones"><span class="ob-insignia" data-tono="verde"><span class="ob-glifo" data-forma="punto"></span>Sincronizado hace 2 min</span></div>
+                    </header>
+                    <div class="ob-pila">
+                      <section class="ob-grupo-cifras" aria-label="Resumen" style="--columnas: 4">
+                        <div class="ob-cifra"><div class="ob-cifra__etiqueta"><span data-icono="documento" data-tamano="16"></span>Pedidos activos</div><div class="ob-cifra__fila"><div class="ob-cifra__valor"><span class="ob-cifra__numero" data-ob-cifra="128">128</span></div></div><div class="ob-cifra__contexto">42 en curso, 31 en proceso</div></div>
+                        <div class="ob-cifra"><div class="ob-cifra__etiqueta"><span data-icono="pagos" data-tamano="16"></span>Ingresos del mes</div><div class="ob-cifra__fila"><div class="ob-cifra__valor"><span class="ob-cifra__prefijo">USD</span><span class="ob-cifra__numero" data-ob-cifra="301420">301.420</span></div><div class="ob-cifra__grafica"><span class="ob-sparkline" data-ob-grafica="sparkline" data-valores="248,262,251,279,301"></span></div></div><div class="ob-cifra__contexto"><span class="ob-delta" data-tono="verde">+7,9 %</span>frente a octubre</div></div>
+                        <div class="ob-cifra"><div class="ob-cifra__etiqueta"><span data-icono="cartera" data-tamano="16"></span>Por cobrar</div><div class="ob-cifra__fila"><div class="ob-cifra__valor"><span class="ob-cifra__prefijo">USD</span><span class="ob-cifra__numero" data-ob-cifra="3284120">3.284.120</span></div></div><div class="ob-cifra__contexto">8 clientes · corte 10 nov</div></div>
+                        <div class="ob-cifra"><div class="ob-cifra__etiqueta"><span data-icono="reloj" data-tamano="16"></span>Entregas esta semana</div><div class="ob-cifra__fila"><div class="ob-cifra__valor"><span class="ob-cifra__numero" data-ob-cifra="14">14</span><span class="ob-cifra__unidad">de 19</span></div></div><div class="ob-cifra__contexto"><span class="ob-delta" data-tono="ambar">5 sin confirmar</span></div></div>
+                      </section>
+
+                      <div class="cat-columnas">
+                        <section class="ob-tarjeta" data-filo="encendido">
+                          <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Requiere tu atención</h3><span class="ob-tarjeta__meta">6 asuntos</span></header>
+                          <div class="ob-tarjeta__cuerpo" style="padding-top: 6px; padding-bottom: 6px">
+                            <ul class="ob-lista ob-lista--lineas" data-ob-escalonar>
+                              <li><a class="ob-lista__elemento" href="#patrones"><span class="ob-insignia" data-tono="rojo"><span class="ob-glifo" data-forma="punto"></span>Urgente</span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo" style="font-weight: 400">Entregas vencidas sin confirmar</p></div><div class="ob-lista__fin"><b class="ob-cifras">3</b></div></a></li>
+                              <li><a class="ob-lista__elemento" href="#patrones"><span class="ob-insignia" data-tono="rojo"><span class="ob-glifo" data-forma="punto"></span>Urgente</span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo" style="font-weight: 400">Saldos vencidos</p></div><div class="ob-lista__fin"><span class="ob-texto-3 ob-cifras">USD 85.926</span><b class="ob-cifras">2</b></div></a></li>
+                              <li><a class="ob-lista__elemento" href="#patrones"><span class="ob-insignia" data-tono="ambar"><span class="ob-glifo" data-forma="punto"></span>Hoy</span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo" style="font-weight: 400">Pedidos sin fecha de entrega</p></div><div class="ob-lista__fin"><b class="ob-cifras">4</b></div></a></li>
+                              <li><a class="ob-lista__elemento" href="#patrones"><span class="ob-insignia" data-tono="ambar"><span class="ob-glifo" data-forma="punto"></span>Hoy</span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo" style="font-weight: 400">Documentos pendientes tras la entrega</p></div><div class="ob-lista__fin"><b class="ob-cifras">6</b></div></a></li>
+                              <li><a class="ob-lista__elemento" href="#patrones"><span class="ob-insignia"><span class="ob-glifo" data-forma="punto"></span>Esta semana</span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo" style="font-weight: 400">Saldos que vencen en 7 días</p></div><div class="ob-lista__fin"><span class="ob-texto-3 ob-cifras">USD 22.659</span><b class="ob-cifras">4</b></div></a></li>
+                              <li><a class="ob-lista__elemento" href="#patrones"><span class="ob-insignia"><span class="ob-glifo" data-forma="punto"></span>Esta semana</span><div class="ob-lista__cuerpo"><p class="ob-lista__titulo" style="font-weight: 400">Presupuestos sin respuesta</p></div><div class="ob-lista__fin"><b class="ob-cifras">9</b></div></a></li>
+                            </ul>
+                          </div>
+                        </section>
+                        <section class="ob-tarjeta">
+                          <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Ingresos</h3><span class="ob-tarjeta__meta">Miles de USD · 2026 frente a 2025</span></header>
+                          <div class="ob-tarjeta__cuerpo cat-bloque">
+                            <div class="ob-grafica" data-ob-grafica="lineas" data-valores="182,195,176,214,233,228,251,262,248,279,301" data-comparacion="160,171,168,180,194,201,207,215,222,230,236" data-etiquetas="Ene,Feb,Mar,Abr,May,Jun,Jul,Ago,Sep,Oct,Nov" data-prefijo="USD" data-unidad="mil" style="height: 232px" role="img" aria-label="Ingresos de 2026 por encima de 2025 todos los meses"></div>
+                            <div class="ob-leyenda"><span class="ob-leyenda__elemento"><span class="ob-leyenda__muestra"></span>2026</span><span class="ob-leyenda__elemento"><span class="ob-leyenda__muestra" style="--ob-tono: var(--texto-4)"></span>2025</span></div>
+                          </div>
+                        </section>
+                      </div>
+
+                      <div class="ob-rejilla" style="--columnas: 3">
+                        <section class="ob-tarjeta">
+                          <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Proyectos activos</h3><span class="ob-tarjeta__meta">4 de 11</span></header>
+                          <div class="ob-tarjeta__cuerpo cat-bloque" style="gap: 16px">
+                            <div class="ob-progreso-caja"><div class="ob-progreso-caja__cabeza"><span class="ob-texto-1">Nordika · sede central</span><span>82 %</span></div><div class="ob-progreso" role="progressbar" aria-label="Nordika" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="--valor: .82"><span class="ob-progreso__barra"></span></div></div>
+                            <div class="ob-progreso-caja"><div class="ob-progreso-caja__cabeza"><span class="ob-texto-1">Brisa Textil · tiendas</span><span>54 %</span></div><div class="ob-progreso" role="progressbar" aria-label="Brisa Textil" aria-valuenow="54" aria-valuemin="0" aria-valuemax="100" data-tono="vivo" style="--valor: .54"><span class="ob-progreso__barra"></span></div></div>
+                            <div class="ob-progreso-caja"><div class="ob-progreso-caja__cabeza"><span class="ob-texto-1">Lumen Andino · oficinas</span><span>31 %</span></div><div class="ob-progreso" role="progressbar" aria-label="Lumen Andino" aria-valuenow="31" aria-valuemin="0" aria-valuemax="100" data-tono="ambar" style="--valor: .31"><span class="ob-progreso__barra"></span></div></div>
+                            <div class="ob-progreso-caja"><div class="ob-progreso-caja__cabeza"><span class="ob-texto-1">Corvel Industrial · planta</span><span>12 %</span></div><div class="ob-progreso" role="progressbar" aria-label="Corvel Industrial" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100" style="--valor: .12"><span class="ob-progreso__barra"></span></div></div>
+                          </div>
+                        </section>
+                        <section class="ob-tarjeta">
+                          <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Pedidos por estado</h3><span class="ob-tarjeta__meta">Noviembre</span></header>
+                          <div class="ob-tarjeta__cuerpo cat-fila" style="gap: 20px; flex-wrap: nowrap">
+                            <div data-ob-grafica="anillo" data-valores="358,42,22,7" data-series="5,1,2,3" data-etiquetas="Completados,En proceso,En curso,Pendientes" data-centro="447" data-centro-etiqueta="pedidos" data-tamano="128" role="img" aria-label="447 pedidos por estado"></div>
+                            <div class="ob-leyenda ob-leyenda--vertical" style="flex: 1">
+                              <span class="ob-leyenda__elemento" data-serie="5"><span class="ob-leyenda__muestra"></span>Completados<span class="ob-leyenda__valor">358</span></span>
+                              <span class="ob-leyenda__elemento" data-serie="1"><span class="ob-leyenda__muestra"></span>En proceso<span class="ob-leyenda__valor">42</span></span>
+                              <span class="ob-leyenda__elemento" data-serie="2"><span class="ob-leyenda__muestra"></span>En curso<span class="ob-leyenda__valor">22</span></span>
+                              <span class="ob-leyenda__elemento" data-serie="3"><span class="ob-leyenda__muestra"></span>Pendientes<span class="ob-leyenda__valor">7</span></span>
+                            </div>
+                          </div>
+                        </section>
+                        <section class="ob-tarjeta">
+                          <header class="ob-tarjeta__encabezado"><h3 class="ob-tarjeta__titulo">Actividad</h3><button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm" style="margin-left: auto" data-ob-abrir="cajon-actividad">Ver todo</button></header>
+                          <div class="ob-tarjeta__cuerpo">
+                            <ol class="ob-linea-tiempo">
+                              <li class="ob-hito" data-tono="acento"><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">Ana Navarro aprobó el presupuesto de Nordika</p><p class="ob-hito__meta">Hoy · 10:42</p></div></li>
+                              <li class="ob-hito" data-tono="vivo" data-pulso><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">PE-26014 en camino a Lima</p><p class="ob-hito__meta">Llega en 4 días</p></div></li>
+                              <li class="ob-hito" data-tono="verde"><span class="ob-hito__punto"></span><div class="ob-hito__cuerpo"><p class="ob-hito__titulo">Pago recibido de Altamira</p><p class="ob-hito__meta">Ayer · USD 77.452</p></div></li>
+                            </ol>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!--
+      1. Captura del HTML de cada demostración, antes de que iconos.js y obsidiana.js lo transformen.
+      2. iconos/iconos.js sustituye los [data-icono] por su SVG.
+      3. js/obsidiana.js da el comportamiento (se inicia al terminar de cargar el documento).
+      4. Datos de ejemplo y demostraciones del catálogo.
+    -->
+    <script>
+      (function () {
+        "use strict";
+        function sangria(texto) {
+          var lineas = texto.replace(/^\s*\n/, "").replace(/\s+$/, "").split("\n");
+          var min = Infinity;
+          lineas.forEach(function (l) {
+            if (!l.trim()) return;
+            var m = /^[ \t]*/.exec(l)[0].length;
+            if (m < min) min = m;
+          });
+          if (!isFinite(min)) min = 0;
+          return lineas
+            .map(function (l) {
+              return l.slice(min);
+            })
+            .join("\n");
+        }
+        function limpiar(html) {
+          return html
+            .replace(/class="([^"]*)"/g, function (m, c) {
+              var cls = c.split(/\s+/).filter(function (x) {
+                return x && x.indexOf("cat-") !== 0;
+              });
+              return cls.length ? 'class="' + cls.join(" ") + '"' : "";
+            })
+            .replace(/\s+data-cat-[\w-]+(="[^"]*")?/g, "")
+            .replace(/(\s[\w-]+)=""/g, "$1")
+            .replace(/ +>/g, ">");
+        }
+        function resaltar(codigo) {
+          var e = codigo.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+          return e
+            .replace(/(&lt;\/?)([a-z][\w-]*)/g, '$1<span class="t">$2</span>')
+            .replace(/ ([a-z:][\w:-]*)(="[^"]*")?/g, function (m, a, v) {
+              return ' <span class="a">' + a + "</span>" + (v ? '=<span class="v">' + v.slice(1) + "</span>" : "");
+            });
+        }
+        var bloques = [];
+        document.querySelectorAll(".cat-demo").forEach(function (tarjeta) {
+          var demos = tarjeta.querySelectorAll("[data-demo]");
+          if (!demos.length) return;
+          var html = Array.prototype.map
+            .call(demos, function (d) {
+              return sangria(limpiar(d.innerHTML));
+            })
+            .join("\n\n");
+          var detalles = document.createElement("details");
+          detalles.className = "ob-bloque-codigo";
+          detalles.innerHTML =
+            '<summary class="ob-bloque-codigo__cabeza"><span class="ob-bloque-codigo__chevron" data-icono="chevron-derecha" data-tamano="14"></span>HTML' +
+            '<button type="button" class="ob-boton ob-boton--fantasma ob-boton--sm ob-bloque-codigo__copiar" data-ob-copiar>Copiar</button></summary>' +
+            '<pre class="ob-bloque-codigo__pre"><code></code></pre>';
+          detalles.querySelector("code").innerHTML = resaltar(html);
+          tarjeta.appendChild(detalles);
+          bloques.push(detalles);
+        });
+        window.__catBloques = bloques;
+        window.__catResaltar = resaltar;
+      })();
+    </script>
+    <script src="iconos/iconos.js"></script>
+    <script src="js/obsidiana.js"></script>
+    <script src="catalogo.js"></script>
+  </body>
+</html>

@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="es" data-theme="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Obsidiana · Iconos</title>
+<link rel="stylesheet" href="../fuentes/fuentes.css">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="iconos.css">
+<script>
+  try {
+    var t = localStorage.getItem('obsidiana-tema');
+    if (t === 'claro' || t === 'oscuro') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { font-style: normal; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--lienzo-luz), var(--lienzo);
+    background-repeat: no-repeat;
+    color: var(--texto-1);
+    font-family: var(--fuente-texto);
+    font-feature-settings: var(--rasgos-texto);
+    font-size: 14px;
+    line-height: 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+  em, i { font-style: normal; }
+  button, input { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+  code, .codigo { font-family: var(--fuente-codigo); font-size: 12.5px; }
+
+  /* ---------------------------------------------------------------- Cabecera */
+  .cabecera {
+    position: sticky; top: 0; z-index: 20;
+    height: var(--alto-superior);
+    display: flex; align-items: center; gap: 24px;
+    padding: 0 32px;
+    background: color-mix(in srgb, var(--lienzo) 82%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--linea);
+  }
+  .marca { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -0.01em; }
+  .marca-signo {
+    width: 22px; height: 22px; border-radius: 7px;
+    background: linear-gradient(140deg, var(--acento-fuerte), var(--acento-relleno));
+    box-shadow: var(--sombra-boton-acento);
+    display: grid; place-items: center; color: var(--sobre-acento);
+  }
+  .marca small { color: var(--texto-3); font-weight: 500; }
+  .nav { display: flex; gap: 2px; margin-left: 8px; }
+  .nav a {
+    color: var(--texto-2); text-decoration: none; font-weight: 500;
+    padding: 6px 10px; border-radius: var(--r-control);
+    transition: background-color var(--t-hover), color var(--t-hover);
+  }
+  .nav a:hover { color: var(--texto-1); background: var(--lavado-2); }
+  .espaciador { flex: 1; }
+
+  .segmentado {
+    display: inline-flex; padding: 2px; gap: 2px;
+    background: var(--carril); border: 1px solid var(--linea); border-radius: var(--r-control);
+  }
+  .segmentado button {
+    height: 26px; min-width: 30px; padding: 0 9px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    border: 0; border-radius: var(--r-elemento); background: transparent;
+    color: var(--texto-3); font-weight: 500; font-size: 12.5px; cursor: pointer;
+    font-feature-settings: var(--rasgos-cifras);
+    transition: background-color var(--t-hover), color var(--t-hover);
+  }
+  .segmentado button:hover { color: var(--texto-1); }
+  .segmentado button[aria-pressed="true"] {
+    background: var(--carril-indicador); color: var(--texto-1);
+    box-shadow: var(--sombra-carril-indicador);
+  }
+
+  /* ---------------------------------------------------------------- Página */
+  main { max-width: 1320px; margin: 0 auto; padding: 40px 32px 96px; }
+  .intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 28px; }
+  h1 { font-size: 28px; line-height: 34px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .intro p { margin: 0; max-width: 680px; color: var(--texto-2); }
+  .cifras { display: flex; gap: 28px; }
+  .cifra { display: flex; flex-direction: column; gap: 2px; }
+  .cifra b { font-size: 22px; line-height: 26px; font-weight: 600; font-feature-settings: var(--rasgos-cifras); letter-spacing: -0.01em; }
+  .cifra span { color: var(--texto-3); font-size: 12.5px; }
+
+  .tarjeta {
+    background: var(--sup-degradado), var(--sup-1);
+    border: 1px solid var(--linea);
+    border-radius: var(--r-tarjeta);
+    box-shadow: var(--sombra-tarjeta);
+  }
+
+  /* Barra de herramientas */
+  .herramientas {
+    position: sticky; top: calc(var(--alto-superior) + 12px); z-index: 10;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    padding: 10px; margin-bottom: 16px;
+    background: color-mix(in srgb, var(--sup-1) 90%, transparent);
+    backdrop-filter: blur(12px);
+  }
+  .buscador {
+    flex: 1 1 280px; min-width: 220px; height: var(--alto-control);
+    display: flex; align-items: center; gap: 8px; padding: 0 10px;
+    background: var(--campo); border: 1px solid var(--linea-fuerte); border-radius: var(--r-control);
+    color: var(--texto-3);
+    transition: border-color var(--t-hover);
+  }
+  .buscador:focus-within { border-color: var(--filo-hover); }
+  .buscador input { flex: 1; border: 0; outline: 0; background: transparent; color: var(--texto-1); min-width: 0; }
+  .buscador input::placeholder { color: var(--texto-3); }
+  .buscador input::-webkit-search-cancel-button { appearance: none; }
+  .buscador kbd {
+    font-family: var(--fuente-codigo); font-size: 11px; color: var(--texto-3);
+    border: 1px solid var(--linea-fuerte); border-radius: var(--r-mini); padding: 0 5px; line-height: 18px;
+  }
+  .grupo-control { display: flex; align-items: center; gap: 8px; color: var(--texto-3); font-size: 12.5px; }
+  .boton {
+    height: var(--alto-control); padding: 0 12px;
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--linea-fuerte); border-radius: var(--r-control);
+    background: var(--boton-2); color: var(--texto-1); font-weight: 500; font-size: 13px;
+    box-shadow: var(--sombra-control); cursor: pointer;
+    transition: background-color var(--t-hover), border-color var(--t-hover);
+  }
+  .boton:hover { background: var(--boton-2-hover); border-color: var(--linea-hover); }
+  .boton.compacto { height: var(--alto-control-compacto); padding: 0 10px; font-size: 12.5px; }
+  .boton.acento {
+    background: var(--acento-relleno); border-color: transparent; color: var(--sobre-acento);
+    box-shadow: var(--sombra-boton-acento);
+  }
+  .boton.acento:hover { background: var(--acento-relleno-hover); }
+  .boton svg { color: var(--texto-2); }
+  .boton.acento svg { color: currentColor; }
+  .interruptor { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; color: var(--texto-2); font-size: 13px; user-select: none; }
+  .interruptor input { position: absolute; opacity: 0; pointer-events: none; }
+  .interruptor .pista {
+    width: 30px; height: 18px; border-radius: 999px; position: relative;
+    background: var(--lavado-3); border: 1px solid var(--interruptor-borde);
+    transition: background-color var(--t-estado) var(--curva);
+  }
+  .interruptor .pista::after {
+    content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--interruptor-pulgar); box-shadow: 0 1px 2px rgba(0,0,0,.25);
+    transition: transform var(--t-estado) var(--curva);
+  }
+  .interruptor input:checked + .pista { background: var(--acento-relleno); }
+  .interruptor input:checked + .pista::after { transform: translateX(12px); background: #fff; }
+  .interruptor input:focus-visible + .pista { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+  /* Disposición con detalle */
+  .disposicion { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+  .rejilla { padding: 8px 20px 20px; }
+  .categoria { padding-top: 16px; }
+  .categoria + .categoria { border-top: 1px solid var(--linea); margin-top: 8px; }
+  .categoria h2 {
+    display: flex; align-items: baseline; gap: 8px;
+    margin: 0 0 10px; font-size: 13px; line-height: 18px; font-weight: 600; color: var(--texto-2);
+  }
+  .categoria h2 span { color: var(--texto-4); font-weight: 500; font-feature-settings: var(--rasgos-cifras); }
+  .celdas { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 6px; }
+  .celda {
+    position: relative; height: 84px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    border: 1px solid transparent; border-radius: var(--r-interno);
+    background: transparent; color: var(--texto-2); cursor: pointer;
+    transition: background-color var(--t-hover), border-color var(--t-hover), color var(--t-hover);
+  }
+  .celda:hover { background: var(--lavado-2); border-color: var(--linea); color: var(--texto-1); }
+  .celda[aria-pressed="true"] { background: var(--acento-tenue); border-color: var(--filo-hover); color: var(--texto-1); }
+  .celda .nombre {
+    font-size: 11.5px; line-height: 14px; color: var(--texto-3); max-width: 96px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .celda:hover .nombre, .celda[aria-pressed="true"] .nombre { color: var(--texto-2); }
+  .vacio { display: none; flex-direction: column; align-items: center; gap: 10px; padding: 56px 16px 64px; text-align: center; }
+  .vacio.visible { display: flex; }
+  .vacio p { margin: 0; }
+  .vacio .t { font-weight: 500; }
+  .vacio .d { color: var(--texto-2); }
+
+  /* Panel de detalle */
+  .detalle { position: sticky; top: calc(var(--alto-superior) + 84px); padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .lienzo-icono {
+    position: relative; height: 176px; border-radius: var(--r-interno);
+    border: 1px solid var(--linea);
+    background-color: var(--sup-2);
+    background-image:
+      linear-gradient(to right, var(--linea) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--linea) 1px, transparent 1px);
+    background-size: 8px 8px; background-position: center;
+    display: grid; place-items: center; color: var(--texto-1); cursor: default;
+  }
+  .lienzo-icono .pista-hover { position: absolute; bottom: 8px; left: 0; right: 0; text-align: center; font-size: 11.5px; color: var(--texto-3); }
+  .tamanos-detalle { display: flex; align-items: flex-end; justify-content: space-between; padding: 0 6px; color: var(--texto-2); }
+  .tamanos-detalle div { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; color: var(--texto-3); font-feature-settings: var(--rasgos-cifras); }
+  .detalle h3 { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .meta { display: flex; flex-direction: column; gap: 6px; color: var(--texto-2); font-size: 12.5px; }
+  .meta-fila { display: flex; justify-content: space-between; gap: 12px; }
+  .meta-fila span:first-child { color: var(--texto-3); }
+  .fichas { display: flex; flex-wrap: wrap; gap: 4px; }
+  .ficha { font-size: 11.5px; line-height: 18px; padding: 0 7px; border-radius: 999px; background: var(--lavado-2); color: var(--texto-2); }
+  .acciones-detalle { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .acciones-detalle .boton { justify-content: center; }
+
+  /* Secciones inferiores */
+  section.bloque { margin-top: 56px; scroll-margin-top: 80px; }
+  section.bloque > h2 { font-size: 20px; line-height: 26px; font-weight: 650; letter-spacing: -0.015em; margin: 0 0 6px; }
+  section.bloque > p { margin: 0 0 18px; color: var(--texto-2); max-width: 720px; }
+
+  .glifos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding: 16px; }
+  @media (max-width: 720px) { .glifos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .glifo-caja { display: flex; flex-direction: column; gap: 12px; padding: 14px; border-radius: var(--r-interno); background: var(--sup-2); border: 1px solid var(--linea); }
+  .glifo-caja .grande { color: var(--texto-1); height: 34px; display: flex; align-items: center; }
+  .glifo-caja .nombre { font-size: 12px; color: var(--texto-3); }
+  .pildora {
+    align-self: flex-start;
+    display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 9px 0 8px;
+    border-radius: 999px; font-size: 12px; font-weight: 500; white-space: nowrap;
+    color: var(--tono-texto); background: color-mix(in srgb, var(--tono) var(--tinte-estado), transparent);
+  }
+  .pildora svg { color: var(--tono); }
+
+  .indicadores { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .indicador { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+  .indicador .muestra { height: 72px; display: flex; align-items: center; justify-content: center; gap: 18px; color: var(--texto-1); border-radius: var(--r-interno); background: var(--sup-2); border: 1px solid var(--linea); }
+  .indicador h3 { margin: 0; font-size: 13.5px; font-weight: 600; }
+  .indicador p { margin: 0; color: var(--texto-2); font-size: 12.5px; line-height: 18px; }
+  .indicador .pie { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .indicador .pie .grupo-control { width: 100%; }
+  .indicador .pie input[type="range"] { flex: 1; }
+  .vivo { color: var(--vivo-texto); display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; }
+  .indicador .muestra.exito-tono { color: var(--verde); }
+  .indicador .muestra.error-tono { color: var(--rojo); }
+  input[type="range"] { accent-color: var(--acento); width: 120px; }
+  .cifra-progreso { font-feature-settings: var(--rasgos-cifras); color: var(--texto-2); font-size: 12.5px; min-width: 34px; text-align: right; }
+
+  .ilustraciones { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .ilustracion { display: flex; flex-direction: column; }
+  .ilustracion .escena { height: 188px; display: grid; place-items: center; border-bottom: 1px solid var(--linea); }
+  .ilustracion .texto { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .ilustracion .texto b { font-weight: 600; font-size: 13.5px; }
+  .ilustracion .texto span { color: var(--texto-2); font-size: 12.5px; line-height: 18px; }
+  .ilustracion .texto .fila { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 2px; }
+  .ilustracion .texto code { color: var(--texto-3); }
+  .ilustracion .texto .botones { display: flex; gap: 6px; margin-top: 10px; }
+
+  .uso { padding: 18px 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .uso h3 { margin: 0 0 8px; font-size: 13.5px; font-weight: 600; }
+  .uso pre {
+    margin: 0; padding: 12px; border-radius: var(--r-control); background: var(--campo); border: 1px solid var(--linea);
+    color: var(--texto-2); font-family: var(--fuente-codigo); font-size: 12px; line-height: 18px; overflow-x: auto; white-space: pre;
+  }
+
+  /* Aviso */
+  .aviso {
+    position: fixed; right: 24px; bottom: 24px; z-index: 50;
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    background: var(--sup-3); border: 1px solid var(--linea-fuerte); border-radius: var(--r-interno);
+    box-shadow: var(--sombra-flotante); font-size: 13px;
+    opacity: 0; transform: translateY(8px); pointer-events: none;
+    transition: opacity var(--t-ventana) var(--curva), transform var(--t-ventana) var(--curva);
+  }
+  .aviso.visible { opacity: 1; transform: none; }
+  .aviso svg { color: var(--verde); }
+  .aviso code { color: var(--texto-2); }
+
+  .nota-teclado { color: var(--texto-3); font-size: 12px; }
+
+  @media (max-width: 960px) {
+    .disposicion { grid-template-columns: 1fr; }
+    .detalle { position: static; }
+    .intro { flex-direction: column; align-items: flex-start; }
+    .nav { display: none; }
+  }
+  @media (max-width: 560px) {
+    main { padding: 24px 16px 72px; }
+    .cabecera { padding: 0 16px; }
+    .rejilla { padding: 4px 12px 14px; }
+    .celdas { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .aviso { transition: opacity 60ms; transform: none; }
+  }
+</style>
+</head>
+<body>
+<header class="cabecera">
+  <div class="marca">
+    <span class="marca-signo"><span data-icono="sistema" data-tamano="14"></span></span>
+    Obsidiana <small>Iconos</small>
+  </div>
+  <nav class="nav" aria-label="Secciones">
+    <a href="#iconos">Iconos</a>
+    <a href="#glifos">Glifos de estado</a>
+    <a href="#indicadores">Indicadores</a>
+    <a href="#ilustraciones">Ilustraciones</a>
+    <a href="#uso">Uso</a>
+  </nav>
+  <div class="espaciador"></div>
+  <div class="segmentado" role="group" aria-label="Tema">
+    <button type="button" data-tema="claro" title="Tema claro"><span data-icono="sol" data-tamano="14"></span><span class="sr">Claro</span></button>
+    <button type="button" data-tema="oscuro" title="Tema oscuro"><span data-icono="luna" data-tamano="14"></span><span class="sr">Oscuro</span></button>
+  </div>
+</header>
+
+<main>
+  <div class="intro" id="iconos">
+    <div>
+      <h1>Iconos</h1>
+      <p>Retícula de 24 px, trazo de 1,5 px con extremos redondeados y relleno al 12 % en las formas cerradas. Toman el color del texto. Pasa el cursor: los que tienen sentido se mueven una vez.</p>
+    </div>
+    <div class="cifras" id="cifras"></div>
+  </div>
+
+  <div class="zona-iconos">
+  <div class="herramientas tarjeta">
+    <label class="buscador">
+      <span data-icono="buscar" data-tamano="16"></span>
+      <input id="busqueda" type="search" placeholder="Buscar por nombre, categoría o uso" autocomplete="off" spellcheck="false" aria-label="Buscar iconos">
+      <kbd>/</kbd>
+    </label>
+    <div class="grupo-control">
+      Tamaño
+      <div class="segmentado" role="group" aria-label="Tamaño de los iconos" id="tamanos">
+        <button type="button" data-tamano="14">14</button>
+        <button type="button" data-tamano="16" aria-pressed="true">16</button>
+        <button type="button" data-tamano="20">20</button>
+        <button type="button" data-tamano="24">24</button>
+      </div>
+    </div>
+    <label class="interruptor">
+      <input type="checkbox" id="solo-animados">
+      <span class="pista"></span>
+      Solo con animación
+    </label>
+    <button type="button" class="boton" id="reproducir"><span data-icono="actualizar" data-tamano="16"></span>Reproducir animaciones</button>
+  </div>
+
+  <div class="disposicion">
+    <div class="tarjeta">
+      <div class="rejilla" id="rejilla"></div>
+      <div class="vacio" id="vacio">
+        <span data-ilustracion="sin-resultados"></span>
+        <p class="t">Ningún icono coincide con <span id="termino"></span></p>
+        <p class="d">Prueba con otra palabra: los nombres y las etiquetas están en español.</p>
+        <button type="button" class="boton compacto" id="limpiar">Quitar la búsqueda</button>
+      </div>
+    </div>
+
+    <aside class="detalle tarjeta" id="detalle" aria-live="polite"></aside>
+  </div>
+  </div>
+
+  <section class="bloque" id="glifos">
+    <h2>Glifos de estado</h2>
+    <p>Formas de 10 px que distinguen un estado sin depender del color. Van dentro de las píldoras, delante de la etiqueta.</p>
+    <div class="tarjeta glifos" id="lista-glifos"></div>
+  </section>
+
+  <section class="bloque" id="indicadores">
+    <h2>Indicadores</h2>
+    <p>El giro de carga y el pulso son los únicos movimientos en bucle del sistema. El éxito y el error se dibujan una vez al aparecer.</p>
+    <div class="indicadores">
+      <div class="tarjeta indicador">
+        <div class="muestra"><span data-icono="cargando" data-tamano="24"></span><button type="button" class="boton compacto" tabindex="-1"><span data-icono="cargando" data-tamano="14"></span>Guardando</button></div>
+        <div><h3>cargando</h3><p>Arco que gira mientras una operación está en marcha. Con movimiento reducido gira más despacio.</p></div>
+      </div>
+      <div class="tarjeta indicador">
+        <div class="muestra"><span class="vivo"><span data-icono="en-curso" data-tamano="16"></span>En tránsito</span></div>
+        <div><h3>en-curso</h3><p>Pulso suave para lo que ocurre ahora: viajes en curso, sincronización activa.</p></div>
+      </div>
+      <div class="tarjeta indicador">
+        <div class="muestra exito-tono" id="muestra-exito"><span data-icono="exito-animado" data-tamano="32"></span></div>
+        <div class="pie"><div><h3>exito-animado</h3><p>Se dibuja al insertarse.</p></div><button type="button" class="boton compacto" data-repetir="muestra-exito">Repetir</button></div>
+      </div>
+      <div class="tarjeta indicador">
+        <div class="muestra error-tono" id="muestra-error"><span data-icono="error-animado" data-tamano="32"></span></div>
+        <div class="pie"><div><h3>error-animado</h3><p>Círculo y cruz, una sola vez.</p></div><button type="button" class="boton compacto" data-repetir="muestra-error">Repetir</button></div>
+      </div>
+      <div class="tarjeta indicador">
+        <div class="muestra" id="muestra-progreso" style="--progreso: 64"><span data-icono="progreso" data-tamano="32"></span><span data-icono="progreso" data-tamano="16"></span></div>
+        <div class="pie"><div><h3>progreso</h3><p>Lee la variable <code>--progreso</code>, de 0 a 100.</p></div><span class="grupo-control"><input type="range" min="0" max="100" value="64" id="rango-progreso" aria-label="Progreso"><span class="cifra-progreso" id="cifra-progreso">64 %</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" id="ilustraciones">
+    <h2>Ilustraciones de estado vacío</h2>
+    <p>Un dibujo mínimo que se traza una vez, una línea de texto y una acción. Usan las variables del tema, así que se incrustan en línea.</p>
+    <div class="ilustraciones" id="lista-ilustraciones"></div>
+  </section>
+
+  <section class="bloque" id="uso">
+    <h2>Uso</h2>
+    <p>Todos los formatos salen de una sola fuente: <code>iconos/fuente/iconos.mjs</code>. El detalle está en <code>iconos/LEEME.md</code>.</p>
+    <div class="tarjeta uso">
+      <div>
+        <h3>HTML</h3>
+<pre>&lt;link rel="stylesheet" href="iconos/iconos.css"&gt;
+&lt;script src="iconos/iconos.js"&gt;&lt;/script&gt;
+
+&lt;button&gt;
+  &lt;span data-icono="descargar"&gt;&lt;/span&gt;
+  Descargar
+&lt;/button&gt;</pre>
+      </div>
+      <div>
+        <h3>JavaScript</h3>
+<pre>el.innerHTML = Obsidiana.icono('filtro', {
+  tamano: 20,
+  titulo: 'Filtrar',
+});</pre>
+      </div>
+      <div>
+        <h3>React</h3>
+<pre>import { IconoDescargar } from './iconos/react';
+
+&lt;IconoDescargar tamano={16} /&gt;</pre>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+<script src="iconos.js"></script>
+<script src="../ilustraciones/ilustraciones.js"></script>
+<script>
+(function () {
+  'use strict';
+  var O = window.Obsidiana;
+  var CATEGORIAS = ['Módulos', 'Acciones', 'Navegación', 'Interfaz', 'Estado', 'Archivos', 'Comunicación', 'Datos y análisis', 'Operación', 'Finanzas', 'Personas', 'Seguridad y sistemas', 'Multimedia', 'Tema', 'Indicadores'];
+  var nombres = Object.keys(O.iconos);
+  var estado = { tamano: 16, busqueda: '', soloAnimados: false, seleccion: 'descargar' };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var normalizar = function (s) { return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); };
+  var pascal = function (n) { return n.split('-').map(function (p) { return p.charAt(0).toUpperCase() + p.slice(1); }).join(''); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var indice = {};
+  nombres.forEach(function (n) {
+    var c = O.iconos[n];
+    indice[n] = normalizar([n, n.replace(/-/g, ' '), c.categoria].concat(c.etiquetas).join(' '));
+  });
+
+  /* ------------------------------------------------ Cifras */
+  var animados = nombres.filter(function (n) { return O.iconos[n].animado && O.iconos[n].categoria !== 'Indicadores'; }).length;
+  $('cifras').innerHTML = [
+    [nombres.length, 'iconos'],
+    [animados, 'con animación'],
+    [Object.keys(O.glifos).length, 'glifos'],
+    [Object.keys(O.ilustraciones).length, 'ilustraciones'],
+  ].map(function (c) { return '<div class="cifra"><b>' + c[0] + '</b><span>' + c[1] + '</span></div>'; }).join('');
+
+  /* ------------------------------------------------ Rejilla */
+  function pintarRejilla() {
+    var q = normalizar(estado.busqueda.trim());
+    var total = 0;
+    var html = CATEGORIAS.map(function (cat) {
+      var lista = nombres.filter(function (n) {
+        var c = O.iconos[n];
+        if (c.categoria !== cat) return false;
+        if (estado.soloAnimados && !c.animado) return false;
+        return !q || q.split(/\s+/).every(function (p) { return indice[n].indexOf(p) !== -1; });
+      });
+      total += lista.length;
+      if (!lista.length) return '';
+      return '<div class="categoria"><h2>' + cat + ' <span>' + lista.length + '</span></h2><div class="celdas">' +
+        lista.map(function (n) {
+          return '<button type="button" class="celda" data-nombre="' + n + '" aria-pressed="' + (n === estado.seleccion) + '" title="' + n + '">' +
+            O.icono(n, { tamano: estado.tamano }) + '<span class="nombre">' + n + '</span></button>';
+        }).join('') + '</div></div>';
+    }).join('');
+    $('rejilla').innerHTML = html;
+    $('rejilla').style.display = total ? '' : 'none';
+    $('vacio').classList.toggle('visible', !total);
+    if (!total) {
+      $('termino').textContent = '«' + estado.busqueda.trim() + '»';
+      var viejo = $('vacio').querySelector('svg');
+      if (viejo) O.reproducirIlustracion(viejo);
+    }
+  }
+
+  /* ------------------------------------------------ Detalle */
+  function pintarDetalle() {
+    var n = estado.seleccion;
+    var c = O.iconos[n];
+    $('detalle').innerHTML =
+      '<div class="lienzo-icono icono-vivo" title="Pasa el cursor para ver la animación">' + O.icono(n, { tamano: 72 }) +
+        (c.animado ? '<span class="pista-hover">' + (c.categoria === 'Indicadores' ? 'Animación continua o de entrada' : 'Pasa el cursor') + '</span>' : '') + '</div>' +
+      '<div class="tamanos-detalle icono-vivo">' + [12, 16, 20, 24, 32].map(function (t) {
+        return '<div>' + O.icono(n, { tamano: t }) + t + '</div>';
+      }).join('') + '</div>' +
+      '<h3 class="codigo">' + n + '</h3>' +
+      '<div class="meta">' +
+        '<div class="meta-fila"><span>Categoría</span><span>' + c.categoria + '</span></div>' +
+        '<div class="meta-fila"><span>React</span><span class="codigo">Icono' + pascal(n) + '</span></div>' +
+        '<div class="meta-fila"><span>Animación</span><span>' + (c.animado ? (c.categoria === 'Indicadores' ? 'Continua o de entrada' : 'Al pasar el cursor') : 'Sin animación') + '</span></div>' +
+      '</div>' +
+      '<div class="fichas">' + c.etiquetas.map(function (e) { return '<span class="ficha">' + esc(e) + '</span>'; }).join('') + '</div>' +
+      '<div class="acciones-detalle">' +
+        '<button type="button" class="boton compacto" data-copiar="nombre">' + O.icono('copiar', { tamano: 14 }) + 'Nombre</button>' +
+        '<button type="button" class="boton compacto" data-copiar="svg">' + O.icono('codigo', { tamano: 14 }) + 'SVG</button>' +
+        '<button type="button" class="boton compacto" data-copiar="react">' + O.icono('integracion', { tamano: 14 }) + 'React</button>' +
+        '<button type="button" class="boton compacto" data-copiar="html">' + O.icono('documento', { tamano: 14 }) + 'HTML</button>' +
+      '</div>' +
+      '<a class="boton compacto" style="justify-content:center;text-decoration:none" href="svg/' + n + '.svg" download>' + O.icono('descargar', { tamano: 14 }) + 'Descargar ' + n + '.svg</a>' +
+      '<span class="nota-teclado">Clic en un icono copia su nombre. Mayús + clic copia el SVG.</span>';
+  }
+
+  function textoPara(tipo, n) {
+    if (tipo === 'nombre') return n;
+    if (tipo === 'svg') return O.icono(n, { tamano: 24 });
+    if (tipo === 'react') return '<Icono' + pascal(n) + ' tamano={16} />';
+    return '<span data-icono="' + n + '" data-tamano="16"></span>';
+  }
+  var ETIQUETA_COPIA = { nombre: 'Nombre copiado', svg: 'SVG copiado', react: 'Componente copiado', html: 'HTML copiado' };
+
+  /* ------------------------------------------------ Copiar y avisar */
+  function copiar(texto) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(texto).catch(function () { copiarAntiguo(texto); });
+    copiarAntiguo(texto);
+    return Promise.resolve();
+  }
+  function copiarAntiguo(texto) {
+    var t = document.createElement('textarea');
+    t.value = texto; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    t.remove();
+  }
+  var temporizador;
+  function avisar(texto, detalle) {
+    var a = $('aviso');
+    a.innerHTML = O.icono('exito', { tamano: 16 }) + '<span>' + esc(texto) + '</span>' + (detalle ? '<code>' + esc(detalle) + '</code>' : '');
+    a.classList.add('visible');
+    clearTimeout(temporizador);
+    temporizador = setTimeout(function () { a.classList.remove('visible'); }, 1800);
+  }
+
+  /* ------------------------------------------------ Eventos */
+  $('rejilla').addEventListener('click', function (e) {
+    var b = e.target.closest('.celda');
+    if (!b) return;
+    var n = b.getAttribute('data-nombre');
+    var previa = $('rejilla').querySelector('.celda[aria-pressed="true"]');
+    if (previa) previa.setAttribute('aria-pressed', 'false');
+    b.setAttribute('aria-pressed', 'true');
+    estado.seleccion = n;
+    pintarDetalle();
+    var tipo = e.shiftKey ? 'svg' : 'nombre';
+    copiar(textoPara(tipo, n)).then(function () { avisar(ETIQUETA_COPIA[tipo], n); });
+  });
+  $('detalle').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-copiar]');
+    if (!b) return;
+    var tipo = b.getAttribute('data-copiar');
+    copiar(textoPara(tipo, estado.seleccion)).then(function () { avisar(ETIQUETA_COPIA[tipo], estado.seleccion); });
+  });
+  $('busqueda').addEventListener('input', function (e) { estado.busqueda = e.target.value; pintarRejilla(); });
+  $('limpiar').addEventListener('click', function () { $('busqueda').value = ''; estado.busqueda = ''; pintarRejilla(); $('busqueda').focus(); });
+  $('solo-animados').addEventListener('change', function (e) { estado.soloAnimados = e.target.checked; pintarRejilla(); });
+  $('tamanos').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    estado.tamano = Number(b.getAttribute('data-tamano'));
+    Array.prototype.forEach.call(this.children, function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    pintarRejilla();
+  });
+  $('reproducir').addEventListener('click', function () { O.reproducirIcono($('rejilla')); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== $('busqueda')) { e.preventDefault(); $('busqueda').focus(); }
+    if (e.key === 'Escape' && document.activeElement === $('busqueda')) { $('busqueda').value = ''; estado.busqueda = ''; pintarRejilla(); }
+  });
+
+  /* ------------------------------------------------ Tema */
+  function aplicarTema(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.querySelectorAll('[data-tema]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-tema') === t)); });
+    try { localStorage.setItem('obsidiana-tema', t); } catch (e) {}
+  }
+  document.querySelectorAll('[data-tema]').forEach(function (b) {
+    b.addEventListener('click', function () { aplicarTema(b.getAttribute('data-tema')); });
+  });
+  aplicarTema(document.documentElement.getAttribute('data-theme') || 'oscuro');
+
+  /* ------------------------------------------------ Glifos */
+  var TONOS = {
+    anillo: ['ambar', 'Pendiente anticipo'], medio: ['acento', 'En producción'], rombo: ['vivo', 'En tránsito'],
+    lleno: ['verde', 'Entregado'], guion: ['gris-estado', 'Anulado'], triangulo: ['rojo', 'Vencida'],
+    cuadrado: ['gris-estado', 'En pausa'], punto: ['acento', 'Informativo'],
+  };
+  var TEXTO_TONO = { ambar: 'ambar-texto', acento: 'acento-texto', vivo: 'vivo-texto', verde: 'verde-texto', 'gris-estado': 'gris-texto', rojo: 'rojo-texto' };
+  $('lista-glifos').innerHTML = Object.keys(O.glifos).map(function (f) {
+    var t = TONOS[f] || ['gris-estado', f];
+    return '<div class="glifo-caja"><div class="grande">' + O.glifo(f, { tamano: 28 }) + '</div>' +
+      '<span class="pildora" style="--tono: var(--' + t[0] + '); --tono-texto: var(--' + TEXTO_TONO[t[0]] + ')">' + O.glifo(f) + t[1] + '</span>' +
+      '<span class="nombre codigo">' + f + '</span></div>';
+  }).join('');
+
+  /* ------------------------------------------------ Indicadores */
+  document.querySelectorAll('[data-repetir]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var caja = $(b.getAttribute('data-repetir'));
+      var svg = caja.querySelector('svg');
+      var copia = svg.cloneNode(true);
+      svg.parentNode.replaceChild(copia, svg);
+    });
+  });
+  $('rango-progreso').addEventListener('input', function (e) {
+    $('muestra-progreso').style.setProperty('--progreso', e.target.value);
+    $('cifra-progreso').textContent = e.target.value + ' %';
+  });
+
+  /* ------------------------------------------------ Ilustraciones */
+  $('lista-ilustraciones').innerHTML = Object.keys(O.ilustraciones).map(function (n) {
+    var il = O.ilustraciones[n];
+    return '<div class="tarjeta ilustracion"><div class="escena">' + O.ilustracion(n) + '</div>' +
+      '<div class="texto"><div class="fila"><b>' + il.titulo + '</b><code>' + n + '</code></div><span>' + il.uso + '</span>' +
+      '<div class="botones"><button type="button" class="boton compacto" data-repetir-il="' + n + '">' + O.icono('actualizar', { tamano: 14 }) + 'Repetir</button>' +
+      '<button type="button" class="boton compacto" data-copiar-il="' + n + '">' + O.icono('copiar', { tamano: 14 }) + 'Copiar SVG</button></div></div></div>';
+  }).join('');
+  $('lista-ilustraciones').addEventListener('click', function (e) {
+    var r = e.target.closest('[data-repetir-il]');
+    if (r) {
+      O.reproducirIlustracion(r.closest('.ilustracion').querySelector('.escena svg'));
+      return;
+    }
+    var c = e.target.closest('[data-copiar-il]');
+    if (c) {
+      var n = c.getAttribute('data-copiar-il');
+      copiar(O.ilustracion(n)).then(function () { avisar('SVG copiado', n); });
+    }
+  });
+
+  pintarRejilla();
+  pintarDetalle();
+})();
+</script>
+<style>.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }</style>
+</body>
+</html>

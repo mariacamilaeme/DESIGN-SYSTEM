@@ -1,0 +1,139 @@
+/*
+ * Obsidiana · selector y combobox con búsqueda.
+ *
+ * Se escriben como un <select> nativo (funciona sin JS y en formularios); el JS lo sustituye a la
+ * vista por un disparador con aspecto de campo y una lista flotante accesible (role="listbox"),
+ * y mantiene sincronizado el <select> (valor y evento "change").
+ *
+ *   <div class="ob-selector-caja">
+ *     <select class="ob-selector" data-ob-selector aria-label="Estado">
+ *       <option value="">Seleccionar</option>
+ *       <option value="activo">Activo</option>
+ *     </select>
+ *   </div>
+ *
+ * Combobox: data-ob-selector="buscar" añade la caja de búsqueda (ignora mayúsculas y tildes).
+ * Opciones con dato a la derecha: <option data-meta="128">Altamira</option>.
+ * Compacto: .ob-selector-caja--sm. Error: aria-invalid="true" en el select.
+ */
+.ob-selector-caja {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+/* Respaldo sin JS: select nativo con chevron dibujado por la caja */
+select.ob-selector {
+  padding-right: var(--esp-8);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.ob-selector-caja:not([data-ob-listo])::after {
+  content: "";
+  position: absolute;
+  right: var(--esp-2-5);
+  width: 14px;
+  height: 14px;
+  background: var(--texto-3);
+  pointer-events: none;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.ob-selector-caja[data-ob-listo] > select {
+  display: none;
+}
+
+/* Disparador con aspecto de campo (la receta de campo está en entrada.css) */
+.ob-selector__disparador {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-2);
+  text-align: left;
+  cursor: pointer;
+}
+.ob-selector__valor {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ob-selector__disparador[data-vacio] .ob-selector__valor {
+  color: var(--texto-3);
+}
+.ob-selector__chevron {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--texto-3);
+  transition: transform var(--t-estado) var(--curva);
+}
+.ob-selector__disparador[aria-expanded="true"] .ob-selector__chevron[data-gira] {
+  transform: rotate(180deg);
+}
+.ob-selector-caja--sm .ob-selector__disparador,
+.ob-selector-caja--sm select.ob-selector {
+  height: var(--alto-control-compacto);
+  font-size: var(--txt-etiqueta);
+}
+
+/* Lista flotante (selector, combobox) */
+.ob-lista-flotante {
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  max-width: min(420px, calc(100vw - 24px));
+  overflow: hidden;
+}
+.ob-lista-flotante__buscar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: 0 var(--esp-3);
+  border-bottom: 1px solid var(--linea);
+  color: var(--texto-3);
+}
+.ob-lista-flotante__buscar input {
+  width: 100%;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  color: var(--texto-1);
+  outline: none;
+}
+.ob-lista-flotante__opciones {
+  max-height: 256px;
+  overflow: auto;
+  padding: var(--esp-1);
+  overscroll-behavior: contain;
+}
+.ob-lista-flotante__vacio {
+  padding: var(--esp-6) var(--esp-2-5);
+  text-align: center;
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-opcion {
+  cursor: pointer;
+}
+.ob-opcion__texto {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ob-opcion__meta {
+  margin-left: auto;
+  padding-left: var(--esp-3);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-opcion--crear {
+  color: var(--acento-texto);
+}

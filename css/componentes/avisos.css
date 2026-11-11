@@ -1,0 +1,212 @@
+/*
+ * Obsidiana · avisos (toasts) y aviso en línea (banner).
+ *
+ * Avisos: se crean con JS, abajo a la derecha, como mucho 4 visibles.
+ *   Obsidiana.aviso({ titulo: "Pedido guardado", tono: "exito" })
+ *   const a = Obsidiana.aviso({ titulo: "Exportando…", tono: "cargando", progreso: 0 });
+ *   a.actualizar({ progreso: 0.6 });  a.actualizar({ titulo: "Exportado", tono: "exito" });
+ * Entran desde abajo con fundido y 8 px (transición, no fotogramas: se pueden disparar seguidos)
+ * y salen por el mismo sitio. La barra inferior muestra el tiempo que le queda (se detiene al
+ * pasar el cursor) o el progreso de una operación larga.
+ *
+ * Banner:
+ *   <div class="ob-banner" data-tono="ambar" role="status">
+ *     <span class="ob-banner__icono" data-icono="alerta"></span>
+ *     <div class="ob-banner__cuerpo"><p class="ob-banner__titulo">…</p><p class="ob-banner__texto">…</p></div>
+ *     <div class="ob-banner__acciones">…</div>
+ *   </div>
+ * Tonos: acento (por defecto) · vivo · ambar · rojo · verde · gris.
+ */
+.ob-avisos {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: var(--z-avisos);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--esp-2);
+  width: var(--ancho-aviso);
+  max-width: calc(100vw - 40px);
+  pointer-events: none;
+}
+.ob-aviso {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  padding: var(--esp-3) var(--esp-4);
+  overflow: hidden;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--r-interno);
+  background-color: var(--sup-3);
+  background-image: var(--sup-degradado);
+  box-shadow: var(--sombra-flotante);
+  color: var(--texto-1);
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+  transition:
+    opacity var(--t-aviso) var(--curva),
+    transform var(--t-aviso) var(--curva);
+}
+.ob-aviso[data-estado="visible"] {
+  opacity: 1;
+  transform: none;
+}
+.ob-aviso[data-estado="saliendo"] {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+  transition-duration: 180ms;
+}
+.ob-aviso__icono {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 20px;
+}
+.ob-aviso[data-tono="exito"] .ob-aviso__icono {
+  color: var(--verde-texto);
+}
+.ob-aviso[data-tono="error"] .ob-aviso__icono {
+  color: var(--rojo-texto);
+}
+.ob-aviso[data-tono="alerta"] .ob-aviso__icono {
+  color: var(--ambar-texto);
+}
+.ob-aviso[data-tono="info"] .ob-aviso__icono {
+  color: var(--acento-texto);
+}
+.ob-aviso[data-tono="cargando"] .ob-aviso__icono {
+  color: var(--texto-2);
+}
+.ob-aviso__cuerpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.ob-aviso__titulo {
+  font-weight: 500;
+  color: var(--texto-1);
+}
+.ob-aviso__descripcion {
+  margin-top: 2px;
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-2);
+}
+.ob-aviso__acciones {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--esp-1);
+  margin: -4px -8px -4px 0;
+}
+.ob-aviso__progreso {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--lavado-2);
+}
+.ob-aviso__progreso-barra {
+  height: 100%;
+  background: var(--acento);
+  transform-origin: left;
+  transform: scaleX(var(--ob-progreso, 0));
+  transition: transform var(--t-estado) var(--curva);
+}
+.ob-aviso[data-tono="exito"] .ob-aviso__progreso-barra {
+  background: var(--verde);
+}
+.ob-aviso[data-tono="error"] .ob-aviso__progreso-barra {
+  background: var(--rojo);
+}
+/* Cuenta atrás: la barra se vacía de forma lineal durante la duración del aviso */
+.ob-aviso__progreso[data-cuenta] .ob-aviso__progreso-barra {
+  background: var(--linea-hover);
+  transform: scaleX(1);
+  animation: ob-cuenta var(--ob-duracion, 5000ms) linear forwards;
+}
+.ob-aviso:hover .ob-aviso__progreso[data-cuenta] .ob-aviso__progreso-barra {
+  animation-play-state: paused;
+}
+@keyframes ob-cuenta {
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Banner                                                                                       */
+/* ------------------------------------------------------------------------------------------ */
+.ob-banner {
+  --ob-tono: var(--acento);
+  --ob-tono-texto: var(--acento-texto);
+  --ob-tono-fondo: var(--acento-tenue);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  padding: var(--esp-3) var(--esp-4);
+  border: 1px solid color-mix(in oklab, var(--ob-tono) 22%, transparent);
+  border-radius: var(--r-interno);
+  background: var(--ob-tono-fondo);
+  color: var(--texto-1);
+}
+.ob-banner[data-tono="vivo"] {
+  --ob-tono: var(--vivo);
+  --ob-tono-texto: var(--vivo-texto);
+  --ob-tono-fondo: color-mix(in oklab, var(--vivo) 7%, transparent);
+}
+.ob-banner[data-tono="ambar"] {
+  --ob-tono: var(--ambar);
+  --ob-tono-texto: var(--ambar-texto);
+  --ob-tono-fondo: color-mix(in oklab, var(--ambar) 7%, transparent);
+}
+.ob-banner[data-tono="rojo"] {
+  --ob-tono: var(--rojo);
+  --ob-tono-texto: var(--rojo-texto);
+  --ob-tono-fondo: color-mix(in oklab, var(--rojo) 7%, transparent);
+}
+.ob-banner[data-tono="verde"] {
+  --ob-tono: var(--verde);
+  --ob-tono-texto: var(--verde-texto);
+  --ob-tono-fondo: color-mix(in oklab, var(--verde) 7%, transparent);
+}
+.ob-banner[data-tono="gris"] {
+  --ob-tono: var(--gris-estado);
+  --ob-tono-texto: var(--gris-texto);
+  --ob-tono-fondo: var(--lavado);
+}
+.ob-banner__icono {
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 20px;
+  color: var(--ob-tono-texto);
+}
+.ob-banner__cuerpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ob-banner__titulo {
+  font-weight: 500;
+  color: var(--texto-1);
+}
+.ob-banner__texto {
+  color: var(--texto-2);
+}
+.ob-banner__acciones {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--esp-2);
+  margin: -2px -4px -2px 0;
+}

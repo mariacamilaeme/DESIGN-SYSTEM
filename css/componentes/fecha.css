@@ -1,0 +1,123 @@
+/*
+ * Obsidiana · campo de fecha con calendario.
+ *
+ *   <div class="ob-fecha" data-ob-fecha data-valor="2026-11-14">
+ *     <input class="ob-entrada" name="entrega" placeholder="dd/mm/aaaa" aria-label="Fecha de entrega">
+ *   </div>
+ *
+ * El JS añade el botón del calendario y el calendario flotante. Se escribe dd/mm/aaaa (también
+ * d/m/aa o aaaa-mm-dd); el valor se publica en data-valor (aaaa-mm-dd) y con el evento "ob:cambio".
+ * Calendario: flechas (día), RePág/AvPág (mes), Inicio/Fin (semana), Enter elige, Escape cierra.
+ * Lunes primero. Hoy con un punto; el día elegido en acento.
+ */
+.ob-fecha {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+.ob-fecha > .ob-entrada {
+  padding-right: 36px;
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-fecha__boton {
+  position: absolute;
+  right: 2px;
+}
+
+.ob-calendario-flotante {
+  width: var(--ancho-calendario);
+  padding: var(--esp-3);
+}
+.ob-calendario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+.ob-calendario__cabeza {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: var(--esp-1);
+}
+.ob-calendario__mes {
+  font-weight: 600;
+  color: var(--texto-1);
+}
+.ob-calendario__navegar {
+  display: flex;
+  gap: 2px;
+}
+.ob-calendario__rejilla {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 2px;
+}
+.ob-calendario__dia-semana {
+  display: grid;
+  height: 28px;
+  place-items: center;
+  font-size: var(--txt-mini);
+  line-height: var(--txt-mini-alto);
+  color: var(--texto-3);
+}
+.ob-calendario__dia {
+  position: relative;
+  display: grid;
+  height: 32px;
+  place-items: center;
+  border-radius: var(--r-elemento);
+  font-size: var(--txt-etiqueta);
+  color: var(--texto-1);
+  font-feature-settings: var(--rasgos-cifras);
+  transition: background-color var(--t-hover) ease;
+}
+.ob-calendario__dia:hover {
+  background: var(--lavado-2);
+}
+.ob-calendario__dia:focus-visible {
+  outline-offset: 0;
+}
+.ob-calendario__dia[data-fuera] {
+  color: var(--texto-4);
+}
+.ob-calendario__dia[data-hoy] {
+  font-weight: 600;
+  color: var(--acento-texto);
+}
+.ob-calendario__dia[data-hoy]::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--acento);
+}
+.ob-calendario__dia[aria-pressed="true"] {
+  background: var(--acento-relleno);
+  color: var(--sobre-acento);
+  font-weight: 600;
+}
+.ob-calendario__dia[aria-pressed="true"]::after {
+  background: var(--sobre-acento);
+}
+.ob-calendario__pie {
+  display: flex;
+  justify-content: space-between;
+  padding-top: var(--esp-2);
+  border-top: 1px solid var(--linea);
+}
+.ob-calendario__hoy {
+  padding: 0 6px;
+  border-radius: var(--r-elemento);
+  font-size: var(--txt-etiqueta);
+  line-height: 24px;
+  font-weight: 500;
+  color: var(--acento-texto);
+  transition: background-color var(--t-hover) ease;
+}
+.ob-calendario__hoy:hover {
+  background: var(--lavado-2);
+}

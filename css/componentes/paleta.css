@@ -1,0 +1,227 @@
+/*
+ * Obsidiana · paleta de comandos (Ctrl K) y conmutador de tema.
+ *
+ * Paleta: la crea el JS (Obsidiana.paleta). Grande, centrada, con resultados agrupados,
+ * navegación por teclado y búsqueda sin mayúsculas ni tildes. Se abre y se cierra sin
+ * animación: se usa decenas de veces al día y debe sentirse instantánea.
+ *
+ * Tema: <div class="ob-tema" role="group" aria-label="Tema" data-ob-tema>
+ *         <button class="ob-tema__opcion" data-tema="claro" aria-label="Tema claro">…sol…</button>
+ *         <button class="ob-tema__opcion" data-tema="oscuro" aria-label="Tema oscuro">…luna…</button>
+ *       </div>
+ * El pulgar se desliza al tema elegido y el icono hace su gesto (los rayos giran, la luna se inclina).
+ */
+.ob-paleta {
+  position: fixed;
+  top: 14vh;
+  left: 50%;
+  z-index: var(--z-modal);
+  width: min(var(--ancho-paleta), calc(100vw - 32px));
+  overflow: hidden;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--r-ventana);
+  background-color: var(--sup-3);
+  background-image: var(--sup-degradado);
+  box-shadow: var(--sombra-flotante);
+  color: var(--texto-1);
+  translate: -50% 0;
+  outline: none;
+}
+.ob-paleta__buscar {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding: 0 var(--esp-4-5);
+  border-bottom: 1px solid var(--linea);
+  color: var(--texto-3);
+}
+.ob-paleta__entrada {
+  width: 100%;
+  height: 56px;
+  border: 0;
+  background: transparent;
+  font-size: var(--txt-paleta);
+  line-height: var(--txt-paleta-alto);
+  color: var(--texto-1);
+  outline: none;
+}
+.ob-paleta__lista {
+  max-height: min(var(--alto-paleta-lista), 60vh);
+  overflow: auto;
+  padding: var(--esp-2);
+  scroll-padding: var(--esp-2) 0;
+  overscroll-behavior: contain;
+}
+.ob-paleta__grupo + .ob-paleta__grupo {
+  margin-top: var(--esp-1);
+}
+.ob-paleta__grupo-titulo {
+  padding: var(--esp-2-5) var(--esp-3) 6px;
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  font-weight: 500;
+  color: var(--texto-3);
+}
+.ob-paleta__elemento {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  height: var(--alto-elemento-paleta);
+  padding: 0 var(--esp-3);
+  border-radius: var(--r-control);
+  color: var(--texto-1);
+  cursor: pointer;
+  user-select: none;
+}
+.ob-paleta__elemento[aria-selected="true"] {
+  background: var(--lavado-2);
+}
+.ob-paleta__icono {
+  display: grid;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: var(--r-elemento);
+  color: var(--texto-3);
+}
+.ob-paleta__elemento[aria-selected="true"] .ob-paleta__icono {
+  color: var(--texto-1);
+}
+.ob-paleta__titulo {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.ob-paleta__titulo mark {
+  background: none;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--acento);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+.ob-paleta__subtitulo {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-paleta__detalle {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+  margin-left: auto;
+  color: var(--texto-3);
+  opacity: 0;
+}
+.ob-paleta__elemento[aria-selected="true"] .ob-paleta__detalle {
+  opacity: 1;
+}
+.ob-paleta__vacio {
+  padding: var(--esp-10) var(--esp-3);
+  text-align: center;
+  color: var(--texto-3);
+}
+.ob-paleta__pie {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-4);
+  padding: var(--esp-2-5) var(--esp-4-5);
+  border-top: 1px solid var(--linea);
+  background: var(--lavado);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-paleta__pie > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ob-paleta__pie > span:last-child {
+  margin-left: auto;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Conmutador de tema                                                                           */
+/* ------------------------------------------------------------------------------------------ */
+.ob-tema {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: var(--alto-control);
+  margin: 0;
+  padding: 2px;
+  border: 1px solid var(--linea);
+  border-radius: var(--r-control);
+  background: var(--lavado);
+  isolation: isolate;
+}
+.ob-tema__opcion {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 28px;
+  height: 100%;
+  place-items: center;
+  border-radius: var(--r-elemento);
+  color: var(--texto-3);
+  transition: color var(--t-estado) ease;
+}
+.ob-tema__opcion:hover {
+  color: var(--texto-2);
+}
+.ob-tema__opcion[aria-pressed="true"] {
+  color: var(--texto-1);
+}
+.ob-tema__opcion:focus-visible {
+  outline-offset: 0;
+}
+.ob-tema__opcion svg,
+.ob-tema__opcion [data-icono] {
+  width: 14px;
+  height: 14px;
+}
+.ob-tema__opcion[data-gesto] > * {
+  animation: ob-tema-gesto 420ms var(--curva);
+}
+.ob-tema__opcion[data-tema="oscuro"][data-gesto] > * {
+  animation-name: ob-tema-gesto-luna;
+}
+@keyframes ob-tema-gesto {
+  from {
+    opacity: 0.4;
+    transform: rotate(-45deg) scale(0.8);
+  }
+}
+@keyframes ob-tema-gesto-luna {
+  from {
+    opacity: 0.4;
+    transform: rotate(20deg) scale(0.8);
+  }
+}
+.ob-tema__pulgar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--r-elemento);
+  background: var(--pulgar);
+  box-shadow: var(--sombra-control);
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+.ob-tema:not([data-ob-listo]) .ob-tema__opcion[aria-pressed="true"] {
+  background: var(--pulgar);
+  box-shadow:
+    inset 0 0 0 1px var(--linea-fuerte),
+    var(--sombra-control);
+}

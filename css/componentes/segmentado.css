@@ -1,0 +1,75 @@
+/*
+ * Obsidiana · control segmentado con píldora que se desliza entre opciones.
+ *
+ *   <div class="ob-segmentado" role="radiogroup" aria-label="Vista" data-ob-segmentado>
+ *     <button type="button" role="radio" aria-checked="true" class="ob-segmentado__opcion" data-valor="activos">Activos</button>
+ *     <button type="button" role="radio" aria-checked="false" class="ob-segmentado__opcion" data-valor="inactivos">Inactivos</button>
+ *   </div>
+ *
+ * El JS añade el indicador (.ob-segmentado__indicador), lo desliza con la curva del resorte,
+ * mueve el foco con las flechas (foco itinerante) y emite "ob:cambio" con detail.valor.
+ * Compacto: --sm. Solo icono: .ob-segmentado__opcion--icono (con aria-label).
+ */
+.ob-segmentado {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  height: var(--alto-control);
+  padding: 2px;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--r-control);
+  background: var(--campo);
+  isolation: isolate;
+}
+.ob-segmentado--sm {
+  height: var(--alto-control-compacto);
+}
+.ob-segmentado__opcion {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 var(--esp-3);
+  border-radius: var(--r-elemento);
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--texto-2);
+  transition: color var(--t-hover) ease;
+}
+.ob-segmentado--sm .ob-segmentado__opcion {
+  padding: 0 var(--esp-2-5);
+  font-size: var(--txt-etiqueta);
+}
+.ob-segmentado__opcion:hover,
+.ob-segmentado__opcion:is([aria-checked="true"], [aria-pressed="true"]) {
+  color: var(--texto-1);
+}
+.ob-segmentado__opcion:focus-visible {
+  outline-offset: 0;
+}
+.ob-segmentado__opcion--icono {
+  aspect-ratio: 1;
+  padding: 0 !important;
+}
+.ob-segmentado__indicador {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--r-elemento);
+  background: var(--pulgar);
+  box-shadow: var(--sombra-control);
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+/* Sin JS, la opción activa pinta su propio fondo */
+.ob-segmentado:not([data-ob-listo])
+  .ob-segmentado__opcion:is([aria-checked="true"], [aria-pressed="true"]) {
+  background: var(--pulgar);
+  box-shadow:
+    inset 0 0 0 1px var(--linea-fuerte),
+    var(--sombra-control);
+}

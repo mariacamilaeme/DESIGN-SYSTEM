@@ -1,0 +1,163 @@
+/*
+ * Obsidiana · iconos.css · v1.0.0
+ * Generado por iconos/fuente/generar.mjs. No editar a mano.
+ *
+ * Microanimaciones de los iconos al pasar el cursor. Cada elemento animado del icono lleva
+ * style="animation: var(--ia-nombre, none)". Aquí las variables --ia-* solo se definen mientras
+ * el cursor está sobre el control que contiene el icono (botón, enlace, opción de menú, pestaña
+ * o cualquier elemento con .icono-vivo), así que cada animación corre una sola vez por hover.
+ * .icono-reproducir fuerza la animación una vez (quítala y vuelve a ponerla para repetir).
+ * Con prefers-reduced-motion: reduce no se mueve nada; los indicadores giran más despacio.
+ */
+
+.ob-icono {
+  flex: none;
+  overflow: visible;
+}
+
+/* ---------------------------------------------------------------- Keyframes de hover */
+@keyframes ic-trazar { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes ic-caer { 0% { transform: none; opacity: 1; } 38% { transform: translateY(5px); opacity: 0; } 39% { transform: translateY(-6px); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes ic-subir { 0% { transform: none; opacity: 1; } 38% { transform: translateY(-5px); opacity: 0; } 39% { transform: translateY(6px); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes ic-despegar { 0% { transform: none; opacity: 1; } 38% { transform: translate(4px, -4px); opacity: 0; } 39% { transform: translate(-4px, 4px); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes ic-empujar { 0%, 100% { transform: none; } 45% { transform: translateX(2.5px); } }
+@keyframes ic-empujar-izq { 0%, 100% { transform: none; } 45% { transform: translateX(-2.5px); } }
+@keyframes ic-empujar-arr { 0%, 100% { transform: none; } 45% { transform: translateY(-2.5px); } }
+@keyframes ic-empujar-ab { 0%, 100% { transform: none; } 45% { transform: translateY(2.5px); } }
+@keyframes ic-salir { 0%, 100% { transform: none; } 45% { transform: translate(2px, -2px); } }
+@keyframes ic-girar-cuarto { from { transform: rotate(0); } to { transform: rotate(90deg); } }
+@keyframes ic-rayos { from { transform: rotate(0); } to { transform: rotate(45deg); } }
+@keyframes ic-inclinar { 0%, 100% { transform: rotate(0); } 45% { transform: rotate(-16deg); } }
+@keyframes ic-inclinar-der { 0%, 100% { transform: rotate(0); } 45% { transform: rotate(16deg); } }
+@keyframes ic-asomar { 0%, 100% { transform: none; } 45% { transform: translate(-1.5px, -1.5px); } }
+@keyframes ic-navegar { 0%, 100% { transform: none; } 45% { transform: translateX(2.5px); } }
+@keyframes ic-reloj { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes ic-reloj-atras { from { transform: rotate(0); } to { transform: rotate(-360deg); } }
+@keyframes ic-media-vuelta { from { transform: rotate(0); } to { transform: rotate(180deg); } }
+@keyframes ic-barras { from { transform: scaleY(0.35); } to { transform: scaleY(1); } }
+@keyframes ic-ruta { from { stroke-dashoffset: 9.6; } to { stroke-dashoffset: 0; } }
+@keyframes ic-encoger { 0%, 100% { transform: none; } 45% { transform: scaleX(0.6); } }
+@keyframes ic-encender { 0%, 100% { transform: none; } 45% { transform: translateY(-1.5px); } }
+@keyframes ic-parpadear { 0%, 100% { transform: none; } 40% { transform: scaleY(0.12); } }
+@keyframes ic-levantar { 0%, 100% { transform: none; } 45% { transform: translateY(-2px); } }
+@keyframes ic-presionar { 0%, 100% { transform: none; } 40% { transform: translateY(1.5px); } }
+@keyframes ic-pulsar { 0%, 100% { transform: none; } 40% { transform: scale(0.82); } }
+@keyframes ic-destello { from { transform: scale(0.5) rotate(-45deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes ic-aterrizar { from { transform: translateY(-3px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes ic-apilar { from { transform: translate(-5px, -5px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes ic-voltear { 0%, 100% { transform: none; } 50% { transform: scaleX(0.15); } }
+@keyframes ic-destellar { 0%, 100% { opacity: 1; } 40% { opacity: 0.25; } }
+@keyframes ic-separar-izq { 0%, 100% { transform: none; } 45% { transform: translateX(-1.5px); } }
+@keyframes ic-separar-der { 0%, 100% { transform: none; } 45% { transform: translateX(1.5px); } }
+@keyframes ic-expandir { 0%, 100% { transform: none; } 45% { transform: scale(1.1); } }
+
+/* ---------------------------------------------------------------- Keyframes de indicadores */
+@keyframes ob-girar { to { transform: rotate(360deg); } }
+@keyframes ob-pulso { 0% { transform: scale(1); opacity: 0.55; } 70%, 100% { transform: scale(2.4); opacity: 0; } }
+@keyframes ob-trazar { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes ob-aparecer { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------------------------------------------------------------- Disparadores */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :is(button, a, [role="menuitem"], [role="option"], [role="tab"], .icono-vivo):hover {
+    --ia-trazo-1: ic-trazar 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-trazo-2: ic-trazar 420ms cubic-bezier(0.16, 1, 0.3, 1) 90ms both;
+    --ia-trazo-3: ic-trazar 420ms cubic-bezier(0.16, 1, 0.3, 1) 180ms both;
+    --ia-trazo-lento: ic-trazar 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-caer: ic-caer 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-subir: ic-subir 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-despegar: ic-despegar 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-empujar: ic-empujar 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-empujar-izq: ic-empujar-izq 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-empujar-arr: ic-empujar-arr 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-empujar-ab: ic-empujar-ab 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-salir: ic-salir 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-girar: ic-girar-cuarto 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-rayos: ic-rayos 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-inclinar: ic-inclinar 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-inclinar-der: ic-inclinar-der 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-asomar: ic-asomar 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-navegar: ic-navegar 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-reloj: ic-reloj 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-reloj-atras: ic-reloj-atras 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-media-vuelta: ic-media-vuelta 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-barra-1: ic-barras 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-barra-2: ic-barras 420ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both;
+    --ia-barra-3: ic-barras 420ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+    --ia-ruta: ic-ruta 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-encoger-1: ic-encoger 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-encoger-2: ic-encoger 420ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both;
+    --ia-encoger-3: ic-encoger 420ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+    --ia-encender: ic-encender 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-parpadear: ic-parpadear 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-levantar: ic-levantar 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-presionar: ic-presionar 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-pulsar: ic-pulsar 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-destello: ic-destello 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-aterrizar: ic-aterrizar 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-apilar: ic-apilar 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-voltear: ic-voltear 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-destellar: ic-destellar 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-separar-izq: ic-separar-izq 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-separar-der: ic-separar-der 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-expandir: ic-expandir 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .icono-reproducir {
+    --ia-trazo-1: ic-trazar 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-trazo-2: ic-trazar 420ms cubic-bezier(0.16, 1, 0.3, 1) 90ms both;
+    --ia-trazo-3: ic-trazar 420ms cubic-bezier(0.16, 1, 0.3, 1) 180ms both;
+    --ia-trazo-lento: ic-trazar 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-caer: ic-caer 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-subir: ic-subir 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-despegar: ic-despegar 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-empujar: ic-empujar 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-empujar-izq: ic-empujar-izq 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-empujar-arr: ic-empujar-arr 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-empujar-ab: ic-empujar-ab 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-salir: ic-salir 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-girar: ic-girar-cuarto 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-rayos: ic-rayos 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-inclinar: ic-inclinar 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-inclinar-der: ic-inclinar-der 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-asomar: ic-asomar 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-navegar: ic-navegar 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-reloj: ic-reloj 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-reloj-atras: ic-reloj-atras 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-media-vuelta: ic-media-vuelta 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-barra-1: ic-barras 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-barra-2: ic-barras 420ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both;
+    --ia-barra-3: ic-barras 420ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+    --ia-ruta: ic-ruta 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-encoger-1: ic-encoger 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-encoger-2: ic-encoger 420ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both;
+    --ia-encoger-3: ic-encoger 420ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+    --ia-encender: ic-encender 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-parpadear: ic-parpadear 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-levantar: ic-levantar 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-presionar: ic-presionar 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-pulsar: ic-pulsar 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-destello: ic-destello 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-aterrizar: ic-aterrizar 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-apilar: ic-apilar 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-voltear: ic-voltear 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-destellar: ic-destellar 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-separar-izq: ic-separar-izq 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-separar-der: ic-separar-der 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    --ia-expandir: ic-expandir 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+/* ---------------------------------------------------------------- Movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ind-girar: ob-girar 1600ms linear infinite;
+    --ind-pulso: none;
+    --ind-aparecer: none;
+    --ind-trazo: none;
+    --ind-trazo-2: none;
+    --ind-trazo-3: none;
+  }
+}

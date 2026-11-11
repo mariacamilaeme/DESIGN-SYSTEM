@@ -1,0 +1,113 @@
+/*
+ * Obsidiana · carga de archivo con zona de arrastre.
+ *
+ *   <label class="ob-archivo" data-ob-archivo>
+ *     <input type="file" class="ob-solo-lector" accept=".xlsx,.csv" multiple>
+ *     <span class="ob-archivo__icono" data-icono="subir" data-tamano="20"></span>
+ *     <span class="ob-archivo__titulo">Arrastra el archivo aquí o <span class="ob-archivo__enlace">elígelo</span></span>
+ *     <span class="ob-archivo__ayuda">Excel o CSV, hasta 20 MB</span>
+ *   </label>
+ *   <ul class="ob-archivo__lista"></ul>   (el JS la rellena con los archivos elegidos)
+ *
+ * Estados: data-estado="arrastrando" (el JS lo pone al arrastrar encima), :focus-within,
+ * aria-invalid="true" en el input. Evento "ob:archivos" con detail.archivos.
+ */
+.ob-archivo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 148px;
+  padding: var(--esp-6);
+  border: 1px dashed var(--linea-hover);
+  border-radius: var(--r-interno);
+  background: var(--lavado);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color var(--t-hover) ease,
+    background-color var(--t-hover) ease;
+}
+.ob-archivo:hover {
+  border-color: var(--texto-3);
+  background: var(--lavado-2);
+}
+.ob-archivo:has(input:focus-visible) {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+.ob-archivo[data-estado="arrastrando"] {
+  border-style: solid;
+  border-color: var(--acento);
+  background: var(--acento-tenue);
+}
+.ob-archivo:has(input[aria-invalid="true"]) {
+  border-color: var(--rojo);
+}
+.ob-archivo__icono {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--esp-1);
+  place-items: center;
+  border: 1px solid var(--linea);
+  border-radius: var(--r-interno);
+  background: var(--sup-2);
+  color: var(--texto-2);
+  box-shadow: var(--sombra-control);
+  transition: transform var(--t-estado) var(--curva);
+}
+.ob-archivo[data-estado="arrastrando"] .ob-archivo__icono {
+  color: var(--acento);
+  transform: translateY(-3px);
+}
+.ob-archivo__titulo {
+  font-weight: 500;
+  color: var(--texto-1);
+}
+.ob-archivo__enlace {
+  color: var(--acento-texto);
+}
+.ob-archivo__ayuda {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-archivo__lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1-5);
+  margin-top: var(--esp-2);
+}
+.ob-archivo__lista:empty {
+  display: none;
+}
+.ob-archivo__elemento {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2-5);
+  height: 40px;
+  padding: 0 var(--esp-1) 0 var(--esp-3);
+  border: 1px solid var(--linea);
+  border-radius: var(--r-control);
+  background: var(--sup-2);
+  animation: ob-entrar-corto 220ms var(--curva) both;
+}
+.ob-archivo__elemento > :first-child {
+  color: var(--texto-3);
+}
+.ob-archivo__nombre {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.ob-archivo__peso {
+  margin-left: auto;
+  font-size: var(--txt-etiqueta);
+  color: var(--texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+}

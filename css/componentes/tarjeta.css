@@ -1,0 +1,142 @@
+/*
+ * Obsidiana · tarjeta.
+ *
+ *   <section class="ob-tarjeta">
+ *     <header class="ob-tarjeta__encabezado">
+ *       <span class="ob-tarjeta__icono" data-icono="pedidos"></span>
+ *       <h2 class="ob-tarjeta__titulo">Pedidos recientes</h2>
+ *       <span class="ob-tarjeta__meta">12 esta semana</span>
+ *       <div class="ob-tarjeta__acciones">…</div>
+ *     </header>
+ *     <div class="ob-tarjeta__cuerpo">…</div>
+ *     <footer class="ob-tarjeta__pie">…</footer>
+ *   </section>
+ *
+ * Filo de luz: data-filo="encendido" (seleccionada, activa) o al recibir foco visible.
+ * Interactiva: --interactiva (borde más visible al pasar; si es un enlace o botón, se eleva 1 px).
+ * Elemento interno elevado: .ob-tarjeta-interna (sup-2, radio 12).
+ */
+.ob-tarjeta {
+  position: relative;
+  min-width: 0;
+  background-color: var(--sup-1);
+  background-image: var(--sup-degradado);
+  border: 1px solid var(--linea);
+  border-radius: var(--r-tarjeta);
+  box-shadow: var(--sombra-tarjeta);
+}
+/* Filo de luz (receta de base.css, integrada para no exigir dos clases) */
+.ob-tarjeta::before,
+.ob-tarjeta-interna::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(135deg, var(--acento) 0%, var(--acento-suave) 30%, transparent 60%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity var(--t-estado) var(--curva);
+}
+:is(.ob-tarjeta, .ob-tarjeta-interna)[data-filo="encendido"]::before,
+:is(.ob-tarjeta, .ob-tarjeta-interna):focus-visible::before {
+  opacity: 1;
+}
+:is(.ob-tarjeta, .ob-tarjeta-interna):focus-visible {
+  outline: none;
+}
+.ob-tarjeta--interactiva {
+  transition:
+    border-color var(--t-estado) var(--curva),
+    transform var(--t-estado) var(--curva);
+}
+.ob-tarjeta--interactiva:hover {
+  border-color: var(--linea-fuerte);
+}
+:is(a, button).ob-tarjeta--interactiva {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+:is(a, button).ob-tarjeta--interactiva:active {
+  transform: scale(0.995);
+}
+
+.ob-tarjeta__encabezado {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--esp-2-5);
+  min-height: var(--alto-encabezado-tarjeta);
+  padding: 0 var(--esp-4-5);
+  border-bottom: 1px solid var(--linea);
+}
+.ob-tarjeta__encabezado--sin-linea {
+  border-bottom: 0;
+}
+.ob-tarjeta__icono {
+  display: flex;
+  color: var(--texto-3);
+}
+.ob-tarjeta__titulo {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--txt-titulo-tarjeta);
+  line-height: var(--txt-titulo-tarjeta-alto);
+  font-weight: var(--txt-titulo-tarjeta-peso);
+  letter-spacing: var(--txt-titulo-tarjeta-espacio);
+  color: var(--texto-1);
+}
+.ob-tarjeta__subtitulo {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-tarjeta__meta {
+  margin-left: auto;
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+  white-space: nowrap;
+}
+.ob-tarjeta__acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  margin-left: auto;
+}
+.ob-tarjeta__meta + .ob-tarjeta__acciones {
+  margin-left: var(--esp-3);
+}
+.ob-tarjeta__cuerpo {
+  padding: var(--esp-4-5);
+}
+.ob-tarjeta__pie {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  min-height: var(--alto-pie-tabla);
+  padding: 0 var(--esp-3) 0 var(--esp-4-5);
+  border-top: 1px solid var(--linea);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+
+.ob-tarjeta-interna {
+  position: relative;
+  min-width: 0;
+  background-color: var(--sup-2);
+  border: 1px solid var(--linea);
+  border-radius: var(--r-interno);
+}

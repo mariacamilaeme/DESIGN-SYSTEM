@@ -1,0 +1,90 @@
+/*
+ * Obsidiana · deslizador (range nativo).
+ *
+ *   <div class="ob-deslizador-caja">
+ *     <input type="range" class="ob-deslizador" min="0" max="100" value="40" data-ob-deslizador data-salida="#salida">
+ *     <output class="ob-deslizador-caja__salida" id="salida">40</output>
+ *   </div>
+ *
+ * El JS pinta el tramo recorrido (--ob-valor) y actualiza la salida enlazada. Sin JS funciona igual,
+ * con el carril sin colorear en Chrome y Safari (Firefox lo colorea siempre).
+ */
+.ob-deslizador {
+  --ob-valor: 0%;
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.ob-deslizador::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: var(--r-pildora);
+  background: linear-gradient(
+    90deg,
+    var(--acento-relleno) 0 var(--ob-valor),
+    var(--lavado-3) var(--ob-valor) 100%
+  );
+}
+.ob-deslizador::-moz-range-track {
+  height: 4px;
+  border-radius: var(--r-pildora);
+  background: var(--lavado-3);
+}
+.ob-deslizador::-moz-range-progress {
+  height: 4px;
+  border-radius: var(--r-pildora);
+  background: var(--acento-relleno);
+}
+.ob-deslizador::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+  margin-top: -6px;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: 50%;
+  background: var(--interruptor-pulgar);
+  box-shadow: var(--sombra-control);
+  transition: transform var(--t-hover) var(--curva);
+}
+.ob-deslizador::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: 50%;
+  background: var(--interruptor-pulgar);
+  box-shadow: var(--sombra-control);
+}
+.ob-deslizador:active::-webkit-slider-thumb {
+  transform: scale(1.1);
+}
+.ob-deslizador:focus-visible {
+  outline: none;
+}
+.ob-deslizador:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+.ob-deslizador:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+.ob-deslizador:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.ob-deslizador-caja {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+}
+.ob-deslizador-caja__salida {
+  min-width: 40px;
+  text-align: right;
+  font-weight: 500;
+  color: var(--texto-1);
+  font-feature-settings: var(--rasgos-cifras);
+}

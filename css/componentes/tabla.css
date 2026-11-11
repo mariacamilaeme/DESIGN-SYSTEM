@@ -1,0 +1,353 @@
+/*
+ * Obsidiana · tabla de datos.
+ *
+ *   <div class="ob-tabla-marco" data-ob-tabla>
+ *     <div class="ob-tabla-desplazable">
+ *       <table class="ob-tabla" aria-label="Pedidos">
+ *         <colgroup><col style="width: 140px">…</colgroup>
+ *         <thead><tr>
+ *           <th data-fija scope="col"><button class="ob-tabla__orden">Pedido</button></th>
+ *           <th scope="col" data-alineacion="derecha" aria-sort="descending"><button class="ob-tabla__orden">Valor</button></th>
+ *         </tr></thead>
+ *         <tbody>
+ *           <tr data-fila tabindex="0">
+ *             <td data-fija data-codigo><div class="ob-tabla__celda-fija">PE-26014</div></td>
+ *             <td data-alineacion="derecha">1.284.500</td>
+ *           </tr>
+ *         </tbody>
+ *       </table>
+ *     </div>
+ *     <footer class="ob-tabla__pie">…conteo · por página · paginación…</footer>
+ *   </div>
+ *
+ * - Encabezado fijo; etiquetas de columna en texto-3; cifras a la derecha con numerales tabulares.
+ * - Primera columna fija (data-fija) con sombra de borde al desplazar en horizontal.
+ * - Fila: hover con lavado tenue y filo tenue; data-seleccionada con filo de luz y resplandor.
+ * - Celda vacía: el JS escribe "—" en texto-3 (o escríbelo tú con .ob-vacio-valor).
+ * - Densidad compacta: data-densidad="compacta" en la tabla (36 px).
+ * - Tonos de columna: data-tono="secundario|tenue" · códigos: data-codigo.
+ * - El JS ordena (aria-sort), navega con el teclado (flechas, Inicio, Fin, Enter abre), marca la
+ *   fila elegida, redimensiona columnas con el asa (.ob-tabla__asa) y muestra las sombras de borde.
+ */
+.ob-tabla-marco {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.ob-tabla-ventana {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+.ob-tabla-desplazable {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior-x: contain;
+}
+
+.ob-tabla {
+  --fondo-tabla: var(--sup-1);
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-feature-settings: var(--rasgos-texto);
+}
+.ob-tabla--auto {
+  table-layout: auto;
+}
+.ob-tabla th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: var(--alto-encabezado-tabla);
+  padding: 0 var(--esp-3);
+  background: var(--fondo-tabla);
+  border-bottom: 1px solid var(--linea);
+  font-size: var(--txt-columna);
+  line-height: var(--txt-columna-alto);
+  letter-spacing: var(--txt-columna-espacio);
+  font-weight: 500;
+  color: var(--texto-3);
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ob-tabla td {
+  height: var(--alto-fila);
+  padding: 0 var(--esp-3);
+  background: var(--fondo-tabla);
+  border-bottom: 1px solid var(--linea);
+  color: var(--texto-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background-color var(--t-hover) ease;
+}
+.ob-tabla :is(th, td):first-child {
+  padding-left: var(--esp-4-5);
+}
+.ob-tabla :is(th, td):last-child {
+  padding-right: var(--esp-4-5);
+}
+.ob-tabla[data-densidad="compacta"] td {
+  height: var(--alto-fila-compacta);
+}
+.ob-tabla :is(td, th):is([data-alineacion="derecha"], [data-alineacion="centro"]) {
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-tabla :is(td, th)[data-alineacion="derecha"] {
+  text-align: right;
+}
+.ob-tabla :is(td, th)[data-alineacion="centro"] {
+  text-align: center;
+}
+.ob-tabla td[data-tono="secundario"] {
+  color: var(--texto-2);
+}
+.ob-tabla td[data-tono="tenue"] {
+  color: var(--texto-3);
+}
+.ob-tabla td[data-codigo] {
+  font-family: var(--fuente-codigo);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  font-feature-settings: normal;
+}
+.ob-tabla tbody tr:last-child td {
+  border-bottom-color: transparent;
+}
+.ob-tabla td .ob-pildora,
+.ob-tabla td .ob-insignia {
+  vertical-align: middle;
+}
+
+/* Encabezado ordenable: sin orden activo, la flecha no reserva sitio */
+.ob-tabla__orden {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  max-width: 100%;
+  height: 24px;
+  margin: 0 calc(var(--esp-1) * -1);
+  padding: 0 var(--esp-1);
+  border-radius: var(--r-mini);
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  transition: color var(--t-hover) ease;
+}
+.ob-tabla__orden:hover,
+th[aria-sort] .ob-tabla__orden {
+  color: var(--texto-1);
+}
+.ob-tabla__orden-texto {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ob-tabla__orden-flecha {
+  display: none;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  opacity: 0.6;
+  transition: transform var(--t-estado) var(--curva);
+}
+.ob-tabla__orden:is(:hover, :focus-visible) .ob-tabla__orden-flecha {
+  display: block;
+}
+th[aria-sort] .ob-tabla__orden-flecha {
+  display: block;
+  opacity: 1;
+}
+th[aria-sort="descending"] .ob-tabla__orden-flecha {
+  transform: rotate(180deg);
+}
+th[data-alineacion="derecha"] .ob-tabla__orden {
+  flex-direction: row-reverse;
+}
+
+/* Filas: hover con lavado tenue y filo de acento */
+.ob-tabla tbody tr[data-fila] {
+  outline: none;
+}
+.ob-tabla tbody tr[data-fila][data-abrible] {
+  cursor: pointer;
+}
+.ob-tabla tbody tr[data-fila]:is(:hover, :focus-visible) td {
+  background-image: linear-gradient(var(--lavado), var(--lavado));
+}
+.ob-tabla tbody tr[data-fila] td:first-child:not([data-fija]) {
+  position: relative;
+}
+.ob-tabla tbody tr[data-fila] td:first-child::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--filo-hover);
+  opacity: 0;
+  transition: opacity var(--t-hover) ease;
+  pointer-events: none;
+}
+.ob-tabla tbody tr[data-fila]:hover td:first-child::before {
+  opacity: 1;
+}
+.ob-tabla tbody tr[data-fila]:focus-visible td:first-child::before {
+  opacity: 1;
+  background: var(--acento);
+}
+.ob-tabla tbody tr[data-fila]:is([data-seleccionada], [aria-selected="true"]) td {
+  background-image: linear-gradient(var(--acento-tenue), var(--acento-tenue));
+}
+.ob-tabla tbody tr[data-fila]:is([data-seleccionada], [aria-selected="true"]):hover td {
+  background-image:
+    linear-gradient(var(--acento-tenue), var(--acento-tenue)),
+    linear-gradient(var(--lavado), var(--lavado));
+}
+/* Filo de luz a la izquierda de la fila seleccionada */
+.ob-tabla tbody tr[data-fila]:is([data-seleccionada], [aria-selected="true"]) td:first-child::before {
+  top: 6px;
+  bottom: 6px;
+  opacity: 1;
+  background: linear-gradient(180deg, var(--acento), var(--acento-suave));
+  box-shadow: var(--resplandor-acento);
+  animation: ob-filo-encender var(--t-estado) var(--curva);
+}
+
+/* Primera columna fija con sombra de borde al desplazar */
+.ob-tabla :is(th, td)[data-fija] {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  overflow: visible;
+}
+.ob-tabla th[data-fija] {
+  z-index: 3;
+}
+.ob-tabla__celda-fija {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ob-tabla :is(th, td)[data-fija]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -14px;
+  bottom: -1px;
+  width: 14px;
+  border-left: 1px solid var(--linea);
+  background: linear-gradient(90deg, var(--sombra-fija), transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-estado) ease;
+}
+[data-desplazada] > .ob-tabla :is(th, td)[data-fija]::after {
+  opacity: 1;
+}
+/* Sombra de borde derecho cuando quedan columnas fuera de la vista */
+.ob-tabla__sombra-derecha {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  width: 14px;
+  background: linear-gradient(270deg, var(--sombra-fija), transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-estado) ease;
+}
+.ob-tabla__sombra-derecha[data-visible] {
+  opacity: 1;
+}
+
+/* Asa para redimensionar columnas */
+.ob-tabla th {
+  position: sticky;
+}
+.ob-tabla__asa {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 4;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  touch-action: none;
+  user-select: none;
+}
+.ob-tabla__asa::after {
+  content: "";
+  position: absolute;
+  top: 9px;
+  bottom: 9px;
+  left: 3.5px;
+  width: 1px;
+  background: var(--linea-fuerte);
+  opacity: 0;
+  transition: opacity var(--t-hover) ease;
+}
+.ob-tabla th:hover .ob-tabla__asa::after {
+  opacity: 1;
+}
+.ob-tabla__asa[data-activa]::after {
+  top: 0;
+  bottom: 0;
+  opacity: 1;
+  background: var(--acento);
+}
+
+/* Fila de estado (vacío, cargando) que ocupa toda la tabla */
+.ob-tabla td.ob-tabla__celda-completa {
+  height: auto;
+  padding: 0;
+  border: 0;
+  white-space: normal;
+}
+
+/* Pie: conteo, contenido extra, tamaño de página y paginación */
+.ob-tabla__pie {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--esp-4);
+  height: var(--alto-pie-tabla);
+  padding: 0 var(--esp-3) 0 var(--esp-4-5);
+  border-top: 1px solid var(--linea);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-tabla__conteo {
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-tabla__conteo b {
+  font-weight: 500;
+  color: var(--texto-1);
+}
+.ob-tabla__pie-derecha {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  margin-left: auto;
+}
+.ob-tabla__por-pagina {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+}
+.ob-tabla__por-pagina .ob-selector-caja {
+  width: 88px;
+}

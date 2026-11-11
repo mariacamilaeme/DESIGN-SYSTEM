@@ -1,0 +1,409 @@
+/*
+ * Obsidiana · capas modales: velo, ventana de detalle (920 px), diálogo (480 px), diálogo de
+ * alerta y panel lateral (cajón).
+ *
+ * Todas empiezan con [hidden] y se abren con <button data-ob-abrir="id">. El JS:
+ *   · pone el velo (el único desenfoque de la herramienta, 6 px),
+ *   · hace que la ventana nazca del punto pulsado (transform-origin),
+ *   · atrapa el foco, deja el resto del documento inerte, cierra con Escape o
+ *     [data-ob-cerrar] y devuelve el foco al disparador,
+ *   · anima la entrada (escala 0,98 → 1 + fundido, 220 ms) y la salida (140 ms).
+ * data-estado="abierta|cerrando" refleja la fase. Un diálogo de alerta no se cierra al pulsar el
+ * velo: hay que elegir.
+ */
+
+/* ------------------------------------------------------------------------------------------ */
+/* Velo                                                                                         */
+/* ------------------------------------------------------------------------------------------ */
+.ob-velo {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background: var(--oscurecer);
+  -webkit-backdrop-filter: blur(var(--desenfoque-modal));
+  backdrop-filter: blur(var(--desenfoque-modal));
+}
+.ob-velo[data-estado="abierta"] {
+  animation: ob-aparecer var(--t-ventana) var(--curva);
+}
+.ob-velo[data-estado="cerrando"] {
+  animation: ob-desaparecer var(--t-salida) ease-out forwards;
+}
+.ob-velo--paleta {
+  /* la paleta se abre y se cierra sin animación: se usa decenas de veces al día */
+  animation: none !important;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Base común de ventana y diálogo                                                              */
+/* ------------------------------------------------------------------------------------------ */
+.ob-ventana,
+.ob-dialogo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 48px);
+  border-radius: var(--r-ventana);
+  background-color: var(--sup-3);
+  background-image: var(--sup-degradado);
+  border: 1px solid var(--linea-fuerte);
+  box-shadow: var(--sombra-flotante);
+  color: var(--texto-1);
+  outline: none;
+  translate: -50% -50%;
+  transform-origin: var(--ob-origen, center);
+}
+:is(.ob-ventana, .ob-dialogo)[data-estado="abierta"] {
+  animation: ob-entrar-ventana var(--t-ventana) var(--curva);
+}
+:is(.ob-ventana, .ob-dialogo)[data-estado="cerrando"] {
+  animation: ob-salir-ventana var(--t-salida) ease-out forwards;
+  pointer-events: none;
+}
+/* Muestra estática (catálogo): en el flujo, sin capa */
+:is(.ob-ventana, .ob-dialogo, .ob-cajon)[data-estatico] {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  z-index: auto;
+  translate: none;
+  max-height: none;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Ventana de detalle: 920 px, carril de pestañas a la izquierda, resumen fijo y pie            */
+/* ------------------------------------------------------------------------------------------ */
+.ob-ventana {
+  width: min(var(--ancho-ventana), calc(100vw - 48px));
+  height: min(var(--alto-ventana), calc(100vh - 48px));
+}
+.ob-ventana__encabezado {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  gap: var(--esp-4);
+  padding: var(--esp-4-5) var(--esp-4) var(--esp-4-5) var(--esp-6);
+  border-bottom: 1px solid var(--linea);
+}
+.ob-ventana__titulos {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+.ob-ventana__antetitulo {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-ventana__titulo,
+.ob-dialogo__titulo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--txt-titulo-ventana);
+  line-height: var(--txt-titulo-ventana-alto);
+  font-weight: var(--txt-titulo-ventana-peso);
+  letter-spacing: var(--txt-titulo-ventana-espacio);
+  color: var(--texto-1);
+}
+.ob-ventana__acciones {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--esp-1);
+}
+.ob-ventana__cuerpo {
+  display: grid;
+  flex: 1;
+  grid-template-columns: var(--ancho-carril) minmax(0, 1fr);
+  min-height: 0;
+}
+.ob-ventana__carril {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--linea);
+  background: var(--carril);
+}
+.ob-ventana__pestanas {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--esp-4) var(--esp-3) 0;
+  overflow: auto;
+}
+.ob-ventana__pestana {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2-5);
+  height: 34px;
+  padding: 0 var(--esp-2-5);
+  border-radius: var(--r-control);
+  text-align: left;
+  font-weight: 500;
+  color: var(--texto-2);
+  transition: color var(--t-hover) ease;
+}
+.ob-ventana__pestana:hover,
+.ob-ventana__pestana[aria-selected="true"] {
+  color: var(--texto-1);
+}
+.ob-ventana__pestana:focus-visible {
+  outline-offset: 0;
+}
+.ob-ventana__pestana > :is(svg, [data-icono]) {
+  color: var(--texto-3);
+  transition: color var(--t-hover) ease;
+}
+.ob-ventana__pestana[aria-selected="true"] > :is(svg, [data-icono]) {
+  color: var(--acento);
+}
+.ob-ventana__cuenta {
+  margin-left: auto;
+  font-size: var(--txt-mini);
+  line-height: var(--txt-mini-alto);
+  color: var(--texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+}
+/* Indicador del carril: fondo elevado + barra de acento de 2 px; se desliza */
+.ob-ventana__indicador {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border-radius: var(--r-control);
+  background: var(--carril-indicador);
+  box-shadow: var(--sombra-carril-indicador);
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+.ob-ventana__indicador::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  width: 2px;
+  border-radius: var(--r-pildora);
+  background: var(--acento);
+}
+.ob-ventana__resumen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2-5);
+  margin: auto var(--esp-3) 0;
+  padding: var(--esp-3-5) var(--esp-2-5) var(--esp-4);
+  border-top: 1px solid var(--linea);
+}
+.ob-ventana__resumen dt {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-ventana__resumen dd {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: var(--texto-1);
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-ventana__contenido {
+  min-height: 0;
+  overflow: auto;
+}
+.ob-ventana__panel {
+  padding: 22px var(--esp-6) 26px;
+  outline: none;
+}
+.ob-ventana__panel:not([hidden]) {
+  animation: ob-aparecer var(--t-vista) var(--curva);
+}
+
+/* Pie compartido por ventana y diálogo */
+.ob-ventana__pie,
+.ob-dialogo__pie {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: var(--esp-3-5) var(--esp-6);
+  border-top: 1px solid var(--linea);
+  border-radius: 0 0 var(--r-ventana) var(--r-ventana);
+  background: var(--lavado);
+}
+.ob-ventana__nota,
+.ob-dialogo__nota {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-ventana__pie-acciones,
+.ob-dialogo__pie-acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  margin-left: auto;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Diálogo (480 px) y diálogo de alerta                                                         */
+/* ------------------------------------------------------------------------------------------ */
+.ob-dialogo {
+  width: min(var(--ancho-dialogo), calc(100vw - 48px));
+}
+.ob-dialogo--ancho {
+  width: min(640px, calc(100vw - 48px));
+}
+.ob-dialogo__encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--esp-6) 56px var(--esp-4) var(--esp-6);
+}
+.ob-dialogo__titulo {
+  white-space: normal;
+}
+.ob-dialogo__descripcion {
+  color: var(--texto-2);
+}
+.ob-dialogo__cuerpo {
+  min-height: 0;
+  overflow: auto;
+  padding: 0 var(--esp-6) var(--esp-5);
+}
+.ob-dialogo__cerrar {
+  position: absolute;
+  top: var(--esp-4);
+  right: var(--esp-4);
+}
+
+/* Alerta: icono a la izquierda, título de tarjeta, botones a la derecha */
+.ob-dialogo--alerta .ob-dialogo__encabezado {
+  flex-direction: row;
+  gap: var(--esp-4);
+  padding: var(--esp-6) var(--esp-6) var(--esp-5);
+}
+.ob-dialogo__icono {
+  display: grid;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: var(--r-interno);
+  background: var(--acento-suave);
+  color: var(--acento-texto);
+}
+.ob-dialogo--peligro .ob-dialogo__icono {
+  background: var(--fondo-rojo);
+  color: var(--rojo-texto);
+}
+.ob-dialogo__textos {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding-top: var(--esp-1);
+}
+.ob-dialogo--alerta .ob-dialogo__titulo {
+  font-size: var(--txt-titulo-tarjeta);
+  line-height: var(--txt-titulo-tarjeta-alto);
+  font-weight: var(--txt-titulo-tarjeta-peso);
+  letter-spacing: var(--txt-titulo-tarjeta-espacio);
+}
+.ob-dialogo--alerta .ob-dialogo__pie {
+  justify-content: flex-end;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Panel lateral (cajón): entra desde el borde derecho y sale por el mismo sitio                */
+/* ------------------------------------------------------------------------------------------ */
+.ob-cajon {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  width: min(var(--ancho-cajon), calc(100vw - 16px));
+  border-radius: var(--r-ventana);
+  background-color: var(--sup-3);
+  background-image: var(--sup-degradado);
+  border: 1px solid var(--linea-fuerte);
+  box-shadow: var(--sombra-flotante);
+  color: var(--texto-1);
+  outline: none;
+}
+.ob-cajon[data-estado="abierta"] {
+  animation: ob-entrar-cajon var(--t-cajon) var(--curva);
+}
+.ob-cajon[data-estado="cerrando"] {
+  animation: ob-salir-cajon 180ms var(--curva-media) forwards;
+  pointer-events: none;
+}
+.ob-cajon--izquierda {
+  right: auto;
+  left: 8px;
+}
+.ob-cajon--izquierda[data-estado] {
+  animation-name: none;
+}
+.ob-cajon__encabezado {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  padding: var(--esp-4-5) var(--esp-4) var(--esp-4) var(--esp-5);
+  border-bottom: 1px solid var(--linea);
+}
+.ob-cajon__titulos {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ob-cajon__titulo {
+  font-size: var(--txt-titulo-ventana);
+  line-height: var(--txt-titulo-ventana-alto);
+  font-weight: var(--txt-titulo-ventana-peso);
+  letter-spacing: var(--txt-titulo-ventana-espacio);
+}
+.ob-cajon__descripcion {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-cajon__cuerpo {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--esp-5);
+}
+.ob-cajon__pie {
+  display: flex;
+  flex: none;
+  justify-content: flex-end;
+  gap: var(--esp-2);
+  padding: var(--esp-3-5) var(--esp-5);
+  border-top: 1px solid var(--linea);
+  border-radius: 0 0 var(--r-ventana) var(--r-ventana);
+  background: var(--lavado);
+}

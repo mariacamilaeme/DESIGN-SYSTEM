@@ -1,0 +1,440 @@
+/*
+ * Obsidiana · movimiento.
+ *
+ * Reglas (DISENO.md › Movimiento): solo transform, opacity y trazos SVG; curva --curva
+ * (cubic-bezier(0.16, 1, 0.3, 1)); sin rebotes ni sobreimpulso; sin bucles salvo el pulso de algo
+ * "en curso", los esqueletos y los indicadores de carga. Cada animación responde a una acción.
+ *
+ * Tabla de referencia
+ *   Cambio de vista            fundido + 6 px, 180 ms                     .ob-entrar, [data-ob-vista]
+ *   Indicadores deslizantes    resorte 420/36 (--curva-resorte, 320 ms)   JS (FLIP)
+ *   Ventana / diálogo          escala 0,98 → 1 + fundido, 220 ms          [data-estado] en .ob-ventana
+ *   Menús y popovers           escala 0,97 → 1 desde su origen, 140 ms    [data-estado] en flotantes
+ *   Entrada de listas          escalonado de 24 ms, máximo 8              .ob-escalonar
+ *   Cifras                     rodillo de dígitos, 600 ms                 [data-ob-cifra]
+ *   Trazos                     de 0 a 1 en 700–900 ms, una vez            .ob-trazar
+ *   Hover                      120 ms
+ *   Pulsar                     escala 0,98, 100 ms                        botones
+ *   Pulso "en curso"           opacidad 0,5 → 1, 2,4 s                    .ob-pulso
+ */
+
+/* ------------------------------------------------------------------------------------------ */
+/* Fotogramas                                                                                   */
+/* ------------------------------------------------------------------------------------------ */
+@keyframes ob-entrar {
+  from {
+    opacity: 0;
+    translate: 0 var(--desplazamiento-vista);
+  }
+}
+@keyframes ob-entrar-corto {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+@keyframes ob-aparecer {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes ob-desaparecer {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes ob-entrar-flotante {
+  from {
+    opacity: 0;
+    scale: var(--escala-flotante);
+  }
+}
+@keyframes ob-salir-flotante {
+  to {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+@keyframes ob-entrar-ventana {
+  from {
+    opacity: 0;
+    scale: var(--escala-ventana);
+  }
+}
+@keyframes ob-salir-ventana {
+  to {
+    opacity: 0;
+    scale: 0.985;
+  }
+}
+@keyframes ob-entrar-cajon {
+  from {
+    opacity: 0.6;
+    translate: 100% 0;
+  }
+}
+@keyframes ob-salir-cajon {
+  to {
+    opacity: 0.6;
+    translate: 100% 0;
+  }
+}
+@keyframes ob-brillo {
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes ob-pulso {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes ob-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ob-trazar {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes ob-crecer-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes ob-crecer-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes ob-indeterminado {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+@keyframes ob-filo-encender {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Clases de animación                                                                          */
+/* ------------------------------------------------------------------------------------------ */
+
+/* Cambio de vista o entrada de un bloque: fundido + 6 px, 180 ms */
+.ob-entrar {
+  animation: ob-entrar var(--t-vista) var(--curva) both;
+}
+.ob-aparecer {
+  animation: ob-aparecer var(--t-vista) var(--curva) both;
+}
+
+/*
+ * Entrada escalonada: los hijos directos entran con 24 ms de diferencia, como mucho 8 escalones
+ * (el resto entra con el octavo). El JS fija --ob-i en cada hijo; sin JS, los 8 primeros llevan su
+ * índice por :nth-child.
+ */
+.ob-escalonar > * {
+  animation: ob-entrar-corto 220ms var(--curva) both;
+  animation-delay: calc(min(var(--ob-i, 0), 8) * var(--escalonado));
+}
+.ob-escalonar > :nth-child(2) {
+  --ob-i: 1;
+}
+.ob-escalonar > :nth-child(3) {
+  --ob-i: 2;
+}
+.ob-escalonar > :nth-child(4) {
+  --ob-i: 3;
+}
+.ob-escalonar > :nth-child(5) {
+  --ob-i: 4;
+}
+.ob-escalonar > :nth-child(6) {
+  --ob-i: 5;
+}
+.ob-escalonar > :nth-child(7) {
+  --ob-i: 6;
+}
+.ob-escalonar > :nth-child(n + 8) {
+  --ob-i: 7;
+}
+
+/* Pulso mínimo de algo en curso: la única animación en bucle permitida */
+.ob-pulso {
+  animation: ob-pulso var(--t-pulso) ease-in-out infinite;
+}
+
+/* Trazo SVG que se dibuja una vez: pathLength="1" en el elemento */
+.ob-trazar {
+  stroke-dasharray: 1;
+  animation: ob-trazar var(--t-trazo) var(--curva) both;
+  animation-delay: var(--ob-retraso, 0ms);
+}
+
+/* Vistas: la vista visible entra con fundido + 6 px; la anterior se retira al instante */
+[data-ob-vista] {
+  animation: ob-entrar var(--t-vista) var(--curva) both;
+}
+[data-ob-vista][hidden] {
+  animation: none;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Iconos: microanimaciones al pasar el cursor (heredadas de la app).                           */
+/* Las partes de un icono leen estas variables (animation: var(--ia-caer, none)); se activan    */
+/* sobre botones, enlaces, opciones y cualquier elemento con .ob-icono-vivo.                    */
+/* ------------------------------------------------------------------------------------------ */
+@keyframes ic-caer {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  38% {
+    transform: translateY(5px);
+    opacity: 0;
+  }
+  39% {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes ic-subir {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  38% {
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+  39% {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes ic-trazar {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes ic-girar-cuarto {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(90deg);
+  }
+}
+@keyframes ic-rayos {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(45deg);
+  }
+}
+@keyframes ic-inclinar {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  45% {
+    transform: rotate(-16deg);
+  }
+}
+@keyframes ic-empujar {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: translateX(3px);
+  }
+}
+@keyframes ic-asomar {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: translate(-1.5px, -1.5px);
+  }
+}
+@keyframes ic-navegar {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: translateX(2.5px);
+  }
+}
+@keyframes ic-reloj {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ic-barras {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@keyframes ic-salir {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: translate(2px, -2px);
+  }
+}
+@keyframes ic-ruta {
+  from {
+    stroke-dashoffset: 9.6;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes ic-encoger {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: scaleX(0.6);
+  }
+}
+@keyframes ic-encender {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: translateY(-1.5px);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(button, a, [role="menuitem"], [role="option"], [role="tab"], .ob-icono-vivo):hover {
+    --ia-caer: ic-caer 560ms var(--curva) both;
+    --ia-subir: ic-subir 560ms var(--curva) both;
+    --ia-trazo-1: ic-trazar 420ms var(--curva) both;
+    --ia-trazo-2: ic-trazar 420ms var(--curva) 90ms both;
+    --ia-girar: ic-girar-cuarto 320ms var(--curva) both;
+    --ia-rayos: ic-rayos 420ms var(--curva) both;
+    --ia-inclinar: ic-inclinar 480ms var(--curva) both;
+    --ia-empujar: ic-empujar 420ms var(--curva) both;
+    --ia-asomar: ic-asomar 380ms var(--curva) both;
+    --ia-navegar: ic-navegar 520ms var(--curva) both;
+    --ia-reloj: ic-reloj 700ms var(--curva) both;
+    --ia-barras: ic-barras 420ms var(--curva) both;
+    --ia-salir: ic-salir 400ms var(--curva) both;
+    --ia-ruta: ic-ruta 600ms linear both;
+    --ia-encoger-1: ic-encoger 420ms var(--curva) both;
+    --ia-encoger-2: ic-encoger 420ms var(--curva) 60ms both;
+    --ia-encender: ic-encender 380ms var(--curva) both;
+  }
+}
+
+/* Reproducción manual (catálogo): la clase fuerza la microanimación una vez */
+.ob-icono-reproducir {
+  --ia-caer: ic-caer 560ms var(--curva) both;
+  --ia-subir: ic-subir 560ms var(--curva) both;
+  --ia-trazo-1: ic-trazar 420ms var(--curva) both;
+  --ia-trazo-2: ic-trazar 420ms var(--curva) 90ms both;
+  --ia-girar: ic-girar-cuarto 320ms var(--curva) both;
+  --ia-rayos: ic-rayos 420ms var(--curva) both;
+  --ia-inclinar: ic-inclinar 480ms var(--curva) both;
+  --ia-empujar: ic-empujar 420ms var(--curva) both;
+  --ia-asomar: ic-asomar 380ms var(--curva) both;
+  --ia-navegar: ic-navegar 520ms var(--curva) both;
+  --ia-reloj: ic-reloj 700ms var(--curva) both;
+  --ia-barras: ic-barras 420ms var(--curva) both;
+  --ia-salir: ic-salir 400ms var(--curva) both;
+  --ia-ruta: ic-ruta 600ms linear both;
+  --ia-encoger-1: ic-encoger 420ms var(--curva) both;
+  --ia-encoger-2: ic-encoger 420ms var(--curva) 60ms both;
+  --ia-encender: ic-encender 380ms var(--curva) both;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Transición de tema (View Transitions): fundido cruzado de 260 ms con la curva del sistema    */
+/* ------------------------------------------------------------------------------------------ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--t-tema);
+  animation-timing-function: var(--curva);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Movimiento reducido: menos y más suave, nunca desplazamientos                                */
+/* Se conservan los fundidos breves (comprensión del cambio); se quitan escalas, traslaciones,  */
+/* rodillos, trazos y bucles.                                                                   */
+/* ------------------------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 60ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  .ob-pulso,
+  .ob-esqueleto::after,
+  .ob-indicador,
+  .ob-progreso[data-estado="indeterminado"] .ob-progreso__barra {
+    animation: none !important;
+  }
+  .ob-pulso {
+    opacity: 1;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+/* Interruptor manual para pruebas y preferencias de la propia herramienta */
+[data-movimiento="reducido"] *,
+[data-movimiento="reducido"] *::before,
+[data-movimiento="reducido"] *::after {
+  animation-duration: 1ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 60ms !important;
+}

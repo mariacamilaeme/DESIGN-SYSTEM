@@ -1,0 +1,283 @@
+/*
+ * Obsidiana · botones.
+ *
+ *   <button class="ob-boton ob-boton--primario">Guardar</button>
+ *   <button class="ob-boton ob-boton--secundario ob-boton--sm">…</button>
+ *   <button class="ob-boton ob-boton--icono" aria-label="Editar"><span data-icono="editar"></span></button>
+ *
+ * Variantes: --primario · --secundario (por defecto) · --fantasma · --destructivo · --destructivo-suave
+ * Tamaños: --sm (28) · md (32, por defecto) · --lg (36)
+ * Solo icono: --icono (cuadrado, fantasma) · añade --borde para la versión con borde
+ * Estado de acción: data-estado="reposo|cargando|listo" (el JS crea las caras; ver Obsidiana.boton).
+ * El ancho no cambia entre estados: las tres caras ocupan la misma celda de la rejilla.
+ */
+
+.ob-boton {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  height: var(--alto-control);
+  padding: 0 var(--esp-3);
+  border-radius: var(--r-control);
+  font-size: var(--txt-cuerpo);
+  line-height: var(--txt-cuerpo-alto);
+  font-weight: 500;
+  white-space: nowrap;
+  user-select: none;
+  /* secundario por defecto */
+  border: 1px solid var(--linea-fuerte);
+  background-color: var(--boton-2);
+  color: var(--texto-1);
+  box-shadow: var(--sombra-control);
+  transition:
+    background-color var(--t-hover) var(--curva),
+    border-color var(--t-hover) var(--curva),
+    color var(--t-hover) var(--curva),
+    box-shadow var(--t-hover) var(--curva),
+    opacity var(--t-hover) var(--curva),
+    transform var(--t-pulsar) var(--curva);
+}
+.ob-boton:hover:not(:disabled, [aria-disabled="true"]) {
+  border-color: var(--linea-hover);
+  background-color: var(--boton-2-hover);
+}
+/* Respuesta al pulsar: escala 0,98 */
+.ob-boton:active:not(:disabled, [aria-disabled="true"]) {
+  transform: scale(var(--escala-pulsar));
+}
+.ob-boton:disabled,
+.ob-boton[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.ob-boton:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+.ob-boton > svg,
+.ob-boton > [data-icono] {
+  flex: none;
+}
+
+/* --- Variantes --- */
+.ob-boton--primario {
+  border-color: transparent;
+  background-color: var(--acento-relleno);
+  color: var(--sobre-acento);
+  box-shadow: var(--sombra-boton-acento);
+}
+.ob-boton--primario:hover:not(:disabled, [aria-disabled="true"]) {
+  border-color: transparent;
+  background-color: var(--acento-relleno-hover);
+}
+
+.ob-boton--secundario {
+  /* es el aspecto por defecto; la clase existe para ser explícito */
+  border-color: var(--linea-fuerte);
+}
+
+.ob-boton--fantasma {
+  border-color: transparent;
+  background-color: transparent;
+  color: var(--texto-2);
+  box-shadow: none;
+}
+.ob-boton--fantasma:hover:not(:disabled, [aria-disabled="true"]),
+.ob-boton--fantasma[aria-expanded="true"] {
+  border-color: transparent;
+  background-color: var(--lavado-2);
+  color: var(--texto-1);
+}
+
+.ob-boton--destructivo {
+  border-color: transparent;
+  background-color: var(--rojo-relleno);
+  color: var(--sobre-acento);
+  box-shadow: var(--sombra-boton-acento);
+}
+.ob-boton--destructivo:hover:not(:disabled, [aria-disabled="true"]) {
+  border-color: transparent;
+  background-color: var(--rojo-relleno-hover);
+}
+
+.ob-boton--destructivo-suave {
+  color: var(--rojo-texto);
+}
+.ob-boton--destructivo-suave:hover:not(:disabled, [aria-disabled="true"]) {
+  border-color: var(--borde-rojo);
+  background-color: var(--lavado-rojo);
+}
+
+/* --- Tamaños --- */
+.ob-boton--sm {
+  gap: 6px;
+  height: var(--alto-control-compacto);
+  padding: 0 var(--esp-2-5);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+}
+.ob-boton--lg {
+  height: var(--alto-control-grande);
+  padding: 0 var(--esp-4);
+}
+.ob-boton--bloque {
+  display: flex;
+  width: 100%;
+}
+
+/* --- Solo icono: cuadrado, fantasma por defecto --- */
+.ob-boton--icono {
+  width: var(--alto-control);
+  padding: 0;
+  border-color: transparent;
+  background-color: transparent;
+  color: var(--texto-2);
+  box-shadow: none;
+}
+.ob-boton--icono:hover:not(:disabled, [aria-disabled="true"]),
+.ob-boton--icono[aria-expanded="true"] {
+  border-color: transparent;
+  background-color: var(--lavado-2);
+  color: var(--texto-1);
+}
+.ob-boton--icono:active:not(:disabled, [aria-disabled="true"]) {
+  transform: scale(0.96);
+}
+.ob-boton--icono:disabled {
+  opacity: 0.4;
+}
+.ob-boton--icono.ob-boton--sm {
+  width: var(--alto-control-compacto);
+}
+.ob-boton--icono.ob-boton--lg {
+  width: var(--alto-control-grande);
+}
+.ob-boton--icono.ob-boton--xs {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--r-elemento);
+}
+.ob-boton--icono.ob-boton--borde {
+  border-color: var(--linea-fuerte);
+  background-color: var(--boton-2);
+  box-shadow: var(--sombra-control);
+}
+.ob-boton--icono.ob-boton--borde:hover:not(:disabled) {
+  border-color: var(--linea-hover);
+  background-color: var(--boton-2-hover);
+}
+
+/* Contador dentro de un botón ("Filtros 2") */
+.ob-boton__contador {
+  display: inline-grid;
+  min-width: 18px;
+  height: 18px;
+  place-items: center;
+  padding: 0 4px;
+  border-radius: var(--r-pildora);
+  background: var(--acento-relleno);
+  color: var(--sobre-acento);
+  font-size: var(--txt-mini);
+  line-height: 1;
+  font-weight: 600;
+  font-feature-settings: var(--rasgos-cifras);
+}
+/* Chevron que gira cuando el menú del botón está abierto */
+.ob-boton__chevron {
+  color: var(--texto-3);
+  transition: transform var(--t-estado) var(--curva);
+}
+.ob-boton[aria-expanded="true"] .ob-boton__chevron {
+  transform: rotate(180deg);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Estados de acción: reposo → cargando → listo sin cambiar de tamaño                           */
+/* ------------------------------------------------------------------------------------------ */
+.ob-boton__caras {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+.ob-boton__cara {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+  transition:
+    opacity var(--t-estado) var(--curva),
+    transform var(--t-estado) var(--curva);
+}
+.ob-boton__caras {
+  gap: inherit;
+}
+.ob-boton__cara--cargando,
+.ob-boton__cara--listo {
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+}
+.ob-boton__cara--listo path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 300ms var(--curva) 75ms;
+}
+.ob-boton:is([data-estado="cargando"], [data-estado="listo"]) .ob-boton__cara--reposo {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+.ob-boton[data-estado="cargando"] .ob-boton__cara--cargando,
+.ob-boton[data-estado="listo"] .ob-boton__cara--listo {
+  opacity: 1;
+  transform: none;
+}
+.ob-boton[data-estado="listo"] .ob-boton__cara--listo path {
+  stroke-dashoffset: 0;
+}
+.ob-boton[data-estado="cargando"] {
+  cursor: progress;
+}
+.ob-boton[data-estado="cargando"]:disabled {
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Grupo de botones: botones unidos que comparten bordes                                        */
+/* ------------------------------------------------------------------------------------------ */
+.ob-grupo-botones {
+  display: inline-flex;
+  isolation: isolate;
+}
+.ob-grupo-botones > .ob-boton {
+  border-radius: 0;
+}
+.ob-grupo-botones > .ob-boton:first-child {
+  border-top-left-radius: var(--r-control);
+  border-bottom-left-radius: var(--r-control);
+}
+.ob-grupo-botones > .ob-boton:last-child {
+  border-top-right-radius: var(--r-control);
+  border-bottom-right-radius: var(--r-control);
+}
+.ob-grupo-botones > .ob-boton + .ob-boton {
+  margin-left: -1px;
+}
+.ob-grupo-botones > .ob-boton:hover,
+.ob-grupo-botones > .ob-boton:focus-visible {
+  z-index: 1;
+}
+.ob-grupo-botones > .ob-boton:active:not(:disabled) {
+  transform: none;
+}
+/* Fila de acciones separadas */
+.ob-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-2);
+}

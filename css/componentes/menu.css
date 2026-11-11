@@ -1,0 +1,141 @@
+/*
+ * Obsidiana · menú desplegable.
+ *
+ *   <button class="ob-boton ob-boton--fantasma" data-ob-menu="menu-exportar" aria-haspopup="menu">Exportar</button>
+ *   <div class="ob-menu" id="menu-exportar" role="menu" hidden>
+ *     <div class="ob-menu__etiqueta">Formato</div>
+ *     <button class="ob-menu__elemento" role="menuitem">
+ *       <span data-icono="descargar"></span><span class="ob-menu__texto">Excel</span><span class="ob-menu__meta">Ctrl E</span>
+ *     </button>
+ *     <div class="ob-menu__separador" role="separator"></div>
+ *     <button class="ob-menu__elemento ob-menu__elemento--peligro" role="menuitem">…</button>
+ *   </div>
+ *
+ * Elementos con descripción: <span class="ob-menu__cuerpo"><span>Título</span><span class="ob-menu__descripcion">…</span></span>
+ * Casillas y radios: role="menuitemcheckbox|menuitemradio" con aria-checked; la marca es .ob-menu__marca.
+ * Alineación con data-alinear="end" en el menú. Teclado: flechas, Inicio, Fin, letra inicial,
+ * Enter/Espacio, Escape (devuelve el foco al disparador) y Tab (cierra).
+ */
+.ob-menu {
+  min-width: var(--ancho-menu-min);
+  max-width: min(360px, calc(100vw - 24px));
+  padding: var(--esp-1);
+}
+.ob-menu__elemento,
+.ob-opcion {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2-5);
+  width: 100%;
+  min-height: var(--alto-elemento-menu);
+  padding: 0 var(--esp-2-5);
+  border-radius: var(--r-elemento);
+  text-align: left;
+  color: var(--texto-1);
+  user-select: none;
+  outline: none;
+  transition: background-color var(--t-hover) ease;
+}
+.ob-menu__elemento > svg,
+.ob-menu__elemento > [data-icono],
+.ob-opcion > svg,
+.ob-opcion > [data-icono] {
+  color: var(--texto-3);
+  transition: color var(--t-hover) ease;
+}
+.ob-menu__elemento:is(:hover, :focus-visible, [data-activo]),
+.ob-opcion:is(:hover, [data-activo]) {
+  background: var(--lavado-2);
+}
+.ob-menu__elemento:is(:hover, :focus-visible, [data-activo]) > :is(svg, [data-icono]),
+.ob-opcion:is(:hover, [data-activo]) > :is(svg, [data-icono]) {
+  color: var(--texto-2);
+}
+.ob-menu__elemento:is(:disabled, [aria-disabled="true"]),
+.ob-opcion[aria-disabled="true"] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.ob-menu__texto {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ob-menu__cuerpo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ob-menu__elemento:has(.ob-menu__cuerpo) {
+  align-items: flex-start;
+  padding-top: var(--esp-2);
+  padding-bottom: var(--esp-2);
+}
+.ob-menu__elemento:has(.ob-menu__cuerpo) > :is(svg, [data-icono]) {
+  margin-top: 2px;
+}
+.ob-menu__descripcion {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-menu__meta {
+  margin-left: auto;
+  padding-left: var(--esp-4);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+  white-space: nowrap;
+}
+.ob-menu__etiqueta {
+  padding: var(--esp-2) var(--esp-2-5) var(--esp-1);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-menu__separador {
+  height: 1px;
+  margin: var(--esp-1);
+  background: var(--linea);
+}
+.ob-menu__elemento--peligro {
+  color: var(--rojo-texto);
+}
+.ob-menu__elemento--peligro > :is(svg, [data-icono]),
+.ob-menu__elemento--peligro:is(:hover, :focus-visible, [data-activo]) > :is(svg, [data-icono]) {
+  color: var(--rojo-texto);
+}
+.ob-menu__elemento--peligro:is(:hover, :focus-visible, [data-activo]) {
+  background: var(--lavado-rojo);
+}
+
+/* Casillas y radios dentro del menú: marca a la derecha */
+.ob-menu__elemento:is([role="menuitemcheckbox"], [role="menuitemradio"]),
+.ob-opcion {
+  padding-right: var(--esp-8);
+}
+.ob-menu__marca,
+.ob-opcion__marca {
+  position: absolute;
+  right: var(--esp-2-5);
+  display: flex;
+  color: var(--acento);
+  opacity: 0;
+  transform: scale(0.85);
+  transition:
+    opacity var(--t-hover) ease,
+    transform var(--t-estado) var(--curva);
+}
+.ob-menu__elemento[aria-checked="true"] .ob-menu__marca,
+.ob-opcion[aria-selected="true"] .ob-opcion__marca,
+.ob-opcion[aria-checked="true"] .ob-opcion__marca {
+  opacity: 1;
+  transform: none;
+}
+.ob-menu__marca svg,
+.ob-opcion__marca svg {
+  width: 14px;
+  height: 14px;
+}

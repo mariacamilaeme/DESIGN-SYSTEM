@@ -1,0 +1,318 @@
+/*
+ * Obsidiana · miga de pan, paginación, pasos (stepper) y línea de tiempo.
+ *
+ * Miga
+ *   <nav class="ob-miga" aria-label="Ubicación"><ol>
+ *     <li><a class="ob-miga__enlace" href="#">Obsidiana</a></li>
+ *     <li class="ob-miga__sep" aria-hidden="true">›</li>
+ *     <li><span class="ob-miga__actual" aria-current="page">Pedidos</span></li>
+ *   </ol></nav>
+ *   (el separador puede ser un icono chevron-derecha de 14 px)
+ *
+ * Paginación (Obsidiana.paginacion(el, { pagina, total, alCambiar }) la dibuja)
+ *   <nav class="ob-paginacion" aria-label="Paginación">
+ *     <button class="ob-paginacion__boton" aria-label="Página anterior">‹</button>
+ *     <button class="ob-paginacion__boton" aria-current="page">1</button>
+ *     <span class="ob-paginacion__hueco">·</span> …
+ *   </nav>
+ *
+ * Pasos
+ *   <ol class="ob-pasos">
+ *     <li class="ob-paso" data-estado="completado"><span class="ob-paso__marca"></span>
+ *       <span class="ob-paso__texto"><span class="ob-paso__titulo">Datos</span><span class="ob-paso__descripcion">…</span></span></li>
+ *     <li class="ob-paso" data-estado="actual" aria-current="step">…</li>
+ *     <li class="ob-paso" data-estado="pendiente">…</li>
+ *   </ol>
+ *   vertical: --vertical
+ *
+ * Línea de tiempo
+ *   <ol class="ob-linea-tiempo">
+ *     <li class="ob-hito" data-tono="vivo"><span class="ob-hito__punto"></span>
+ *       <div class="ob-hito__cuerpo"><p class="ob-hito__titulo">…</p><p class="ob-hito__meta">…</p><p class="ob-hito__texto">…</p></div></li>
+ *   </ol>
+ */
+
+/* ------------------------------------------------------------------------------------------ */
+/* Miga de pan                                                                                  */
+/* ------------------------------------------------------------------------------------------ */
+.ob-miga ol {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.ob-miga li {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.ob-miga__enlace {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: 0 var(--esp-1);
+  border-radius: var(--r-elemento);
+  font-weight: 500;
+  color: var(--texto-3);
+  white-space: nowrap;
+  transition: color var(--t-hover) ease;
+}
+.ob-miga__enlace:hover {
+  color: var(--texto-1);
+}
+.ob-miga__sep {
+  color: var(--texto-4);
+}
+.ob-miga__sep svg {
+  width: 14px;
+  height: 14px;
+}
+.ob-miga__actual {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  min-width: 0;
+  padding: 0 var(--esp-1);
+  overflow: hidden;
+  font-weight: 500;
+  color: var(--texto-1);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ob-miga__actual > :is(svg, [data-icono]) {
+  color: var(--texto-3);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Paginación                                                                                   */
+/* ------------------------------------------------------------------------------------------ */
+.ob-paginacion {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.ob-paginacion__boton {
+  display: grid;
+  min-width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0 var(--esp-1);
+  border-radius: var(--r-elemento);
+  font-size: var(--txt-etiqueta);
+  font-weight: 500;
+  color: var(--texto-2);
+  font-feature-settings: var(--rasgos-cifras);
+  transition:
+    background-color var(--t-hover) ease,
+    color var(--t-hover) ease;
+}
+.ob-paginacion__boton:hover:not(:disabled) {
+  background: var(--lavado-2);
+  color: var(--texto-1);
+}
+.ob-paginacion__boton[aria-current="page"] {
+  background: var(--lavado-2);
+  color: var(--texto-1);
+  box-shadow: inset 0 0 0 1px var(--linea-fuerte);
+}
+.ob-paginacion__boton:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.ob-paginacion__boton svg {
+  width: 16px;
+  height: 16px;
+}
+.ob-paginacion__hueco {
+  display: grid;
+  width: 20px;
+  height: 28px;
+  place-items: center;
+  color: var(--texto-3);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Pasos                                                                                        */
+/* ------------------------------------------------------------------------------------------ */
+.ob-pasos {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  counter-reset: ob-paso;
+}
+.ob-paso {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  gap: var(--esp-2-5);
+  min-width: 0;
+  counter-increment: ob-paso;
+}
+/* Conector hasta el paso siguiente */
+.ob-paso:not(:last-child)::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  min-width: 16px;
+  margin-top: 12px;
+  background: var(--linea-fuerte);
+}
+.ob-paso[data-estado="completado"]:not(:last-child)::after {
+  background: var(--acento);
+}
+.ob-paso__marca {
+  position: relative;
+  display: grid;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: 50%;
+  background: var(--sup-2);
+  font-size: var(--txt-mini);
+  font-weight: 600;
+  color: var(--texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+  transition:
+    background-color var(--t-estado) var(--curva),
+    border-color var(--t-estado) var(--curva),
+    color var(--t-estado) var(--curva);
+}
+.ob-paso__marca:empty::before {
+  content: counter(ob-paso);
+}
+.ob-paso[data-estado="actual"] .ob-paso__marca {
+  border-color: var(--acento);
+  color: var(--acento-texto);
+  box-shadow: 0 0 0 3px var(--acento-suave);
+}
+.ob-paso[data-estado="completado"] .ob-paso__marca {
+  border-color: var(--acento-relleno);
+  background: var(--acento-relleno);
+  color: var(--sobre-acento);
+}
+.ob-paso[data-estado="completado"] .ob-paso__marca:empty::before {
+  content: "";
+  width: 9px;
+  height: 5px;
+  margin-top: -2px;
+  border-bottom: 1.8px solid currentColor;
+  border-left: 1.8px solid currentColor;
+  transform: rotate(-45deg);
+}
+.ob-paso__texto {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2px;
+  min-width: 0;
+  white-space: nowrap;
+}
+.ob-paso__titulo {
+  font-weight: 500;
+  color: var(--texto-2);
+}
+.ob-paso[data-estado="actual"] .ob-paso__titulo,
+.ob-paso[data-estado="completado"] .ob-paso__titulo {
+  color: var(--texto-1);
+}
+.ob-paso__descripcion {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-pasos--vertical {
+  flex-direction: column;
+  gap: 0;
+}
+.ob-pasos--vertical .ob-paso {
+  width: 100%;
+  padding-bottom: var(--esp-5);
+}
+.ob-pasos--vertical .ob-paso:not(:last-child)::after {
+  position: absolute;
+  top: 28px;
+  bottom: 4px;
+  left: 11.5px;
+  width: 1px;
+  height: auto;
+  min-width: 0;
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Línea de tiempo                                                                              */
+/* ------------------------------------------------------------------------------------------ */
+.ob-linea-tiempo {
+  display: flex;
+  flex-direction: column;
+}
+.ob-hito {
+  --ob-tono: var(--texto-3);
+  position: relative;
+  display: flex;
+  gap: var(--esp-3);
+  padding-bottom: var(--esp-4-5);
+}
+.ob-hito:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  bottom: 0;
+  left: 4.5px;
+  width: 1px;
+  background: var(--linea-fuerte);
+}
+.ob-hito[data-tono="acento"] {
+  --ob-tono: var(--acento);
+}
+.ob-hito[data-tono="vivo"] {
+  --ob-tono: var(--vivo);
+}
+.ob-hito[data-tono="verde"] {
+  --ob-tono: var(--verde);
+}
+.ob-hito[data-tono="ambar"] {
+  --ob-tono: var(--ambar);
+}
+.ob-hito[data-tono="rojo"] {
+  --ob-tono: var(--rojo);
+}
+.ob-hito__punto {
+  position: relative;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: var(--sup-1);
+  box-shadow: inset 0 0 0 1.5px var(--ob-tono);
+}
+.ob-hito[data-tono]:not([data-tono="gris"]) .ob-hito__punto {
+  background: var(--ob-tono);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ob-tono) 16%, transparent);
+}
+.ob-hito[data-pulso] .ob-hito__punto {
+  animation: ob-pulso var(--t-pulso) ease-in-out infinite;
+}
+.ob-hito__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ob-hito__titulo {
+  font-weight: 500;
+  color: var(--texto-1);
+}
+.ob-hito__meta {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-hito__texto {
+  margin-top: 2px;
+  color: var(--texto-2);
+}

@@ -1,0 +1,140 @@
+/*
+ * Obsidiana · puente con Tailwind CSS v4.
+ *
+ *   @import "tailwindcss";
+ *   @import "./tokens/tokens.css";
+ *   @import "./tokens/tailwind.css";
+ *
+ * Genera utilidades que leen los tokens en tiempo de ejecución (cambian con data-theme):
+ * bg-sup-1, text-texto-2, border-linea, rounded-tarjeta, shadow-flotante, text-cifra, ease-salida…
+ * Equivalente al bloque @theme de IBC CORE 2.0 (src/client/styles/tokens.css).
+ */
+@theme {
+  /* Sin la paleta por defecto de Tailwind: solo existen los colores de Obsidiana. */
+  --color-*: initial;
+
+  --text-titulo: 22px;
+  --text-titulo--line-height: 28px;
+  --text-titulo--letter-spacing: -0.018em;
+  --text-titulo--font-weight: 600;
+  --text-titulo-ventana: 17px;
+  --text-titulo-ventana--line-height: 24px;
+  --text-titulo-ventana--letter-spacing: -0.012em;
+  --text-titulo-ventana--font-weight: 600;
+  --text-titulo-tarjeta: 14px;
+  --text-titulo-tarjeta--line-height: 20px;
+  --text-titulo-tarjeta--letter-spacing: -0.006em;
+  --text-titulo-tarjeta--font-weight: 600;
+  --text-cifra: 34px;
+  --text-cifra--line-height: 38px;
+  --text-cifra--letter-spacing: -0.028em;
+  --text-cifra--font-weight: 550;
+  --text-cifra-2: 20px;
+  --text-cifra-2--line-height: 26px;
+  --text-cifra-2--letter-spacing: -0.02em;
+  --text-cifra-2--font-weight: 600;
+  --text-cuerpo: 13px;
+  --text-cuerpo--line-height: 20px;
+  --text-cuerpo--letter-spacing: 0em;
+  --text-etiqueta: 12px;
+  --text-etiqueta--line-height: 16px;
+  --text-etiqueta--letter-spacing: 0.002em;
+  --text-columna: 11.5px;
+  --text-columna--line-height: 16px;
+  --text-columna--letter-spacing: 0.01em;
+  --text-codigo: 12.5px;
+  --text-codigo--line-height: 18px;
+  --text-paleta: 15px;
+  --text-paleta--line-height: 22px;
+  --text-mini: 11px;
+  --text-mini--line-height: 14px;
+  --text-mini--letter-spacing: 0.01em;
+  --text-micro: 10px;
+  --text-micro--line-height: 12px;
+  --text-micro--letter-spacing: 0.01em;
+}
+
+@theme inline {
+  --color-lienzo: var(--lienzo);
+  --color-sup-1: var(--sup-1);
+  --color-sup-2: var(--sup-2);
+  --color-sup-3: var(--sup-3);
+  --color-campo: var(--campo);
+  --color-campo-hover: var(--campo-hover);
+  --color-pulgar: var(--pulgar);
+  --color-boton-2: var(--boton-2);
+  --color-boton-2-hover: var(--boton-2-hover);
+  --color-carril: var(--carril);
+  --color-carril-indicador: var(--carril-indicador);
+  --color-interruptor-pulgar: var(--interruptor-pulgar);
+  --color-interruptor-borde: var(--interruptor-borde);
+  --color-lateral: var(--lateral);
+  --color-linea: var(--linea);
+  --color-linea-fuerte: var(--linea-fuerte);
+  --color-linea-hover: var(--linea-hover);
+  --color-realce: var(--realce);
+  --color-texto-1: var(--texto-1);
+  --color-texto-2: var(--texto-2);
+  --color-texto-3: var(--texto-3);
+  --color-texto-4: var(--texto-4);
+  --color-acento: var(--acento);
+  --color-acento-fuerte: var(--acento-fuerte);
+  --color-acento-suave: var(--acento-suave);
+  --color-acento-tenue: var(--acento-tenue);
+  --color-acento-relleno: var(--acento-relleno);
+  --color-acento-relleno-hover: var(--acento-relleno-hover);
+  --color-acento-texto: var(--acento-texto);
+  --color-sobre-acento: var(--sobre-acento);
+  --color-vivo: var(--vivo);
+  --color-ambar: var(--ambar);
+  --color-rojo: var(--rojo);
+  --color-verde: var(--verde);
+  --color-gris-estado: var(--gris-estado);
+  --color-vivo-texto: var(--vivo-texto);
+  --color-ambar-texto: var(--ambar-texto);
+  --color-rojo-texto: var(--rojo-texto);
+  --color-verde-texto: var(--verde-texto);
+  --color-gris-texto: var(--gris-texto);
+  --color-rojo-relleno: var(--rojo-relleno);
+  --color-rojo-relleno-hover: var(--rojo-relleno-hover);
+  --color-lavado: var(--lavado);
+  --color-lavado-2: var(--lavado-2);
+  --color-lavado-3: var(--lavado-3);
+  --color-esqueleto: var(--esqueleto);
+  --color-oscurecer: var(--oscurecer);
+  --color-lateral-texto-1: var(--lateral-texto-1);
+  --color-lateral-texto-2: var(--lateral-texto-2);
+  --color-lateral-texto-3: var(--lateral-texto-3);
+  --color-lateral-linea: var(--lateral-linea);
+  --color-lateral-lavado: var(--lateral-lavado);
+  --color-lateral-activo: var(--lateral-activo);
+  --color-lateral-acento: var(--lateral-acento);
+  --color-lateral-contador: var(--lateral-contador);
+
+  --radius-mini: var(--r-mini);
+  --radius-elemento: var(--r-elemento);
+  --radius-control: var(--r-control);
+  --radius-interno: var(--r-interno);
+  --radius-tarjeta: var(--r-tarjeta);
+  --radius-ventana: var(--r-ventana);
+  --radius-pildora: var(--r-pildora);
+
+  --shadow-tarjeta: var(--sombra-tarjeta);
+  --shadow-flotante: var(--sombra-flotante);
+  --shadow-control: var(--sombra-control);
+  --shadow-carril-indicador: var(--sombra-carril-indicador);
+  --shadow-boton-acento: var(--sombra-boton-acento);
+
+  --font-sans: var(--fuente-texto);
+  --font-mono: var(--fuente-codigo);
+
+  --ease-salida: var(--curva);
+  --ease-media: var(--curva-media);
+  --ease-resorte: var(--curva-resorte);
+
+  --spacing-control: var(--alto-control);
+  --spacing-control-compacto: var(--alto-control-compacto);
+  --spacing-fila: var(--alto-fila);
+  --spacing-encabezado-tabla: var(--alto-encabezado-tabla);
+  --spacing-superior: var(--alto-superior);
+}

@@ -1,0 +1,239 @@
+/*
+ * Obsidiana · gráficas mínimas en SVG, sin librería.
+ *
+ * Se dibujan con Obsidiana.graficas (barras, lineas, anillo, sparkline) o declarando:
+ *   <div class="ob-grafica" data-ob-grafica="barras" data-valores="12,18,9,22" data-etiquetas="Ene,Feb,Mar,Abr"
+ *        data-formato="USD" style="height: 180px" role="img" aria-label="Ventas por mes"></div>
+ *   <span class="ob-sparkline" data-ob-grafica="sparkline" data-valores="3,5,4,8,7,9" data-tono="vivo"></span>
+ *
+ * Reglas: una sola tinta por serie (acento por defecto), rejilla de 1 px en --linea, etiquetas de
+ * eje a 11 px en texto-3, cifras tabulares. Las barras crecen desde la base una vez (escalonado
+ * de 24 ms), las líneas se trazan en 900 ms y el área aparece con un fundido. Al pasar el cursor,
+ * una guía vertical y la pista dicen el valor exacto.
+ * Tonos: data-tono="acento|vivo|ambar|verde|rojo|gris" en el contenedor o data-serie="1…5" en cada marca.
+ */
+.ob-grafica {
+  --ob-tono: var(--acento);
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+:is(.ob-grafica, .ob-sparkline, .ob-dona)[data-tono="vivo"] {
+  --ob-tono: var(--vivo);
+}
+:is(.ob-grafica, .ob-sparkline, .ob-dona)[data-tono="ambar"] {
+  --ob-tono: var(--ambar);
+}
+:is(.ob-grafica, .ob-sparkline, .ob-dona)[data-tono="verde"] {
+  --ob-tono: var(--verde);
+}
+:is(.ob-grafica, .ob-sparkline, .ob-dona)[data-tono="rojo"] {
+  --ob-tono: var(--rojo);
+}
+:is(.ob-grafica, .ob-sparkline, .ob-dona)[data-tono="gris"] {
+  --ob-tono: var(--gris-estado);
+}
+.ob-grafica svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.ob-grafica__rejilla {
+  stroke: var(--linea);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.ob-grafica__base {
+  stroke: var(--linea-fuerte);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.ob-grafica__eje {
+  fill: var(--texto-3);
+  font-size: 11px;
+  font-family: var(--fuente-texto);
+  font-feature-settings: var(--rasgos-cifras);
+}
+
+/* Series */
+[data-serie="1"] {
+  --ob-tono: var(--acento);
+}
+[data-serie="2"] {
+  --ob-tono: var(--vivo);
+}
+[data-serie="3"] {
+  --ob-tono: var(--ambar);
+}
+[data-serie="4"] {
+  --ob-tono: var(--gris-estado);
+}
+[data-serie="5"] {
+  --ob-tono: var(--verde);
+}
+
+/* Barras */
+.ob-grafica__barra {
+  fill: var(--ob-tono);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: ob-crecer-y 520ms var(--curva) both;
+  animation-delay: calc(min(var(--ob-i, 0), 12) * var(--escalonado));
+  transition: opacity var(--t-hover) ease;
+}
+.ob-grafica__barra--tenue {
+  fill: var(--lavado-3);
+}
+.ob-grafica[data-activa] .ob-grafica__barra:not([data-activa]) {
+  opacity: 0.45;
+}
+.ob-grafica__zona {
+  fill: transparent;
+}
+
+/* Líneas y área */
+.ob-grafica__linea {
+  fill: none;
+  stroke: var(--ob-tono);
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  animation: ob-trazar var(--t-ruta) var(--curva) both;
+}
+.ob-grafica__linea--comparacion {
+  stroke: var(--texto-4);
+  stroke-width: 1.25;
+  stroke-dasharray: none;
+  animation: ob-aparecer var(--t-ruta) var(--curva) both;
+}
+.ob-grafica__area {
+  fill: var(--ob-tono);
+  fill-opacity: 0.1;
+  stroke: none;
+  animation: ob-aparecer var(--t-ruta) var(--curva) 200ms both;
+}
+.ob-grafica__punto {
+  fill: var(--sup-1);
+  stroke: var(--ob-tono);
+  stroke-width: 1.75;
+}
+.ob-grafica__punto--final {
+  fill: var(--ob-tono);
+  stroke: none;
+  animation: ob-aparecer 240ms var(--curva) var(--t-ruta) both;
+}
+.ob-grafica__guia {
+  stroke: var(--linea-hover);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  opacity: 0;
+  transition: opacity var(--t-hover) ease;
+}
+.ob-grafica__marcador {
+  fill: var(--ob-tono);
+  stroke: var(--sup-1);
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity var(--t-hover) ease;
+}
+.ob-grafica[data-activa] :is(.ob-grafica__guia, .ob-grafica__marcador) {
+  opacity: 1;
+}
+
+/* Al redibujar por un cambio de tamaño o de tema, sin volver a animar */
+[data-ob-dibujada] * {
+  animation: none !important;
+}
+
+/* Sparkline (micrográfica de la cifra): 72 × 24, sin ejes */
+.ob-sparkline {
+  --ob-tono: var(--acento);
+  display: inline-block;
+  width: 72px;
+  height: 24px;
+}
+.ob-sparkline svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Anillo (dona) con leyenda */
+.ob-dona {
+  --ob-tono: var(--acento);
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+}
+.ob-dona svg {
+  grid-area: 1 / 1;
+  transform: rotate(-90deg);
+}
+.ob-dona__carril {
+  fill: none;
+  stroke: var(--lavado-3);
+}
+.ob-dona__segmento {
+  fill: none;
+  stroke: var(--ob-tono);
+  animation: ob-aparecer 400ms var(--curva) both;
+  animation-delay: calc(var(--ob-i, 0) * 60ms);
+  transition: opacity var(--t-hover) ease;
+}
+.ob-dona[data-activa] .ob-dona__segmento:not([data-activa]) {
+  opacity: 0.35;
+}
+.ob-dona__centro {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-dona__valor {
+  font-size: var(--txt-cifra-2);
+  line-height: var(--txt-cifra-2-alto);
+  font-weight: 600;
+  letter-spacing: var(--txt-cifra-2-espacio);
+  color: var(--texto-1);
+}
+.ob-dona__etiqueta {
+  font-size: var(--txt-mini);
+  line-height: var(--txt-mini-alto);
+  color: var(--texto-3);
+}
+
+.ob-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2) var(--esp-4);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-2);
+}
+.ob-leyenda--vertical {
+  flex-direction: column;
+}
+.ob-leyenda__elemento {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  min-width: 0;
+}
+.ob-leyenda__muestra {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--ob-tono, var(--acento));
+}
+.ob-leyenda__valor {
+  margin-left: auto;
+  padding-left: var(--esp-3);
+  font-weight: 500;
+  color: var(--texto-1);
+  font-feature-settings: var(--rasgos-cifras);
+}

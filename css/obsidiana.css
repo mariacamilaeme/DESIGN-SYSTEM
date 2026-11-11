@@ -1,0 +1,53 @@
+/*
+ * Obsidiana · punto de entrada.
+ *
+ *   <link rel="stylesheet" href="css/obsidiana.css">
+ *   <script src="js/obsidiana.js" defer></script>
+ *
+ * Orden: tokens → fuentes → base → movimiento → componentes. Todo es CSS plano sin dependencias;
+ * funciona abriendo el HTML con doble clic (file://) y servido por http.
+ * Para un solo archivo, usa css/obsidiana.min.css (lo genera herramientas/empaquetar.mjs).
+ */
+@import url("../tokens/tokens.css");
+@import url("../fuentes/fuentes.css");
+@import url("./base.css");
+@import url("./movimiento.css");
+
+/* Armazón */
+@import url("./componentes/armazon.css");
+
+/* Primitivas */
+@import url("./componentes/boton.css");
+@import url("./componentes/entrada.css");
+@import url("./componentes/campo.css");
+@import url("./componentes/casilla.css");
+@import url("./componentes/interruptor.css");
+@import url("./componentes/segmentado.css");
+@import url("./componentes/deslizador.css");
+@import url("./componentes/tecla.css");
+@import url("./componentes/flotante.css");
+@import url("./componentes/menu.css");
+@import url("./componentes/selector.css");
+@import url("./componentes/fecha.css");
+@import url("./componentes/archivo.css");
+@import url("./componentes/pista.css");
+@import url("./componentes/ventana.css");
+@import url("./componentes/pestanas.css");
+@import url("./componentes/acordeon.css");
+@import url("./componentes/avisos.css");
+@import url("./componentes/insignia.css");
+@import url("./componentes/progreso.css");
+@import url("./componentes/navegacion.css");
+@import url("./componentes/codigo.css");
+
+/* Datos */
+@import url("./componentes/tarjeta.css");
+@import url("./componentes/cifra.css");
+@import url("./componentes/tabla.css");
+@import url("./componentes/barra-herramientas.css");
+@import url("./componentes/vacio.css");
+@import url("./componentes/lista.css");
+@import url("./componentes/graficas.css");
+
+/* Navegación global */
+@import url("./componentes/paleta.css");

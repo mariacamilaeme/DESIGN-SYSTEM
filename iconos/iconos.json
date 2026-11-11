@@ -1,0 +1,2129 @@
+{
+  "nombre": "Obsidiana · iconos",
+  "version": "1.0.0",
+  "reticula": 24,
+  "trazo": 1.5,
+  "categorias": [
+    "Módulos",
+    "Acciones",
+    "Navegación",
+    "Interfaz",
+    "Estado",
+    "Archivos",
+    "Comunicación",
+    "Datos y análisis",
+    "Operación",
+    "Finanzas",
+    "Personas",
+    "Seguridad y sistemas",
+    "Multimedia",
+    "Tema",
+    "Indicadores"
+  ],
+  "iconos": [
+    {
+      "nombre": "panel",
+      "categoria": "Módulos",
+      "etiquetas": [
+        "inicio",
+        "tablero",
+        "resumen",
+        "dashboard"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoPanel"
+    },
+    {
+      "nombre": "contratos",
+      "categoria": "Módulos",
+      "etiquetas": [
+        "contrato",
+        "acuerdo",
+        "firma",
+        "contract"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoContratos"
+    },
+    {
+      "nombre": "embarques",
+      "categoria": "Módulos",
+      "etiquetas": [
+        "envío",
+        "ruta",
+        "viaje",
+        "shipment"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoEmbarques"
+    },
+    {
+      "nombre": "facturas",
+      "categoria": "Módulos",
+      "etiquetas": [
+        "factura",
+        "cobro",
+        "comprobante",
+        "invoice"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFacturas"
+    },
+    {
+      "nombre": "reportes",
+      "categoria": "Módulos",
+      "etiquetas": [
+        "informe",
+        "análisis",
+        "estadística",
+        "report"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoReportes"
+    },
+    {
+      "nombre": "sistema",
+      "categoria": "Módulos",
+      "etiquetas": [
+        "diseño",
+        "componentes",
+        "formas",
+        "design system"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoSistema"
+    },
+    {
+      "nombre": "buscar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "lupa",
+        "encontrar",
+        "search"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoBuscar"
+    },
+    {
+      "nombre": "filtro",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "filtrar",
+        "refinar",
+        "filter"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFiltro"
+    },
+    {
+      "nombre": "nuevo",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "crear",
+        "añadir",
+        "agregar",
+        "new"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoNuevo"
+    },
+    {
+      "nombre": "mas",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "añadir",
+        "sumar",
+        "agregar",
+        "plus"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoMas"
+    },
+    {
+      "nombre": "menos",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "quitar",
+        "restar",
+        "reducir",
+        "minus"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoMenos"
+    },
+    {
+      "nombre": "editar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "lápiz",
+        "modificar",
+        "escribir",
+        "edit"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoEditar"
+    },
+    {
+      "nombre": "eliminar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "borrar",
+        "papelera",
+        "quitar",
+        "delete"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoEliminar"
+    },
+    {
+      "nombre": "copiar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "duplicar",
+        "portapapeles",
+        "copy"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCopiar"
+    },
+    {
+      "nombre": "guardar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "disco",
+        "salvar",
+        "save"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoGuardar"
+    },
+    {
+      "nombre": "exportar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "sacar",
+        "enviar fuera",
+        "excel",
+        "export"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoExportar"
+    },
+    {
+      "nombre": "importar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "cargar",
+        "traer",
+        "excel",
+        "import"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoImportar"
+    },
+    {
+      "nombre": "descargar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "bajar",
+        "guardar",
+        "download"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoDescargar"
+    },
+    {
+      "nombre": "subir",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "cargar",
+        "adjuntar",
+        "upload"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoSubir"
+    },
+    {
+      "nombre": "actualizar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "recargar",
+        "sincronizar",
+        "refrescar",
+        "refresh"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoActualizar"
+    },
+    {
+      "nombre": "deshacer",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "volver",
+        "revertir",
+        "undo"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoDeshacer"
+    },
+    {
+      "nombre": "rehacer",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "repetir",
+        "avanzar",
+        "redo"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoRehacer"
+    },
+    {
+      "nombre": "enviar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "mandar",
+        "avión de papel",
+        "send"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoEnviar"
+    },
+    {
+      "nombre": "imprimir",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "impresora",
+        "papel",
+        "print"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoImprimir"
+    },
+    {
+      "nombre": "compartir",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "red",
+        "difundir",
+        "share"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCompartir"
+    },
+    {
+      "nombre": "enlace",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "vínculo",
+        "url",
+        "cadena",
+        "link"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoEnlace"
+    },
+    {
+      "nombre": "enlace-externo",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "abrir",
+        "nueva pestaña",
+        "external"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoEnlaceExterno"
+    },
+    {
+      "nombre": "adjunto",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "clip",
+        "adjuntar",
+        "attachment"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoAdjunto"
+    },
+    {
+      "nombre": "lupa-mas",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "acercar",
+        "zoom",
+        "ampliar"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoLupaMas"
+    },
+    {
+      "nombre": "lupa-menos",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "alejar",
+        "zoom",
+        "reducir"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoLupaMenos"
+    },
+    {
+      "nombre": "fijar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "chincheta",
+        "anclar",
+        "pin"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFijar"
+    },
+    {
+      "nombre": "marcador",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "guardar",
+        "favorito",
+        "bookmark"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoMarcador"
+    },
+    {
+      "nombre": "estrella",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "favorito",
+        "destacar",
+        "star"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoEstrella"
+    },
+    {
+      "nombre": "etiqueta",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "tag",
+        "categoría",
+        "marca"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoEtiqueta"
+    },
+    {
+      "nombre": "bandera",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "marcar",
+        "reportar",
+        "hito",
+        "flag"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoBandera"
+    },
+    {
+      "nombre": "ordenar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "orden",
+        "clasificar",
+        "sort"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoOrdenar"
+    },
+    {
+      "nombre": "ver",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "ojo",
+        "mostrar",
+        "visible",
+        "view"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoVer"
+    },
+    {
+      "nombre": "ocultar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "ojo",
+        "esconder",
+        "invisible",
+        "hide"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoOcultar"
+    },
+    {
+      "nombre": "apagar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "cerrar",
+        "salir",
+        "energía",
+        "power"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoApagar"
+    },
+    {
+      "nombre": "salir",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "cerrar sesión",
+        "logout",
+        "puerta"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoSalir"
+    },
+    {
+      "nombre": "entrar",
+      "categoria": "Acciones",
+      "etiquetas": [
+        "iniciar sesión",
+        "login",
+        "acceder"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoEntrar"
+    },
+    {
+      "nombre": "inicio",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "casa",
+        "portada",
+        "home"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoInicio"
+    },
+    {
+      "nombre": "menu",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "hamburguesa",
+        "opciones",
+        "menu"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoMenu"
+    },
+    {
+      "nombre": "flecha",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "siguiente",
+        "ir",
+        "derecha",
+        "arrow"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFlecha"
+    },
+    {
+      "nombre": "flecha-derecha",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "siguiente",
+        "avanzar",
+        "arrow right"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFlechaDerecha"
+    },
+    {
+      "nombre": "flecha-izquierda",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "anterior",
+        "volver",
+        "arrow left"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFlechaIzquierda"
+    },
+    {
+      "nombre": "flecha-arriba",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "subir",
+        "ascendente",
+        "arrow up"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFlechaArriba"
+    },
+    {
+      "nombre": "flecha-abajo",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "bajar",
+        "descendente",
+        "arrow down"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFlechaAbajo"
+    },
+    {
+      "nombre": "flecha-diagonal",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "abrir",
+        "ir a",
+        "arrow up right"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFlechaDiagonal"
+    },
+    {
+      "nombre": "retorno",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "intro",
+        "enter",
+        "devolver"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoRetorno"
+    },
+    {
+      "nombre": "orden",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "ascendente",
+        "dirección de orden",
+        "sort"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoOrden"
+    },
+    {
+      "nombre": "flechas",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "selector",
+        "desplegable",
+        "arriba y abajo"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoFlechas"
+    },
+    {
+      "nombre": "chevron-derecha",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "siguiente",
+        "expandir",
+        "chevron"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoChevronDerecha"
+    },
+    {
+      "nombre": "chevron-izquierda",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "anterior",
+        "atrás",
+        "chevron"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoChevronIzquierda"
+    },
+    {
+      "nombre": "chevron-abajo",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "desplegar",
+        "abrir",
+        "chevron"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoChevronAbajo"
+    },
+    {
+      "nombre": "chevron-arriba",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "plegar",
+        "cerrar",
+        "chevron"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoChevronArriba"
+    },
+    {
+      "nombre": "chevrones-izquierda",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "plegar lateral",
+        "primero",
+        "chevron"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoChevronesIzquierda"
+    },
+    {
+      "nombre": "chevrones-derecha",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "desplegar lateral",
+        "último",
+        "chevron"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoChevronesDerecha"
+    },
+    {
+      "nombre": "cerrar",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "equis",
+        "salir",
+        "descartar",
+        "close"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCerrar"
+    },
+    {
+      "nombre": "check",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "hecho",
+        "confirmar",
+        "aceptar",
+        "check"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCheck"
+    },
+    {
+      "nombre": "mas-opciones",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "puntos",
+        "acciones",
+        "más",
+        "more"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoMasOpciones"
+    },
+    {
+      "nombre": "mas-opciones-vertical",
+      "categoria": "Navegación",
+      "etiquetas": [
+        "puntos",
+        "acciones",
+        "kebab"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoMasOpcionesVertical"
+    },
+    {
+      "nombre": "lateral",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "barra lateral",
+        "panel",
+        "sidebar"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoLateral"
+    },
+    {
+      "nombre": "columnas",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "diseño",
+        "vista",
+        "columns"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoColumnas"
+    },
+    {
+      "nombre": "tabla",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "cuadrícula",
+        "datos",
+        "filas",
+        "table"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoTabla"
+    },
+    {
+      "nombre": "cuadricula",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "mosaico",
+        "vista",
+        "grid"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoCuadricula"
+    },
+    {
+      "nombre": "lista",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "viñetas",
+        "elementos",
+        "list"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoLista"
+    },
+    {
+      "nombre": "tarea",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "pendiente",
+        "casilla",
+        "hecho",
+        "task"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoTarea"
+    },
+    {
+      "nombre": "kanban",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "tablero",
+        "columnas",
+        "board"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoKanban"
+    },
+    {
+      "nombre": "pantalla-completa",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "maximizar",
+        "expandir",
+        "fullscreen"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoPantallaCompleta"
+    },
+    {
+      "nombre": "arrastrar",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "mover",
+        "asa",
+        "reordenar",
+        "drag"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoArrastrar"
+    },
+    {
+      "nombre": "capas",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "niveles",
+        "apilar",
+        "layers"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCapas"
+    },
+    {
+      "nombre": "ajustes",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "engranaje",
+        "configuración",
+        "preferencias",
+        "settings"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoAjustes"
+    },
+    {
+      "nombre": "equipo",
+      "categoria": "Interfaz",
+      "etiquetas": [
+        "computador",
+        "monitor",
+        "este equipo",
+        "computer"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoEquipo"
+    },
+    {
+      "nombre": "alerta",
+      "categoria": "Estado",
+      "etiquetas": [
+        "advertencia",
+        "cuidado",
+        "warning"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoAlerta"
+    },
+    {
+      "nombre": "info",
+      "categoria": "Estado",
+      "etiquetas": [
+        "información",
+        "detalle",
+        "nota",
+        "info"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoInfo"
+    },
+    {
+      "nombre": "exito",
+      "categoria": "Estado",
+      "etiquetas": [
+        "correcto",
+        "listo",
+        "aprobado",
+        "success"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoExito"
+    },
+    {
+      "nombre": "error",
+      "categoria": "Estado",
+      "etiquetas": [
+        "fallo",
+        "rechazado",
+        "cancelado",
+        "error"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoError"
+    },
+    {
+      "nombre": "ayuda",
+      "categoria": "Estado",
+      "etiquetas": [
+        "pregunta",
+        "duda",
+        "soporte",
+        "help"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoAyuda"
+    },
+    {
+      "nombre": "reloj",
+      "categoria": "Estado",
+      "etiquetas": [
+        "hora",
+        "tiempo",
+        "pendiente",
+        "clock"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoReloj"
+    },
+    {
+      "nombre": "historial",
+      "categoria": "Estado",
+      "etiquetas": [
+        "antes",
+        "registro",
+        "cambios",
+        "history"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoHistorial"
+    },
+    {
+      "nombre": "temporizador",
+      "categoria": "Estado",
+      "etiquetas": [
+        "cronómetro",
+        "plazo",
+        "cuenta atrás",
+        "timer"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoTemporizador"
+    },
+    {
+      "nombre": "calendario",
+      "categoria": "Estado",
+      "etiquetas": [
+        "fecha",
+        "día",
+        "agenda",
+        "calendar"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCalendario"
+    },
+    {
+      "nombre": "calidad",
+      "categoria": "Estado",
+      "etiquetas": [
+        "certificado",
+        "garantía",
+        "verificado",
+        "quality"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCalidad"
+    },
+    {
+      "nombre": "campana",
+      "categoria": "Estado",
+      "etiquetas": [
+        "notificaciones",
+        "aviso",
+        "bell"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCampana"
+    },
+    {
+      "nombre": "meta",
+      "categoria": "Estado",
+      "etiquetas": [
+        "objetivo",
+        "diana",
+        "target"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoMeta"
+    },
+    {
+      "nombre": "idea",
+      "categoria": "Estado",
+      "etiquetas": [
+        "bombilla",
+        "sugerencia",
+        "consejo",
+        "idea"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoIdea"
+    },
+    {
+      "nombre": "chispa",
+      "categoria": "Estado",
+      "etiquetas": [
+        "ia",
+        "inteligencia artificial",
+        "automático",
+        "sparkle"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoChispa"
+    },
+    {
+      "nombre": "rayo",
+      "categoria": "Estado",
+      "etiquetas": [
+        "rápido",
+        "energía",
+        "automatizar",
+        "flash"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoRayo"
+    },
+    {
+      "nombre": "documento",
+      "categoria": "Archivos",
+      "etiquetas": [
+        "archivo",
+        "página",
+        "texto",
+        "document"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoDocumento"
+    },
+    {
+      "nombre": "carpeta",
+      "categoria": "Archivos",
+      "etiquetas": [
+        "directorio",
+        "agrupar",
+        "folder"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCarpeta"
+    },
+    {
+      "nombre": "archivo-excel",
+      "categoria": "Archivos",
+      "etiquetas": [
+        "hoja de cálculo",
+        "xlsx",
+        "csv",
+        "spreadsheet"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoArchivoExcel"
+    },
+    {
+      "nombre": "archivo-pdf",
+      "categoria": "Archivos",
+      "etiquetas": [
+        "pdf",
+        "maquetado",
+        "imprimible"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoArchivoPdf"
+    },
+    {
+      "nombre": "archivo-zip",
+      "categoria": "Archivos",
+      "etiquetas": [
+        "comprimido",
+        "zip",
+        "paquete",
+        "archive"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoArchivoZip"
+    },
+    {
+      "nombre": "imagen",
+      "categoria": "Archivos",
+      "etiquetas": [
+        "foto",
+        "fotografía",
+        "image"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoImagen"
+    },
+    {
+      "nombre": "firma",
+      "categoria": "Archivos",
+      "etiquetas": [
+        "firmar",
+        "rúbrica",
+        "signature"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFirma"
+    },
+    {
+      "nombre": "sello",
+      "categoria": "Archivos",
+      "etiquetas": [
+        "estampar",
+        "aprobar",
+        "timbre",
+        "stamp"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoSello"
+    },
+    {
+      "nombre": "respaldo",
+      "categoria": "Archivos",
+      "etiquetas": [
+        "copia de seguridad",
+        "base de datos",
+        "backup"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoRespaldo"
+    },
+    {
+      "nombre": "correo",
+      "categoria": "Comunicación",
+      "etiquetas": [
+        "email",
+        "mensaje",
+        "sobre",
+        "mail"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCorreo"
+    },
+    {
+      "nombre": "comentario",
+      "categoria": "Comunicación",
+      "etiquetas": [
+        "mensaje",
+        "nota",
+        "chat",
+        "comment"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoComentario"
+    },
+    {
+      "nombre": "telefono",
+      "categoria": "Comunicación",
+      "etiquetas": [
+        "llamar",
+        "contacto",
+        "phone"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoTelefono"
+    },
+    {
+      "nombre": "microfono",
+      "categoria": "Comunicación",
+      "etiquetas": [
+        "voz",
+        "grabar",
+        "dictado",
+        "microphone"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoMicrofono"
+    },
+    {
+      "nombre": "globo",
+      "categoria": "Comunicación",
+      "etiquetas": [
+        "mundo",
+        "internacional",
+        "idioma",
+        "globe"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoGlobo"
+    },
+    {
+      "nombre": "tendencia",
+      "categoria": "Datos y análisis",
+      "etiquetas": [
+        "subida",
+        "crecimiento",
+        "alza",
+        "trending up"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoTendencia"
+    },
+    {
+      "nombre": "tendencia-baja",
+      "categoria": "Datos y análisis",
+      "etiquetas": [
+        "bajada",
+        "caída",
+        "descenso",
+        "trending down"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoTendenciaBaja"
+    },
+    {
+      "nombre": "grafica-barras",
+      "categoria": "Datos y análisis",
+      "etiquetas": [
+        "gráfico",
+        "columnas",
+        "bar chart"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoGraficaBarras"
+    },
+    {
+      "nombre": "grafica-lineas",
+      "categoria": "Datos y análisis",
+      "etiquetas": [
+        "gráfico",
+        "serie",
+        "evolución",
+        "line chart"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoGraficaLineas"
+    },
+    {
+      "nombre": "grafica-anillo",
+      "categoria": "Datos y análisis",
+      "etiquetas": [
+        "gráfico",
+        "proporción",
+        "reparto",
+        "donut chart"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoGraficaAnillo"
+    },
+    {
+      "nombre": "porcentaje",
+      "categoria": "Datos y análisis",
+      "etiquetas": [
+        "por ciento",
+        "tasa",
+        "descuento",
+        "percent"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoPorcentaje"
+    },
+    {
+      "nombre": "calculadora",
+      "categoria": "Datos y análisis",
+      "etiquetas": [
+        "calcular",
+        "cuentas",
+        "calculator"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoCalculadora"
+    },
+    {
+      "nombre": "base-datos",
+      "categoria": "Datos y análisis",
+      "etiquetas": [
+        "datos",
+        "almacenamiento",
+        "database"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoBaseDatos"
+    },
+    {
+      "nombre": "barco",
+      "categoria": "Operación",
+      "etiquetas": [
+        "motonave",
+        "buque",
+        "naviera",
+        "ship"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoBarco"
+    },
+    {
+      "nombre": "puerto",
+      "categoria": "Operación",
+      "etiquetas": [
+        "grúa",
+        "muelle",
+        "terminal",
+        "port"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoPuerto"
+    },
+    {
+      "nombre": "contenedor",
+      "categoria": "Operación",
+      "etiquetas": [
+        "carga",
+        "container",
+        "TEU"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoContenedor"
+    },
+    {
+      "nombre": "camion",
+      "categoria": "Operación",
+      "etiquetas": [
+        "transporte",
+        "entrega",
+        "terrestre",
+        "truck"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCamion"
+    },
+    {
+      "nombre": "fabrica",
+      "categoria": "Operación",
+      "etiquetas": [
+        "planta",
+        "producción",
+        "molino",
+        "factory"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFabrica"
+    },
+    {
+      "nombre": "caja",
+      "categoria": "Operación",
+      "etiquetas": [
+        "paquete",
+        "producto",
+        "bulto",
+        "package"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCaja"
+    },
+    {
+      "nombre": "inventario",
+      "categoria": "Operación",
+      "etiquetas": [
+        "bodega",
+        "existencias",
+        "estantería",
+        "stock"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoInventario"
+    },
+    {
+      "nombre": "peso",
+      "categoria": "Operación",
+      "etiquetas": [
+        "toneladas",
+        "balanza",
+        "kilos",
+        "weight"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoPeso"
+    },
+    {
+      "nombre": "edificio",
+      "categoria": "Operación",
+      "etiquetas": [
+        "empresa",
+        "oficina",
+        "sede",
+        "building"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoEdificio"
+    },
+    {
+      "nombre": "tienda",
+      "categoria": "Operación",
+      "etiquetas": [
+        "comercio",
+        "local",
+        "punto de venta",
+        "store"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoTienda"
+    },
+    {
+      "nombre": "ubicacion",
+      "categoria": "Operación",
+      "etiquetas": [
+        "lugar",
+        "dirección",
+        "pin",
+        "location"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoUbicacion"
+    },
+    {
+      "nombre": "mapa",
+      "categoria": "Operación",
+      "etiquetas": [
+        "plano",
+        "territorio",
+        "map"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoMapa"
+    },
+    {
+      "nombre": "cartera",
+      "categoria": "Finanzas",
+      "etiquetas": [
+        "billetera",
+        "saldo",
+        "cuentas por cobrar",
+        "wallet"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCartera"
+    },
+    {
+      "nombre": "pagos",
+      "categoria": "Finanzas",
+      "etiquetas": [
+        "dinero",
+        "billete",
+        "abono",
+        "payment"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoPagos"
+    },
+    {
+      "nombre": "moneda",
+      "categoria": "Finanzas",
+      "etiquetas": [
+        "dólar",
+        "precio",
+        "divisa",
+        "coin"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoMoneda"
+    },
+    {
+      "nombre": "tarjeta-credito",
+      "categoria": "Finanzas",
+      "etiquetas": [
+        "tarjeta",
+        "pago",
+        "débito",
+        "credit card"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoTarjetaCredito"
+    },
+    {
+      "nombre": "banco",
+      "categoria": "Finanzas",
+      "etiquetas": [
+        "entidad",
+        "transferencia",
+        "swift",
+        "bank"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoBanco"
+    },
+    {
+      "nombre": "recibo",
+      "categoria": "Finanzas",
+      "etiquetas": [
+        "ticket",
+        "comprobante",
+        "soporte",
+        "receipt"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoRecibo"
+    },
+    {
+      "nombre": "usuario",
+      "categoria": "Personas",
+      "etiquetas": [
+        "persona",
+        "perfil",
+        "cuenta",
+        "user"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoUsuario"
+    },
+    {
+      "nombre": "usuarios",
+      "categoria": "Personas",
+      "etiquetas": [
+        "personas",
+        "grupo",
+        "equipo de trabajo",
+        "users"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoUsuarios"
+    },
+    {
+      "nombre": "usuario-nuevo",
+      "categoria": "Personas",
+      "etiquetas": [
+        "invitar",
+        "añadir persona",
+        "user plus"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoUsuarioNuevo"
+    },
+    {
+      "nombre": "clientes",
+      "categoria": "Personas",
+      "etiquetas": [
+        "compradores",
+        "contactos",
+        "cartera de clientes",
+        "customers"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoClientes"
+    },
+    {
+      "nombre": "candado",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "bloqueado",
+        "seguro",
+        "privado",
+        "lock"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCandado"
+    },
+    {
+      "nombre": "candado-abierto",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "desbloqueado",
+        "abierto",
+        "unlock"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCandadoAbierto"
+    },
+    {
+      "nombre": "llave",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "acceso",
+        "contraseña",
+        "clave",
+        "key"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoLlave"
+    },
+    {
+      "nombre": "escudo",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "protección",
+        "seguridad",
+        "shield"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoEscudo"
+    },
+    {
+      "nombre": "huella",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "biometría",
+        "identidad",
+        "fingerprint"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoHuella"
+    },
+    {
+      "nombre": "servidor",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "servidor",
+        "host",
+        "infraestructura",
+        "server"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoServidor"
+    },
+    {
+      "nombre": "nube",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "en línea",
+        "almacenamiento",
+        "cloud"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoNube"
+    },
+    {
+      "nombre": "nube-subir",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "sincronizar",
+        "subir a la nube",
+        "cloud upload"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoNubeSubir"
+    },
+    {
+      "nombre": "nube-bajar",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "descargar de la nube",
+        "sincronizar",
+        "cloud download"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoNubeBajar"
+    },
+    {
+      "nombre": "codigo",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "desarrollo",
+        "html",
+        "programar",
+        "code"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoCodigo"
+    },
+    {
+      "nombre": "terminal",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "consola",
+        "comandos",
+        "línea de comandos",
+        "terminal"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoTerminal"
+    },
+    {
+      "nombre": "api",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "interfaz",
+        "llaves",
+        "servicio",
+        "api"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoApi"
+    },
+    {
+      "nombre": "integracion",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "conectar",
+        "enchufe",
+        "plugin",
+        "integration"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoIntegracion"
+    },
+    {
+      "nombre": "flujo",
+      "categoria": "Seguridad y sistemas",
+      "etiquetas": [
+        "proceso",
+        "automatización",
+        "diagrama",
+        "workflow"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoFlujo"
+    },
+    {
+      "nombre": "reproducir",
+      "categoria": "Multimedia",
+      "etiquetas": [
+        "play",
+        "iniciar",
+        "video"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoReproducir"
+    },
+    {
+      "nombre": "pausa",
+      "categoria": "Multimedia",
+      "etiquetas": [
+        "detener",
+        "pausar",
+        "pause"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoPausa"
+    },
+    {
+      "nombre": "video",
+      "categoria": "Multimedia",
+      "etiquetas": [
+        "grabación",
+        "cámara",
+        "reunión",
+        "video"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoVideo"
+    },
+    {
+      "nombre": "sol",
+      "categoria": "Tema",
+      "etiquetas": [
+        "claro",
+        "día",
+        "tema claro",
+        "light"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoSol"
+    },
+    {
+      "nombre": "luna",
+      "categoria": "Tema",
+      "etiquetas": [
+        "oscuro",
+        "noche",
+        "tema oscuro",
+        "dark"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoLuna"
+    },
+    {
+      "nombre": "contraste",
+      "categoria": "Tema",
+      "etiquetas": [
+        "automático",
+        "tema del sistema",
+        "contrast"
+      ],
+      "animado": true,
+      "continuo": false,
+      "componente": "IconoContraste"
+    },
+    {
+      "nombre": "cargando",
+      "categoria": "Indicadores",
+      "etiquetas": [
+        "spinner",
+        "espera",
+        "procesando",
+        "loading"
+      ],
+      "animado": true,
+      "continuo": true,
+      "componente": "IconoCargando"
+    },
+    {
+      "nombre": "en-curso",
+      "categoria": "Indicadores",
+      "etiquetas": [
+        "pulso",
+        "en vivo",
+        "activo",
+        "live"
+      ],
+      "animado": true,
+      "continuo": true,
+      "componente": "IconoEnCurso"
+    },
+    {
+      "nombre": "exito-animado",
+      "categoria": "Indicadores",
+      "etiquetas": [
+        "hecho",
+        "completado",
+        "confirmación",
+        "success"
+      ],
+      "animado": true,
+      "continuo": true,
+      "componente": "IconoExitoAnimado"
+    },
+    {
+      "nombre": "error-animado",
+      "categoria": "Indicadores",
+      "etiquetas": [
+        "fallo",
+        "rechazo",
+        "falla",
+        "error"
+      ],
+      "animado": true,
+      "continuo": true,
+      "componente": "IconoErrorAnimado"
+    },
+    {
+      "nombre": "progreso",
+      "categoria": "Indicadores",
+      "etiquetas": [
+        "avance",
+        "porcentaje",
+        "carga",
+        "progress"
+      ],
+      "animado": false,
+      "continuo": false,
+      "componente": "IconoProgreso"
+    }
+  ],
+  "glifos": [
+    {
+      "forma": "anillo",
+      "etiquetas": [
+        "pendiente",
+        "por iniciar"
+      ]
+    },
+    {
+      "forma": "medio",
+      "etiquetas": [
+        "en proceso",
+        "parcial"
+      ]
+    },
+    {
+      "forma": "rombo",
+      "etiquetas": [
+        "en tránsito",
+        "en movimiento"
+      ]
+    },
+    {
+      "forma": "lleno",
+      "etiquetas": [
+        "completado",
+        "entregado"
+      ]
+    },
+    {
+      "forma": "guion",
+      "etiquetas": [
+        "anulado",
+        "sin dato"
+      ]
+    },
+    {
+      "forma": "triangulo",
+      "etiquetas": [
+        "alerta",
+        "vencido"
+      ]
+    },
+    {
+      "forma": "cuadrado",
+      "etiquetas": [
+        "detenido",
+        "en pausa"
+      ]
+    },
+    {
+      "forma": "punto",
+      "etiquetas": [
+        "neutro",
+        "informativo"
+      ]
+    }
+  ],
+  "ilustraciones": [
+    {
+      "nombre": "sin-datos",
+      "titulo": "Sin datos",
+      "uso": "Una tabla o lista que aún no tiene registros."
+    },
+    {
+      "nombre": "sin-resultados",
+      "titulo": "Sin resultados",
+      "uso": "Una búsqueda o un filtro que no devuelve nada."
+    },
+    {
+      "nombre": "sin-conexion",
+      "titulo": "Sin conexión",
+      "uso": "Un servicio externo o una red que no responde."
+    },
+    {
+      "nombre": "error",
+      "titulo": "Error",
+      "uso": "Algo falló al cargar o guardar; se acompaña de la causa y de cómo resolverla."
+    },
+    {
+      "nombre": "sin-permisos",
+      "titulo": "Sin permisos",
+      "uso": "Contenido que existe pero que este usuario no puede ver."
+    },
+    {
+      "nombre": "todo-al-dia",
+      "titulo": "Todo al día",
+      "uso": "No queda nada pendiente: bandeja vacía, tareas cumplidas."
+    },
+    {
+      "nombre": "primera-vez",
+      "titulo": "Primera vez",
+      "uso": "Un módulo nuevo sin elementos: invita a crear el primero."
+    },
+    {
+      "nombre": "archivo-por-subir",
+      "titulo": "Archivo por subir",
+      "uso": "Zona para soltar o elegir un archivo (importación de Excel, adjuntos)."
+    },
+    {
+      "nombre": "en-construccion",
+      "titulo": "En construcción",
+      "uso": "Una sección prevista que todavía no está disponible."
+    },
+    {
+      "nombre": "sin-notificaciones",
+      "titulo": "Sin notificaciones",
+      "uso": "La bandeja de avisos está vacía."
+    },
+    {
+      "nombre": "sin-rutas",
+      "titulo": "Sin viajes en curso",
+      "uso": "No hay rutas activas en el mapa."
+    },
+    {
+      "nombre": "sin-documentos",
+      "titulo": "Sin documentos",
+      "uso": "Un expediente sin archivos adjuntos."
+    }
+  ]
+}

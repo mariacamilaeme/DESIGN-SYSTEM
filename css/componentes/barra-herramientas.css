@@ -1,0 +1,199 @@
+/*
+ * Obsidiana · barra de herramientas única y popover de filtros.
+ *
+ *   <div class="ob-barra-herramientas" role="toolbar" aria-label="Filtrar pedidos">
+ *     <div class="ob-entrada-caja ob-barra-herramientas__busqueda">…búsqueda…</div>
+ *     <button class="ob-boton" data-ob-popover="filtros" aria-haspopup="dialog">
+ *       <span data-icono="filtro"></span>Filtros<span class="ob-boton__contador" hidden>0</span>
+ *     </button>
+ *     <div class="ob-fichas" id="fichas"></div>
+ *     <div class="ob-barra-herramientas__derecha">…periodo · columnas · conteo…</div>
+ *   </div>
+ *
+ * Popover de filtros de dos niveles (categoría y lista con búsqueda y "Seleccionar todo"):
+ *   <div class="ob-popover ob-popover--sin-relleno ob-filtros" id="filtros" role="dialog" aria-label="Filtros"
+ *        data-ob-filtros data-fichas="#fichas" data-contador="#boton-filtros .ob-boton__contador" hidden>
+ *     <div class="ob-filtros__cuerpo">
+ *       <div class="ob-filtros__categorias" role="tablist" aria-orientation="vertical">
+ *         <button class="ob-filtros__categoria" role="tab" data-categoria="estado" aria-selected="true">Estado</button>
+ *       </div>
+ *       <div class="ob-filtros__panel" role="tabpanel" data-categoria="estado">
+ *         <label class="ob-filtros__opcion"><span class="ob-casilla"><input type="checkbox" value="pendiente">…</span>
+ *           <span class="ob-filtros__opcion-texto">Pendiente</span><span class="ob-filtros__cuenta">34</span></label>
+ *       </div>
+ *     </div>
+ *     <div class="ob-filtros__pie">…</div>
+ *   </div>
+ * El JS añade la búsqueda (desde 6 opciones), "Seleccionar todo" (con estado intermedio), el
+ * conteo por categoría, las fichas de filtros activos con cierre y el evento "ob:filtros".
+ */
+.ob-barra-herramientas {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  min-height: var(--alto-control);
+}
+.ob-barra-herramientas__busqueda {
+  flex: none;
+  width: var(--ancho-busqueda-barra);
+}
+.ob-barra-herramientas__derecha {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--esp-2);
+  margin-left: auto;
+}
+.ob-barra-herramientas__texto {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+  white-space: nowrap;
+}
+.ob-barra-herramientas__limpiar {
+  flex: none;
+  height: 28px;
+  margin-left: var(--esp-1);
+  padding: 0 var(--esp-2);
+  border-radius: var(--r-elemento);
+  font-size: var(--txt-etiqueta);
+  font-weight: 500;
+  color: var(--texto-3);
+  transition:
+    background-color var(--t-hover) ease,
+    color var(--t-hover) ease;
+}
+.ob-barra-herramientas__limpiar:hover {
+  background: var(--lavado-2);
+  color: var(--texto-1);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Popover de filtros                                                                           */
+/* ------------------------------------------------------------------------------------------ */
+.ob-filtros {
+  width: var(--ancho-filtros);
+  max-width: calc(100vw - 24px);
+}
+.ob-filtros__cuerpo {
+  display: grid;
+  grid-template-columns: var(--ancho-categorias-filtro) minmax(0, 1fr);
+  min-height: 300px;
+}
+.ob-filtros__categorias {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+  border-right: 1px solid var(--linea);
+}
+.ob-filtros__categoria {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2-5);
+  height: 32px;
+  padding: 0 var(--esp-2-5);
+  border-radius: var(--r-elemento);
+  text-align: left;
+  font-weight: 500;
+  color: var(--texto-2);
+  transition:
+    background-color var(--t-hover) ease,
+    color var(--t-hover) ease;
+}
+.ob-filtros__categoria:hover {
+  background: var(--lavado);
+  color: var(--texto-1);
+}
+.ob-filtros__categoria[aria-selected="true"] {
+  background: var(--lavado-2);
+  color: var(--texto-1);
+}
+.ob-filtros__categoria > :is(svg, [data-icono]) {
+  color: var(--texto-3);
+}
+.ob-filtros__categoria .ob-contador {
+  margin-left: auto;
+}
+.ob-filtros__panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ob-filtros__buscar {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: 0 var(--esp-3);
+  border-bottom: 1px solid var(--linea);
+  color: var(--texto-3);
+}
+.ob-filtros__buscar input {
+  width: 100%;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--texto-1);
+  outline: none;
+}
+.ob-filtros__lista {
+  flex: 1;
+  min-height: 0;
+  max-height: 240px;
+  overflow: auto;
+  padding: 6px;
+}
+.ob-filtros__opcion {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2-5);
+  height: 32px;
+  padding: 0 var(--esp-2-5);
+  border-radius: var(--r-elemento);
+  cursor: pointer;
+  transition: background-color var(--t-hover) ease;
+}
+.ob-filtros__opcion:hover {
+  background: var(--lavado);
+}
+.ob-filtros__opcion--todo {
+  font-weight: 500;
+}
+.ob-filtros__opcion-texto {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ob-filtros__cuenta {
+  margin-left: auto;
+  font-size: var(--txt-etiqueta);
+  color: var(--texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-filtros__division {
+  height: 1px;
+  margin: var(--esp-1) var(--esp-2-5);
+  background: var(--linea);
+}
+.ob-filtros__vacio {
+  padding: var(--esp-6) var(--esp-2-5);
+  text-align: center;
+  font-size: var(--txt-etiqueta);
+  color: var(--texto-3);
+}
+.ob-filtros__pie {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: var(--esp-2-5) var(--esp-2-5) var(--esp-2-5) var(--esp-3-5);
+  border-top: 1px solid var(--linea);
+}
+.ob-filtros__resumen {
+  font-size: var(--txt-etiqueta);
+  color: var(--texto-3);
+}
+.ob-filtros__pie > .ob-boton:first-of-type {
+  margin-left: auto;
+}

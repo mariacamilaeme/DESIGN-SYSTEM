@@ -1,0 +1,94 @@
+/*
+ * Obsidiana · bloque de código plegable con botón de copiar (documentación, ajustes, registros).
+ *
+ *   <details class="ob-bloque-codigo">
+ *     <summary class="ob-bloque-codigo__cabeza">
+ *       <span class="ob-bloque-codigo__chevron" data-icono="chevron-derecha" data-tamano="14"></span>HTML
+ *       <button class="ob-boton ob-boton--fantasma ob-boton--sm ob-bloque-codigo__copiar" data-ob-copiar>Copiar</button>
+ *     </summary>
+ *     <pre class="ob-bloque-codigo__pre"><code>…</code></pre>
+ *   </details>
+ *
+ * data-ob-copiar copia el texto del <code> del mismo bloque (o el de data-ob-copiar="#id") y
+ * confirma con "Copiado" sin cambiar el ancho del botón.
+ * Código en línea: <code class="ob-codigo-linea">--acento</code>.
+ */
+.ob-bloque-codigo {
+  border-top: 1px solid var(--linea);
+}
+.ob-bloque-codigo__cabeza {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  height: 40px;
+  padding: 0 var(--esp-2) 0 var(--esp-4-5);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  font-weight: 500;
+  color: var(--texto-3);
+  list-style: none;
+  user-select: none;
+  transition: color var(--t-hover) ease;
+}
+.ob-bloque-codigo__cabeza::-webkit-details-marker {
+  display: none;
+}
+.ob-bloque-codigo__cabeza:hover {
+  color: var(--texto-1);
+}
+.ob-bloque-codigo__cabeza:focus-visible {
+  outline-offset: -2px;
+  border-radius: var(--r-control);
+}
+.ob-bloque-codigo__chevron {
+  transition: transform var(--t-estado) var(--curva);
+}
+.ob-bloque-codigo[open] .ob-bloque-codigo__chevron {
+  transform: rotate(90deg);
+}
+.ob-bloque-codigo__copiar {
+  margin-left: auto;
+}
+.ob-bloque-codigo__pre {
+  max-height: 360px;
+  margin: 0;
+  overflow: auto;
+  padding: var(--esp-3) var(--esp-4-5) var(--esp-4);
+  border-top: 1px solid var(--linea);
+  border-radius: 0 0 var(--r-tarjeta) var(--r-tarjeta);
+  background: var(--lavado);
+  font-family: var(--fuente-codigo);
+  font-size: 12px;
+  line-height: 19px;
+  color: var(--texto-2);
+  tab-size: 2;
+}
+.ob-bloque-codigo[open] .ob-bloque-codigo__pre {
+  animation: ob-aparecer var(--t-vista) var(--curva);
+}
+.ob-bloque-codigo__pre code {
+  font: inherit;
+  white-space: pre;
+}
+/* Resaltado mínimo (lo aplica el catálogo): etiquetas, atributos y valores */
+.ob-bloque-codigo__pre .t {
+  color: var(--texto-1);
+}
+.ob-bloque-codigo__pre .a {
+  color: var(--acento-texto);
+}
+.ob-bloque-codigo__pre .v {
+  color: var(--vivo-texto);
+}
+.ob-bloque-codigo__pre .c {
+  color: var(--texto-3);
+}
+.ob-codigo-linea {
+  padding: 1px 5px;
+  border: 1px solid var(--linea);
+  border-radius: var(--r-mini);
+  background: var(--lavado);
+  font-family: var(--fuente-codigo);
+  font-size: 12px;
+  color: var(--texto-1);
+}

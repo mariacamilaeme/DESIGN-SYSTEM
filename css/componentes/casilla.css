@@ -1,0 +1,121 @@
+/*
+ * Obsidiana · casilla (checkbox) y radio. Controles nativos: funcionan sin JS.
+ *
+ *   <label class="ob-control">
+ *     <span class="ob-casilla">
+ *       <input type="checkbox">
+ *       <svg viewBox="0 0 12 12" aria-hidden="true">
+ *         <path class="ob-casilla__check" pathLength="1" d="M2.5 6.25 5 8.75l4.5-5.5"/>
+ *         <path class="ob-casilla__guion" d="M3 6h6"/>
+ *       </svg>
+ *     </span>
+ *     Recordar filtros
+ *   </label>
+ *
+ *   <label class="ob-control">
+ *     <span class="ob-radio"><input type="radio" name="densidad"><span class="ob-radio__punto"></span></span>
+ *     Normal
+ *   </label>
+ *
+ * El trazo de la casilla se dibuja al marcar (240 ms). input.indeterminate = true (o el atributo
+ * data-indeterminada, que el JS convierte) muestra el guion. Error: aria-invalid="true".
+ * Si falta el SVG o el punto, obsidiana.js los añade.
+ */
+.ob-casilla,
+.ob-radio {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  place-items: center;
+}
+.ob-casilla > input,
+.ob-radio > input {
+  grid-area: 1 / 1;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--linea-hover);
+  background: var(--campo);
+  box-shadow: var(--sombra-control);
+  cursor: pointer;
+  transition:
+    background-color var(--t-estado) var(--curva),
+    border-color var(--t-estado) var(--curva);
+}
+.ob-casilla > input {
+  border-radius: var(--r-mini);
+}
+.ob-radio > input {
+  border-radius: 50%;
+}
+.ob-casilla > input:hover:not(:disabled, :checked, :indeterminate),
+.ob-radio > input:hover:not(:disabled, :checked) {
+  border-color: var(--texto-3);
+}
+.ob-casilla > input:is(:checked, :indeterminate),
+.ob-radio > input:checked {
+  border-color: var(--acento-relleno);
+  background: var(--acento-relleno);
+}
+.ob-casilla > input[aria-invalid="true"],
+.ob-radio > input[aria-invalid="true"] {
+  border-color: var(--rojo);
+}
+.ob-casilla > input:disabled,
+.ob-radio > input:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.ob-casilla > input:focus-visible,
+.ob-radio > input:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+
+.ob-casilla > svg {
+  grid-area: 1 / 1;
+  width: 10px;
+  height: 10px;
+  fill: none;
+  stroke: var(--sobre-acento);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.ob-casilla__check {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--t-estado) var(--curva);
+}
+.ob-casilla > input:checked:not(:indeterminate) + svg .ob-casilla__check {
+  stroke-dashoffset: 0;
+}
+.ob-casilla__guion {
+  opacity: 0;
+}
+.ob-casilla > input:indeterminate + svg .ob-casilla__guion {
+  opacity: 1;
+}
+
+.ob-radio__punto {
+  grid-area: 1 / 1;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sobre-acento);
+  opacity: 0;
+  transform: scale(0.5);
+  pointer-events: none;
+  transition:
+    opacity var(--t-estado) var(--curva),
+    transform var(--t-estado) var(--curva);
+}
+.ob-radio > input:checked + .ob-radio__punto {
+  opacity: 1;
+  transform: none;
+}

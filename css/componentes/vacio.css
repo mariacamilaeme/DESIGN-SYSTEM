@@ -1,0 +1,65 @@
+/*
+ * Obsidiana · estado vacío: un dibujo mínimo que se traza una vez, una línea de texto y una acción.
+ *
+ *   <div class="ob-vacio">
+ *     <svg class="ob-vacio__dibujo" viewBox="0 0 120 88" aria-hidden="true">
+ *       <rect class="ob-vacio__fondo" x="14" y="10" width="92" height="68" rx="10"/>
+ *       <path class="ob-trazar" pathLength="1" d="…"/>
+ *       <path class="ob-trazar ob-vacio__acento" pathLength="1" style="--ob-retraso: 450ms" d="…"/>
+ *     </svg>
+ *     <p class="ob-vacio__titulo">Aún no hay pedidos</p>
+ *     <p class="ob-vacio__descripcion">Importa un archivo para empezar.</p>
+ *     <div class="ob-vacio__accion"><button class="ob-boton ob-boton--primario">Importar</button></div>
+ *   </div>
+ *   compacto (dentro de una tabla): --compacto · Obsidiana.vacio.dibujo("lista|busqueda|documento|ruta") da el SVG.
+ */
+.ob-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-3);
+  padding: 64px var(--esp-6) 72px;
+  text-align: center;
+}
+.ob-vacio--compacto {
+  padding: 40px var(--esp-6);
+}
+.ob-vacio__dibujo {
+  width: 120px;
+  height: 88px;
+  overflow: visible;
+  color: var(--texto-3);
+}
+.ob-vacio__dibujo :is(path, circle, line, polyline) {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ob-vacio__fondo {
+  fill: currentColor;
+  fill-opacity: 0.06;
+  stroke: none;
+}
+.ob-vacio__dibujo .ob-vacio__acento {
+  stroke: var(--acento);
+}
+.ob-vacio__textos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  max-width: 384px;
+  margin-top: var(--esp-1);
+}
+.ob-vacio__titulo {
+  font-weight: 500;
+  color: var(--texto-1);
+}
+.ob-vacio__descripcion {
+  color: var(--texto-2);
+}
+.ob-vacio__accion {
+  margin-top: var(--esp-2);
+}

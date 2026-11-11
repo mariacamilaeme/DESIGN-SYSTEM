@@ -1,0 +1,117 @@
+/*
+ * Obsidiana · pestañas con indicador que se desliza.
+ *
+ *   <div class="ob-pestanas" role="tablist" aria-label="Secciones" data-ob-pestanas>
+ *     <button class="ob-pestana" role="tab" id="t-resumen" aria-controls="p-resumen" aria-selected="true">Resumen</button>
+ *     <button class="ob-pestana" role="tab" id="t-pagos" aria-controls="p-pagos" aria-selected="false" tabindex="-1">
+ *       Pagos <span class="ob-pestana__cuenta">12</span>
+ *     </button>
+ *   </div>
+ *   <div class="ob-panel-pestana" role="tabpanel" id="p-resumen" aria-labelledby="t-resumen">…</div>
+ *   <div class="ob-panel-pestana" role="tabpanel" id="p-pagos" aria-labelledby="t-pagos" hidden>…</div>
+ *
+ * Aspectos: línea (subrayado de 2 px, por defecto) y --pildora (fondo elevado).
+ * Teclado: flechas, Inicio y Fin (activación automática). Evento "ob:cambio" con detail.id.
+ */
+.ob-pestanas {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-5);
+  height: 40px;
+  border-bottom: 1px solid var(--linea);
+}
+.ob-pestana {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  height: 100%;
+  padding: 0 2px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--texto-2);
+  transition: color var(--t-hover) ease;
+}
+.ob-pestana:hover,
+.ob-pestana[aria-selected="true"] {
+  color: var(--texto-1);
+}
+.ob-pestana:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.ob-pestana:focus-visible {
+  outline-offset: 0;
+}
+.ob-pestana__cuenta {
+  padding: 0 6px;
+  border-radius: var(--r-pildora);
+  background: var(--lavado-2);
+  font-size: var(--txt-mini);
+  line-height: 16px;
+  color: var(--texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-pestanas__indicador {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  border-radius: var(--r-pildora);
+  background: var(--acento);
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+/* Sin JS */
+.ob-pestanas:not([data-ob-listo]) .ob-pestana[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  border-radius: var(--r-pildora);
+  background: var(--acento);
+}
+
+/* --- Píldora --- */
+.ob-pestanas--pildora {
+  display: inline-flex;
+  gap: 2px;
+  height: var(--alto-control);
+  padding: 2px;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--r-control);
+  background: var(--campo);
+}
+.ob-pestanas--pildora .ob-pestana {
+  padding: 0 var(--esp-3);
+  border-radius: var(--r-elemento);
+}
+.ob-pestanas--pildora .ob-pestanas__indicador {
+  top: 0;
+  bottom: auto;
+  height: auto;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--r-elemento);
+  background: var(--pulgar);
+  box-shadow: var(--sombra-control);
+}
+.ob-pestanas--pildora:not([data-ob-listo]) .ob-pestana[aria-selected="true"] {
+  background: var(--pulgar);
+  box-shadow:
+    inset 0 0 0 1px var(--linea-fuerte),
+    var(--sombra-control);
+}
+.ob-pestanas--pildora:not([data-ob-listo]) .ob-pestana[aria-selected="true"]::after {
+  content: none;
+}
+
+.ob-panel-pestana {
+  outline: none;
+}
+.ob-panel-pestana:not([hidden]) {
+  animation: ob-entrar var(--t-vista) var(--curva);
+}

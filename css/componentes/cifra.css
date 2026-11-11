@@ -1,0 +1,344 @@
+/*
+ * Obsidiana · cifras: cifra (principal 34 px y secundaria 20 px), grupo de cifras y tira de cifras.
+ *
+ * Cifra
+ *   <div class="ob-cifra">
+ *     <div class="ob-cifra__etiqueta"><span data-icono="cartera"></span>Cartera por cobrar</div>
+ *     <div class="ob-cifra__fila">
+ *       <div class="ob-cifra__valor">
+ *         <span class="ob-cifra__prefijo">USD</span>
+ *         <span class="ob-cifra__numero" data-ob-cifra="3284120">3.284.120</span>
+ *         <span class="ob-cifra__unidad">t</span>
+ *       </div>
+ *       <div class="ob-cifra__grafica">…sparkline…</div>
+ *     </div>
+ *     <div class="ob-cifra__contexto"><span class="ob-delta" data-tono="verde">+4,2 %</span> frente al mes anterior</div>
+ *   </div>
+ *   secundaria: --secundaria · las unidades van a 13 px en texto-3 sobre la línea base.
+ *   data-ob-cifra="valor" hace rodar los dígitos al entrar y al cambiar (600 ms); data-decimales="1".
+ *
+ * Grupo de cifras: <section class="ob-grupo-cifras" style="--columnas: 4"> con .ob-cifra dentro,
+ * separadas por divisores interiores.
+ *
+ * Tira de cifras: una sola superficie con 4 a 6 cifras en fila. Si filtra, cada cifra es un botón
+ * con aria-pressed y un indicador se desliza a la activa (data-ob-tira).
+ *   <div class="ob-tira" role="group" aria-label="Filtrar por estado" data-ob-tira style="--columnas: 5">
+ *     <button class="ob-tira__elemento" aria-pressed="true">
+ *       <span class="ob-tira__etiqueta">Todos</span>
+ *       <span class="ob-tira__valor"><span class="ob-tira__numero" data-ob-cifra="447">447</span><span class="ob-tira__secundario">de 512</span></span>
+ *     </button> …
+ *   </div>
+ */
+
+/* ------------------------------------------------------------------------------------------ */
+/* Cifra                                                                                        */
+/* ------------------------------------------------------------------------------------------ */
+.ob-cifra {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  container-type: inline-size;
+}
+.ob-cifra__etiqueta {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  min-width: 0;
+  font-weight: 500;
+  color: var(--texto-2);
+}
+.ob-cifra__etiqueta > :is(svg, [data-icono], .ob-glifo) {
+  flex: none;
+  color: var(--texto-3);
+}
+.ob-cifra__fila {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--esp-4);
+  min-width: 0;
+  margin-top: var(--esp-3);
+}
+.ob-cifra__valor {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  white-space: nowrap;
+  font-size: var(--txt-cifra);
+  line-height: var(--txt-cifra-alto);
+  font-weight: 500;
+  letter-spacing: var(--txt-cifra-espacio);
+  color: var(--texto-1);
+  font-feature-settings: var(--rasgos-cifras);
+  font-variant-numeric: tabular-nums;
+}
+@container (max-width: 220px) {
+  .ob-cifra__valor {
+    font-size: var(--txt-cifra-2);
+    line-height: var(--txt-cifra-2-alto);
+    letter-spacing: var(--txt-cifra-2-espacio);
+  }
+}
+.ob-cifra__prefijo,
+.ob-cifra__unidad {
+  font-size: var(--txt-cuerpo);
+  line-height: var(--txt-cuerpo-alto);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--texto-3);
+}
+.ob-cifra__numero[data-vacio],
+.ob-cifra__vacio {
+  color: var(--texto-3);
+}
+.ob-cifra__grafica {
+  flex: none;
+  margin-bottom: var(--esp-1);
+  margin-left: auto;
+}
+.ob-cifra__contexto {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  margin-top: var(--esp-3);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-cifra--secundaria .ob-cifra__fila {
+  margin-top: var(--esp-2);
+}
+.ob-cifra--secundaria .ob-cifra__valor {
+  font-size: var(--txt-cifra-2);
+  line-height: var(--txt-cifra-2-alto);
+  font-weight: var(--txt-cifra-2-peso);
+  letter-spacing: var(--txt-cifra-2-espacio);
+}
+.ob-cifra--secundaria .ob-cifra__contexto {
+  margin-top: 6px;
+}
+
+/* Variación: signo, valor y tono (verde sube, rojo baja; el texto lo dice, no solo el color) */
+.ob-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-weight: 500;
+  color: var(--texto-2);
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-delta[data-tono="verde"] {
+  color: var(--verde-texto);
+}
+.ob-delta[data-tono="rojo"] {
+  color: var(--rojo-texto);
+}
+.ob-delta[data-tono="ambar"] {
+  color: var(--ambar-texto);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Rodillo de dígitos (data-ob-cifra): cada dígito es una columna 0–9 que se desplaza           */
+/* ------------------------------------------------------------------------------------------ */
+.ob-rodillo {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+/*
+ * La caja del dígito la da un carácter invisible (.ob-rodillo__sombra), así conserva la línea base
+ * de la cifra; la máscara recorta la columna fuera de la caja y difumina los bordes al rodar.
+ */
+.ob-rodillo__digito {
+  position: relative;
+  display: inline-block;
+  -webkit-mask: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+  mask: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+}
+.ob-rodillo__digito[data-quieto] {
+  -webkit-mask: linear-gradient(#000, #000);
+  mask: linear-gradient(#000, #000);
+}
+.ob-rodillo__columna {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--ob-d, 0) * -1lh));
+  transition: transform var(--t-cifra) var(--curva);
+}
+.ob-rodillo__columna > span {
+  display: block;
+  height: 1lh;
+  text-align: center;
+}
+.ob-rodillo__digito > .ob-rodillo__sombra {
+  visibility: hidden;
+}
+.ob-rodillo__digito > .ob-rodillo__columna {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.ob-rodillo__signo {
+  display: inline-block;
+  animation: ob-aparecer var(--t-cifra) var(--curva);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Grupo de cifras                                                                              */
+/* ------------------------------------------------------------------------------------------ */
+.ob-grupo-cifras {
+  display: grid;
+  grid-template-columns: repeat(var(--columnas, 4), minmax(0, 1fr));
+  background-color: var(--sup-1);
+  background-image: var(--sup-degradado);
+  border: 1px solid var(--linea);
+  border-radius: var(--r-tarjeta);
+  box-shadow: var(--sombra-tarjeta);
+}
+.ob-grupo-cifras > * {
+  position: relative;
+  min-width: 0;
+  padding: var(--esp-4-5) var(--esp-5);
+}
+.ob-grupo-cifras > * + *::after {
+  content: "";
+  position: absolute;
+  top: var(--esp-4-5);
+  bottom: var(--esp-4-5);
+  left: 0;
+  width: 1px;
+  background: var(--linea);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Tira de cifras                                                                               */
+/* ------------------------------------------------------------------------------------------ */
+.ob-tira {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--columnas, 5), minmax(0, 1fr));
+  padding: var(--esp-1);
+  background-color: var(--sup-1);
+  background-image: var(--sup-degradado);
+  border: 1px solid var(--linea);
+  border-radius: var(--r-tarjeta);
+  box-shadow: var(--sombra-tarjeta);
+  isolation: isolate;
+}
+.ob-tira__elemento {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+  padding: var(--esp-2-5) var(--esp-3-5);
+  border-radius: var(--r-interno);
+  text-align: left;
+}
+/* Divisor interior entre cifras, oculto junto a la activa */
+.ob-tira__elemento + .ob-tira__elemento::before {
+  content: "";
+  position: absolute;
+  top: var(--esp-3);
+  bottom: var(--esp-3);
+  left: 0;
+  width: 1px;
+  background: var(--linea);
+  transition: opacity var(--t-hover) ease;
+}
+.ob-tira__elemento[aria-pressed="true"]::before,
+.ob-tira__elemento[aria-pressed="true"] + .ob-tira__elemento::before {
+  opacity: 0;
+}
+button.ob-tira__elemento {
+  width: 100%;
+  transition: background-color var(--t-hover) ease;
+}
+button.ob-tira__elemento:hover {
+  background: var(--lavado);
+}
+button.ob-tira__elemento:focus-visible {
+  outline-offset: 0;
+}
+.ob-tira__etiqueta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--texto-2);
+  transition: color var(--t-hover) ease;
+}
+.ob-tira__etiqueta > :is(svg, [data-icono], .ob-glifo) {
+  flex: none;
+  color: var(--ob-glifo, var(--texto-3));
+}
+.ob-tira__etiqueta-texto {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ob-tira__elemento[aria-pressed="true"] .ob-tira__etiqueta {
+  color: var(--texto-1);
+}
+.ob-tira__valor {
+  display: flex;
+  align-items: baseline;
+  gap: var(--esp-2);
+  max-width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+  font-feature-settings: var(--rasgos-cifras);
+  font-variant-numeric: tabular-nums;
+}
+.ob-tira__numero {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--esp-1);
+  font-size: var(--txt-cifra-2);
+  line-height: var(--txt-cifra-2-alto);
+  font-weight: 500;
+  letter-spacing: var(--txt-cifra-2-espacio);
+  color: var(--texto-1);
+}
+.ob-tira__prefijo,
+.ob-tira__unidad {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--texto-3);
+}
+.ob-tira__secundario {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-tira__indicador {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border-radius: var(--r-interno);
+  background: var(--lavado-2);
+  box-shadow:
+    inset 0 0 0 1px var(--linea),
+    inset 0 1px 0 var(--realce);
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+.ob-tira:not([data-ob-listo]) .ob-tira__elemento[aria-pressed="true"] {
+  background: var(--lavado-2);
+  box-shadow:
+    inset 0 0 0 1px var(--linea),
+    inset 0 1px 0 var(--realce);
+}

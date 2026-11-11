@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es" data-theme="oscuro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Obsidiana</title>
+    <link rel="icon" type="image/svg+xml" href="/simbolo.svg" />
+    <script>
+      // Tema antes del primer pintado (sin parpadeo): preferencia guardada en localStorage
+      // ("claro" u "oscuro"). La clave debe coincidir con CLAVES_PREFERENCIA.tema (lib/almacen.ts).
+      (() => {
+        let tema = 'oscuro';
+        try {
+          const guardado = localStorage.getItem('obsidiana-tema');
+          if (guardado === 'claro' || guardado === 'oscuro') tema = guardado;
+        } catch {
+          // Sin acceso a localStorage: se usa el tema oscuro.
+        }
+        document.documentElement.setAttribute('data-theme', tema);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="raiz"></div>
+    <script type="module" src="/src/demo/main.tsx"></script>
+  </body>
+</html>

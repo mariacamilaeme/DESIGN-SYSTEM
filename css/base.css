@@ -1,0 +1,493 @@
+/*
+ * Obsidiana · base.
+ * Reinicio mínimo, lienzo con luz ambiental y grano, tipografía, foco, barras de desplazamiento,
+ * selección y recetas de superficie compartidas por todos los componentes.
+ * Todo lee tokens de tokens.css; ningún color ni medida escrito a mano.
+ */
+
+/* ------------------------------------------------------------------------------------------ */
+/* Reinicio                                                                                     */
+/* ------------------------------------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  /* Prohibición de cursivas (DISENO.md): gana a cualquier estilo. */
+  font-style: normal !important;
+  border: 0 solid var(--linea);
+}
+
+em,
+i,
+cite,
+var,
+dfn,
+address {
+  font-style: normal !important;
+}
+
+html {
+  height: 100%;
+  background: var(--lienzo);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  tab-size: 4;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--lienzo);
+  color: var(--texto-1);
+  font-family: var(--fuente-texto);
+  font-size: var(--txt-cuerpo);
+  line-height: var(--txt-cuerpo-alto);
+  font-weight: 400;
+  font-optical-sizing: auto;
+  font-feature-settings: var(--rasgos-texto);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ol,
+ul,
+pre {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: 600;
+}
+
+ol,
+ul,
+menu {
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+svg {
+  flex: none;
+}
+
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  font: inherit;
+  font-feature-settings: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background: transparent;
+  border-radius: 0;
+}
+
+button,
+[role="button"] {
+  padding: 0;
+  text-align: inherit;
+}
+
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+b,
+strong {
+  font-weight: 600;
+}
+
+hr {
+  height: 0;
+  border-top-width: 1px;
+  color: inherit;
+}
+
+table {
+  border-collapse: collapse;
+  text-indent: 0;
+  border-color: inherit;
+}
+
+[hidden]:not([hidden="until-found"]) {
+  display: none !important;
+}
+
+::selection {
+  background: var(--seleccion-texto);
+}
+
+::placeholder {
+  color: var(--texto-3);
+  opacity: 1;
+}
+
+/* Foco visible: anillo de acento separado del control. Nunca se quita sin sustituto. */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+
+/* Barras de desplazamiento finas y con el tono del tema */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--barra-desplazamiento) transparent;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--barra-desplazamiento);
+  border: 3px solid transparent;
+  border-radius: 10px;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--barra-desplazamiento-hover);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Campos del navegador sin adornos propios */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/* Iconos de iconos/iconos.js: reservan su sitio antes de sustituirse por el SVG (sin saltos). */
+[data-icono] {
+  display: inline-block;
+  flex: none;
+  vertical-align: middle;
+  line-height: 0;
+}
+[data-icono]:empty {
+  width: 16px;
+  height: 16px;
+}
+[data-icono][data-tamano="12"]:empty {
+  width: 12px;
+  height: 12px;
+}
+[data-icono][data-tamano="14"]:empty {
+  width: 14px;
+  height: 14px;
+}
+[data-icono][data-tamano="18"]:empty {
+  width: 18px;
+  height: 18px;
+}
+[data-icono][data-tamano="20"]:empty {
+  width: 20px;
+  height: 20px;
+}
+[data-icono][data-tamano="24"]:empty {
+  width: 24px;
+  height: 24px;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Lienzo: luz ambiental superior y grano del 2 %                                               */
+/* ------------------------------------------------------------------------------------------ */
+.ob-lienzo {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--lienzo);
+}
+.ob-lienzo::before,
+.ob-lienzo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.ob-lienzo::before {
+  background-image: var(--lienzo-luz);
+  background-repeat: no-repeat;
+}
+.ob-lienzo::after {
+  background-image: var(--grano);
+  background-size: 180px 180px;
+  opacity: var(--grano-opacidad);
+  mix-blend-mode: overlay;
+}
+
+/* Piezas sueltas, para quien monte el lienzo a mano */
+.ob-luz {
+  background-image: var(--lienzo-luz);
+  background-repeat: no-repeat;
+}
+.ob-grano {
+  pointer-events: none;
+  background-image: var(--grano);
+  background-size: 180px 180px;
+  opacity: var(--grano-opacidad);
+  mix-blend-mode: overlay;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Recetas de superficie                                                                        */
+/* ------------------------------------------------------------------------------------------ */
+
+/* Tarjeta: sup-1 + degradado vertical + borde de 1 px + realce interior (claro: sombra suave) */
+.ob-superficie {
+  background-color: var(--sup-1);
+  background-image: var(--sup-degradado);
+  border: 1px solid var(--linea);
+  border-radius: var(--r-tarjeta);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+/* Elemento elevado dentro de una tarjeta */
+.ob-superficie-2 {
+  background-color: var(--sup-2);
+  border: 1px solid var(--linea);
+  border-radius: var(--r-interno);
+}
+
+/* Flotantes: menús, popovers, ventanas, paleta */
+.ob-flotante {
+  background-color: var(--sup-3);
+  background-image: var(--sup-degradado);
+  border: 1px solid var(--linea-fuerte);
+  box-shadow: var(--sombra-flotante);
+}
+
+/*
+ * Filo de luz: borde de 1 px en degradado (acento a transparente, 135°) recortado al contorno con
+ * mask-composite. Se enciende con data-filo="encendido" o al recibir foco visible. Hereda el radio.
+ * Aparece con un fundido de 240 ms (nunca un borde plano de color).
+ */
+.ob-filo {
+  position: relative;
+}
+.ob-filo::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(135deg, var(--acento) 0%, var(--acento-suave) 30%, transparent 60%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity var(--t-estado) var(--curva);
+}
+.ob-filo[data-filo="encendido"]::before,
+.ob-filo:focus-visible::before,
+.ob-filo:has(> :focus-visible)::before {
+  opacity: 1;
+}
+.ob-filo:focus-visible {
+  outline: none;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Utilidades tipográficas                                                                      */
+/* ------------------------------------------------------------------------------------------ */
+
+/* Cifras: numerales tabulares (no en códigos con guiones: "tnum" ensancha el guion en Inter) */
+.ob-cifras {
+  font-feature-settings: var(--rasgos-cifras);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Código: referencias, números de pedido, claves */
+.ob-codigo {
+  font-family: var(--fuente-codigo);
+  font-size: var(--txt-codigo);
+  line-height: var(--txt-codigo-alto);
+  font-weight: var(--txt-codigo-peso);
+  letter-spacing: 0;
+  font-feature-settings: normal;
+}
+
+.ob-t-titulo {
+  font-size: var(--txt-titulo);
+  line-height: var(--txt-titulo-alto);
+  font-weight: var(--txt-titulo-peso);
+  letter-spacing: var(--txt-titulo-espacio);
+}
+.ob-t-titulo-ventana {
+  font-size: var(--txt-titulo-ventana);
+  line-height: var(--txt-titulo-ventana-alto);
+  font-weight: var(--txt-titulo-ventana-peso);
+  letter-spacing: var(--txt-titulo-ventana-espacio);
+}
+.ob-t-titulo-tarjeta {
+  font-size: var(--txt-titulo-tarjeta);
+  line-height: var(--txt-titulo-tarjeta-alto);
+  font-weight: var(--txt-titulo-tarjeta-peso);
+  letter-spacing: var(--txt-titulo-tarjeta-espacio);
+}
+.ob-t-cifra {
+  font-size: var(--txt-cifra);
+  line-height: var(--txt-cifra-alto);
+  font-weight: var(--txt-cifra-peso);
+  letter-spacing: var(--txt-cifra-espacio);
+}
+.ob-t-cifra-2 {
+  font-size: var(--txt-cifra-2);
+  line-height: var(--txt-cifra-2-alto);
+  font-weight: var(--txt-cifra-2-peso);
+  letter-spacing: var(--txt-cifra-2-espacio);
+}
+.ob-t-cuerpo {
+  font-size: var(--txt-cuerpo);
+  line-height: var(--txt-cuerpo-alto);
+}
+.ob-t-destacado {
+  font-size: var(--txt-cuerpo);
+  line-height: var(--txt-cuerpo-alto);
+  font-weight: 500;
+}
+.ob-t-etiqueta {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  letter-spacing: var(--txt-etiqueta-espacio);
+}
+.ob-t-columna {
+  font-size: var(--txt-columna);
+  line-height: var(--txt-columna-alto);
+  letter-spacing: var(--txt-columna-espacio);
+  font-weight: 500;
+  color: var(--texto-3);
+}
+.ob-t-mini {
+  font-size: var(--txt-mini);
+  line-height: var(--txt-mini-alto);
+  letter-spacing: var(--txt-mini-espacio);
+}
+.ob-t-micro {
+  font-size: var(--txt-micro);
+  line-height: var(--txt-micro-alto);
+  letter-spacing: var(--txt-micro-espacio);
+}
+
+.ob-texto-1 {
+  color: var(--texto-1);
+}
+.ob-texto-2 {
+  color: var(--texto-2);
+}
+.ob-texto-3 {
+  color: var(--texto-3);
+}
+.ob-texto-4 {
+  color: var(--texto-4);
+}
+.ob-truncar {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Valor vacío: siempre "—" en texto-3 */
+.ob-vacio-valor {
+  color: var(--texto-3);
+}
+
+/* Enlace de texto */
+.ob-enlace {
+  color: var(--acento-texto);
+  font-weight: 500;
+  border-radius: var(--r-mini);
+  transition: color var(--t-hover) ease;
+}
+.ob-enlace:hover {
+  color: var(--acento-fuerte);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* Ocultar a la vista, no al lector de pantalla */
+.ob-solo-lector {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Enlace para saltar al contenido: visible solo con el foco */
+.ob-saltar {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: var(--z-avisos);
+  padding: 6px 12px;
+  border-radius: var(--r-control);
+  background: var(--acento-relleno);
+  color: var(--sobre-acento);
+  font-weight: 500;
+  transform: translateY(-160%);
+  transition: transform var(--t-menu) var(--curva);
+}
+.ob-saltar:focus-visible {
+  transform: none;
+}

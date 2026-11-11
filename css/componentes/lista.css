@@ -1,0 +1,186 @@
+/*
+ * Obsidiana · lista y lista de descripción.
+ *
+ * Lista
+ *   <ul class="ob-lista">
+ *     <li class="ob-lista__elemento">
+ *       <span class="ob-lista__icono" data-icono="documento"></span>
+ *       <div class="ob-lista__cuerpo"><p class="ob-lista__titulo">Pedido PE-26014</p><p class="ob-lista__subtitulo">Altamira · 14 nov</p></div>
+ *       <div class="ob-lista__fin"><span class="ob-pildora" data-estado="en-curso"><span class="ob-glifo"></span>En curso</span></div>
+ *     </li>
+ *   </ul>
+ *   interactiva: el elemento es <a> o <button> con .ob-lista__elemento (hover y filo a la izquierda)
+ *   separada por líneas: --lineas · en tarjetas sueltas: --tarjetas · entrada escalonada: .ob-escalonar
+ *
+ * Lista de descripción (pares etiqueta / valor)
+ *   <dl class="ob-descripcion" style="--columnas: 2">
+ *     <div class="ob-descripcion__par"><dt>Cliente</dt><dd>Altamira</dd></div>
+ *   </dl>
+ *   en filas (etiqueta a la izquierda): --filas
+ */
+.ob-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ob-lista__elemento {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  width: 100%;
+  min-height: var(--alto-fila);
+  padding: var(--esp-1-5) var(--esp-3);
+  border-radius: var(--r-control);
+  text-align: left;
+  color: var(--texto-1);
+}
+:is(a, button).ob-lista__elemento {
+  transition: background-color var(--t-hover) ease;
+}
+:is(a, button).ob-lista__elemento::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--filo-hover);
+  opacity: 0;
+  transition: opacity var(--t-hover) ease;
+}
+:is(a, button).ob-lista__elemento:hover {
+  background: var(--lavado);
+}
+:is(a, button).ob-lista__elemento:hover::before {
+  opacity: 1;
+}
+.ob-lista__elemento[aria-current="true"],
+.ob-lista__elemento[aria-selected="true"] {
+  background: var(--acento-tenue);
+}
+.ob-lista__elemento:is([aria-current="true"], [aria-selected="true"])::before {
+  opacity: 1;
+  background: linear-gradient(180deg, var(--acento), var(--acento-suave));
+  box-shadow: var(--resplandor-acento);
+}
+.ob-lista__elemento:focus-visible {
+  outline-offset: -2px;
+}
+.ob-lista__icono {
+  display: grid;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--linea);
+  border-radius: var(--r-control);
+  background: var(--sup-2);
+  color: var(--texto-3);
+}
+.ob-lista__cuerpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.ob-lista__titulo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: var(--texto-1);
+}
+.ob-lista__subtitulo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-lista__fin {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--esp-3);
+  margin-left: auto;
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-lista--lineas {
+  gap: 0;
+}
+.ob-lista--lineas > li + li > .ob-lista__elemento,
+.ob-lista--lineas > .ob-lista__elemento + .ob-lista__elemento {
+  border-top: 1px solid var(--linea);
+  border-radius: 0;
+}
+.ob-lista--lineas .ob-lista__elemento {
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+}
+.ob-lista--tarjetas {
+  gap: 6px;
+}
+.ob-lista--tarjetas .ob-lista__elemento {
+  min-height: 40px;
+  border: 1px solid var(--linea);
+  background: var(--sup-2);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Lista de descripción                                                                         */
+/* ------------------------------------------------------------------------------------------ */
+.ob-descripcion {
+  display: grid;
+  grid-template-columns: repeat(var(--columnas, 2), minmax(0, 1fr));
+  gap: var(--esp-4) var(--esp-6);
+}
+.ob-descripcion__par {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ob-descripcion dt {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-descripcion dd {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+  color: var(--texto-1);
+}
+.ob-descripcion dd[data-cifras] {
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-descripcion dd[data-codigo] {
+  font-family: var(--fuente-codigo);
+  font-size: var(--txt-codigo);
+  font-weight: 450;
+}
+.ob-descripcion--filas {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+.ob-descripcion--filas .ob-descripcion__par {
+  display: grid;
+  grid-template-columns: minmax(120px, 34%) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--esp-4);
+  min-height: 40px;
+  border-bottom: 1px solid var(--linea);
+}
+.ob-descripcion--filas .ob-descripcion__par:last-child {
+  border-bottom: 0;
+}
+.ob-descripcion--filas dt {
+  font-size: var(--txt-cuerpo);
+  line-height: var(--txt-cuerpo-alto);
+}

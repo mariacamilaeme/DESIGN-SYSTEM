@@ -1,0 +1,40 @@
+/*
+ * Obsidiana · capa común de los flotantes (menú, popover, lista del selector, calendario, pista).
+ *
+ * Un flotante empieza con [hidden]. El JS lo coloca junto a su ancla (position: fixed, volteo en
+ * los bordes y desplazamiento para no salirse) y fija transform-origin en el lado del ancla.
+ *   data-estado="abierto"   entra: escala 0,97 → 1 con fundido, 140 ms, desde su origen
+ *   data-estado="cerrando"  sale: 100 ms, y el JS lo vuelve a ocultar
+ * data-lado="top|bottom|left|right" indica el lado real tras el volteo.
+ */
+.ob-menu,
+.ob-popover,
+.ob-lista-flotante,
+.ob-calendario-flotante {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-flotante);
+  border-radius: var(--r-interno);
+  background-color: var(--sup-3);
+  background-image: var(--sup-degradado);
+  border: 1px solid var(--linea-fuerte);
+  box-shadow: var(--sombra-flotante);
+  color: var(--texto-1);
+  font-size: var(--txt-cuerpo);
+  line-height: var(--txt-cuerpo-alto);
+  outline: none;
+  transform-origin: var(--ob-origen, top left);
+}
+:is(.ob-menu, .ob-popover, .ob-lista-flotante, .ob-calendario-flotante, .ob-pista)[data-estado="abierto"] {
+  animation: ob-entrar-flotante var(--t-menu) var(--curva);
+}
+:is(.ob-menu, .ob-popover, .ob-lista-flotante, .ob-calendario-flotante, .ob-pista)[data-estado="cerrando"] {
+  animation: ob-salir-flotante 100ms ease-out forwards;
+  pointer-events: none;
+}
+/* Flotante en el flujo (catálogo, documentación): sin posición fija */
+:is(.ob-menu, .ob-popover, .ob-lista-flotante, .ob-calendario-flotante)[data-estatico] {
+  position: relative;
+  z-index: auto;
+}

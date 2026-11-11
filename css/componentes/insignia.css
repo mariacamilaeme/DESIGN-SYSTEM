@@ -1,0 +1,395 @@
+/*
+ * Obsidiana · insignia, contador, píldora de estado, ficha y avatar.
+ *
+ * Insignia     <span class="ob-insignia" data-tono="acento">Nuevo</span>
+ *              tonos: neutro (por defecto) · acento · vivo · ambar · rojo · verde · gris · borde
+ *              con punto: <span class="ob-insignia" data-tono="verde"><span class="ob-glifo" data-forma="punto"></span>Activo</span>
+ * Contador     <span class="ob-contador">3</span>       (relleno de acento, 18 px)
+ *
+ * Píldora de estado: forma más etiqueta; se distingue sin depender del color.
+ *   <span class="ob-pildora" data-estado="en-curso"><span class="ob-glifo"></span>En curso</span>
+ *   estados: pendiente (anillo ámbar) · en-proceso (medio círculo azul) · en-curso (rombo vivo, pulso
+ *   con data-pulso) · completado (círculo lleno verde) · anulado (guion gris) · vencido (rombo rojo)
+ *   genérica: data-tono="…" y <span class="ob-glifo" data-forma="anillo|medio|rombo|lleno|guion|punto">
+ *
+ * Ficha con cierre (filtros activos, etiquetas):
+ *   <span class="ob-ficha"><span class="ob-ficha__categoria">Cliente</span><span class="ob-ficha__valor">Altamira</span>
+ *     <button class="ob-ficha__cerrar" aria-label="Quitar filtro Cliente">…</button></span>
+ *   neutra: --neutra
+ *
+ * Avatar       <span class="ob-avatar" data-tono="3">AN</span>   tamaños --sm (24) · md (28) · --lg (36)
+ *              grupo: <span class="ob-avatares">…</span>
+ */
+
+/* ------------------------------------------------------------------------------------------ */
+/* Tonos compartidos                                                                            */
+/* ------------------------------------------------------------------------------------------ */
+:is(.ob-insignia, .ob-pildora) {
+  --ob-fondo: var(--lavado-2);
+  --ob-texto: var(--texto-2);
+  --ob-glifo: var(--texto-3);
+}
+:is(.ob-insignia, .ob-pildora)[data-tono="acento"] {
+  --ob-fondo: var(--fondo-acento);
+  --ob-texto: var(--acento-texto);
+  --ob-glifo: var(--acento);
+}
+:is(.ob-insignia, .ob-pildora)[data-tono="vivo"] {
+  --ob-fondo: var(--fondo-vivo);
+  --ob-texto: var(--vivo-texto);
+  --ob-glifo: var(--vivo);
+}
+:is(.ob-insignia, .ob-pildora)[data-tono="ambar"] {
+  --ob-fondo: var(--fondo-ambar);
+  --ob-texto: var(--ambar-texto);
+  --ob-glifo: var(--ambar);
+}
+:is(.ob-insignia, .ob-pildora)[data-tono="rojo"] {
+  --ob-fondo: var(--fondo-rojo);
+  --ob-texto: var(--rojo-texto);
+  --ob-glifo: var(--rojo);
+}
+:is(.ob-insignia, .ob-pildora)[data-tono="verde"] {
+  --ob-fondo: var(--fondo-verde);
+  --ob-texto: var(--verde-texto);
+  --ob-glifo: var(--verde);
+}
+:is(.ob-insignia, .ob-pildora)[data-tono="gris"] {
+  --ob-fondo: var(--fondo-gris);
+  --ob-texto: var(--gris-texto);
+  --ob-glifo: var(--gris-estado);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Insignia                                                                                     */
+/* ------------------------------------------------------------------------------------------ */
+.ob-insignia {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: var(--alto-insignia);
+  padding: 0 var(--esp-2);
+  border-radius: var(--r-pildora);
+  background: var(--ob-fondo);
+  color: var(--ob-texto);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  font-weight: 500;
+  white-space: nowrap;
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-insignia[data-tono="neutro"] {
+  --ob-fondo: var(--lavado-2);
+}
+.ob-insignia[data-tono="borde"] {
+  --ob-fondo: transparent;
+  box-shadow: inset 0 0 0 1px var(--linea-fuerte);
+}
+.ob-insignia .ob-glifo {
+  width: 8px;
+  height: 8px;
+}
+
+.ob-contador {
+  display: inline-grid;
+  flex: none;
+  min-width: 18px;
+  height: 18px;
+  place-items: center;
+  padding: 0 4px;
+  border-radius: var(--r-pildora);
+  background: var(--acento-relleno);
+  color: var(--sobre-acento);
+  font-size: var(--txt-mini);
+  line-height: 1;
+  font-weight: 600;
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-contador--suave {
+  background: var(--lavado-2);
+  color: var(--texto-3);
+  font-weight: 500;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Glifo de estado: 10 px, una forma distinta por estado (dibujada con CSS)                     */
+/* ------------------------------------------------------------------------------------------ */
+.ob-glifo {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  color: var(--ob-glifo, currentColor);
+}
+.ob-glifo::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.ob-glifo[data-forma="punto"]::before {
+  inset: 2.4px;
+}
+.ob-glifo[data-forma="lleno"]::before {
+  inset: 0.9px;
+}
+.ob-glifo[data-forma="anillo"]::before {
+  inset: 0.85px;
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+.ob-glifo[data-forma="medio"]::before {
+  inset: 0.85px;
+  background: linear-gradient(90deg, transparent 50%, currentColor 50%);
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+.ob-glifo[data-forma="rombo"]::before {
+  inset: 2.1px;
+  border-radius: 1px;
+  transform: rotate(45deg);
+}
+.ob-glifo[data-forma="guion"]::before {
+  top: 4.1px;
+  right: 1.6px;
+  bottom: auto;
+  left: 1.6px;
+  height: 1.8px;
+  border-radius: 1px;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Píldora de estado                                                                            */
+/* ------------------------------------------------------------------------------------------ */
+.ob-pildora {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: var(--alto-insignia);
+  padding: 0 var(--esp-2-5) 0 var(--esp-2);
+  border-radius: var(--r-pildora);
+  background: var(--ob-fondo);
+  color: var(--ob-texto);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.ob-pildora[data-estado="pendiente"] {
+  --ob-fondo: var(--fondo-ambar);
+  --ob-texto: var(--ambar-texto);
+  --ob-glifo: var(--ambar);
+}
+.ob-pildora[data-estado="en-proceso"] {
+  --ob-fondo: var(--fondo-acento);
+  --ob-texto: var(--acento-texto);
+  --ob-glifo: var(--acento);
+}
+.ob-pildora[data-estado="en-curso"] {
+  --ob-fondo: var(--fondo-vivo);
+  --ob-texto: var(--vivo-texto);
+  --ob-glifo: var(--vivo);
+}
+.ob-pildora[data-estado="completado"] {
+  --ob-fondo: var(--fondo-verde);
+  --ob-texto: var(--verde-texto);
+  --ob-glifo: var(--verde);
+}
+.ob-pildora[data-estado="anulado"] {
+  --ob-fondo: var(--fondo-gris);
+  --ob-texto: var(--gris-texto);
+  --ob-glifo: var(--gris-estado);
+}
+.ob-pildora[data-estado="vencido"] {
+  --ob-fondo: var(--fondo-rojo);
+  --ob-texto: var(--rojo-texto);
+  --ob-glifo: var(--rojo);
+}
+/* forma por estado cuando el glifo no la declara */
+.ob-pildora[data-estado="pendiente"] .ob-glifo:not([data-forma])::before {
+  inset: 0.85px;
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+.ob-pildora[data-estado="en-proceso"] .ob-glifo:not([data-forma])::before {
+  inset: 0.85px;
+  background: linear-gradient(90deg, transparent 50%, currentColor 50%);
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+.ob-pildora:is([data-estado="en-curso"], [data-estado="vencido"]) .ob-glifo:not([data-forma])::before {
+  inset: 2.1px;
+  border-radius: 1px;
+  transform: rotate(45deg);
+}
+.ob-pildora[data-estado="completado"] .ob-glifo:not([data-forma])::before {
+  inset: 0.9px;
+}
+.ob-pildora[data-estado="anulado"] .ob-glifo:not([data-forma])::before {
+  top: 4.1px;
+  right: 1.6px;
+  bottom: auto;
+  left: 1.6px;
+  height: 1.8px;
+  border-radius: 1px;
+}
+.ob-pildora:not([data-estado]) .ob-glifo:not([data-forma])::before {
+  inset: 2.4px;
+}
+.ob-pildora[data-pulso] .ob-glifo {
+  animation: ob-pulso var(--t-pulso) ease-in-out infinite;
+}
+/* Etiqueta corta en tablas densas: el texto completo va en title o en la pista */
+.ob-pildora--corta {
+  max-width: 100%;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Ficha con cierre                                                                             */
+/* ------------------------------------------------------------------------------------------ */
+.ob-ficha {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: var(--alto-ficha);
+  padding: 0 2px 0 var(--esp-2-5);
+  border: 1px solid var(--borde-acento);
+  border-radius: var(--r-control);
+  background: var(--acento-tenue);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  font-weight: 500;
+  color: var(--texto-1);
+  white-space: nowrap;
+}
+.ob-ficha:not(:has(.ob-ficha__cerrar)) {
+  padding-right: var(--esp-2-5);
+}
+.ob-ficha[data-estado="entrando"] {
+  animation: ob-entrar-flotante var(--t-menu) var(--curva);
+}
+.ob-ficha[data-estado="saliendo"] {
+  animation: ob-salir-flotante var(--t-menu) var(--curva) forwards;
+}
+.ob-ficha--neutra {
+  border-color: var(--linea-fuerte);
+  background: var(--boton-2);
+}
+.ob-ficha__categoria {
+  font-weight: 400;
+  color: var(--texto-2);
+}
+.ob-ficha__valor {
+  max-width: 224px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ob-ficha__cerrar {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: var(--r-elemento);
+  color: var(--texto-3);
+  transition:
+    background-color var(--t-hover) ease,
+    color var(--t-hover) ease;
+}
+.ob-ficha__cerrar:hover {
+  background: var(--lavado-2);
+  color: var(--texto-1);
+}
+.ob-ficha__cerrar svg,
+.ob-ficha__cerrar [data-icono] {
+  width: 12px;
+  height: 12px;
+}
+.ob-fichas {
+  display: flex;
+  flex: 1;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Avatar                                                                                       */
+/* ------------------------------------------------------------------------------------------ */
+.ob-avatar {
+  --ob-av: var(--acento);
+  display: inline-grid;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--ob-av) 16%, var(--sup-2));
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ob-av) 24%, transparent);
+  color: color-mix(in oklab, var(--ob-av) 70%, var(--texto-1));
+  font-size: var(--txt-mini);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  user-select: none;
+}
+.ob-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ob-avatar[data-tono="2"] {
+  --ob-av: var(--vivo);
+}
+.ob-avatar[data-tono="3"] {
+  --ob-av: var(--ambar);
+}
+.ob-avatar[data-tono="4"] {
+  --ob-av: var(--verde);
+}
+.ob-avatar[data-tono="5"] {
+  --ob-av: var(--gris-estado);
+}
+.ob-avatar[data-tono="6"] {
+  --ob-av: var(--rojo);
+}
+.ob-avatar--sm {
+  width: 24px;
+  height: 24px;
+  font-size: var(--txt-micro);
+}
+.ob-avatar--lg {
+  width: 36px;
+  height: 36px;
+  font-size: var(--txt-etiqueta);
+}
+.ob-avatar__estado {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--sup-1);
+  border-radius: 50%;
+  background: var(--verde);
+}
+.ob-avatar-caja {
+  position: relative;
+  display: inline-flex;
+}
+.ob-avatares {
+  display: inline-flex;
+}
+.ob-avatares > .ob-avatar {
+  box-shadow:
+    0 0 0 2px var(--sup-1),
+    inset 0 0 0 1px color-mix(in oklab, var(--ob-av) 24%, transparent);
+}
+.ob-avatares > .ob-avatar + .ob-avatar {
+  margin-left: -6px;
+}

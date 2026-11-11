@@ -1,0 +1,526 @@
+/*
+ * Obsidiana · armazón: aplicación, barra lateral, barra superior, página y subnavegación.
+ *
+ *   <div class="ob-app" data-ob-app>
+ *     <aside class="ob-lateral">…</aside>
+ *     <div class="ob-app__principal ob-lienzo">
+ *       <header class="ob-superior">…</header>
+ *       <main class="ob-app__contenido" id="contenido">…</main>
+ *     </div>
+ *   </div>
+ *
+ * Plegar la barra: data-lateral="plegada" en .ob-app (el JS lo alterna con [data-ob-plegar] y
+ * Ctrl B, y lo recuerda en localStorage).
+ */
+
+/* ------------------------------------------------------------------------------------------ */
+/* Aplicación                                                                                   */
+/* ------------------------------------------------------------------------------------------ */
+.ob-app {
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
+  min-width: var(--ancho-trabajo-min);
+  overflow: hidden;
+  background: var(--lienzo);
+}
+.ob-app__principal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.ob-app__contenido {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  scroll-padding-top: var(--esp-6);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Barra lateral (232 px, plegable a 64)                                                        */
+/* Siempre más oscura que el contenido; lee solo tokens --lateral-*.                            */
+/* ------------------------------------------------------------------------------------------ */
+.ob-lateral {
+  /* Dentro de la barra el foco y el acento usan los tonos de la barra */
+  --acento: var(--lateral-foco);
+  position: relative;
+  z-index: var(--z-lateral);
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  width: var(--ancho-lateral);
+  height: 100%;
+  min-height: 0;
+  padding: 0 var(--esp-3);
+  background: var(--lateral);
+  border-right: 1px solid var(--lateral-linea);
+  color: var(--lateral-texto-2);
+}
+.ob-app[data-lateral="plegada"] .ob-lateral,
+.ob-lateral[data-plegada] {
+  width: var(--ancho-lateral-plegada);
+  padding: 0 var(--esp-2-5);
+}
+
+.ob-lateral__marca {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--alto-superior);
+  padding: 0 2px 0 var(--esp-2);
+}
+.ob-lateral__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2-5);
+  min-width: 0;
+  border-radius: var(--r-elemento);
+  color: var(--lateral-texto-1);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+.ob-lateral__simbolo {
+  display: grid;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  color: var(--lateral-texto-1);
+}
+.ob-lateral__simbolo svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* Botón de plegar (arriba, junto al logo) y de desplegar (pie, plegada) */
+.ob-lateral__plegar {
+  display: grid;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: var(--r-elemento);
+  color: var(--lateral-texto-3);
+  transition:
+    background-color var(--t-hover) ease,
+    color var(--t-hover) ease;
+}
+.ob-lateral__plegar:hover {
+  background: var(--lateral-lavado);
+  color: var(--lateral-texto-1);
+}
+
+.ob-lateral__nav {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+  margin-top: var(--esp-3);
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* el indicador y el filo no se recortan */
+  margin-inline: -4px;
+  padding-inline: 4px;
+  scrollbar-width: none;
+}
+.ob-lateral__grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ob-lateral__grupo-titulo {
+  margin-bottom: var(--esp-1);
+  padding: 0 var(--esp-2-5);
+  font-size: var(--txt-mini);
+  line-height: var(--txt-mini-alto);
+  letter-spacing: var(--txt-mini-espacio);
+  font-weight: 500;
+  color: var(--lateral-texto-3);
+}
+
+/* Enlace de navegación */
+.ob-lateral__enlace {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2-5);
+  height: 32px;
+  padding: 0 var(--esp-2-5);
+  border-radius: var(--r-control);
+  font-weight: 500;
+  color: var(--lateral-texto-2);
+  transition:
+    background-color var(--t-hover) ease,
+    color var(--t-hover) ease;
+}
+.ob-lateral__enlace:hover {
+  background: var(--lateral-lavado);
+  color: var(--lateral-texto-1);
+}
+.ob-lateral__enlace[aria-current="page"] {
+  color: var(--lateral-texto-1);
+}
+.ob-lateral__enlace[aria-current="page"]:hover {
+  background: transparent;
+}
+.ob-lateral__icono {
+  position: relative;
+  display: flex;
+  color: var(--lateral-texto-3);
+  transition: color var(--t-hover) ease;
+}
+.ob-lateral__enlace:hover .ob-lateral__icono {
+  color: var(--lateral-texto-2);
+}
+.ob-lateral__enlace[aria-current="page"] .ob-lateral__icono {
+  color: var(--lateral-acento);
+}
+.ob-lateral__texto {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ob-lateral__contador {
+  position: relative;
+  margin-left: auto;
+  padding: 0 6px;
+  border-radius: var(--r-pildora);
+  background: var(--lateral-contador);
+  font-size: var(--txt-mini);
+  line-height: 18px;
+  letter-spacing: var(--txt-mini-espacio);
+  font-weight: 500;
+  color: var(--lateral-texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+}
+
+/*
+ * Indicador del elemento activo: una sola pieza que se desliza entre enlaces (el JS la mueve con
+ * transform y la curva del resorte). Fondo atenuado + barra luminosa de 2 px a la izquierda.
+ * Sin JS, el enlace activo pinta su propio indicador con ::before y ::after.
+ */
+.ob-lateral__indicador {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border-radius: var(--r-control);
+  background: var(--lateral-activo);
+  box-shadow: inset 0 1px 0 var(--lateral-realce);
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+.ob-lateral__indicador::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: -1px;
+  width: 2px;
+  border-radius: var(--r-pildora);
+  background: var(--lateral-acento);
+  box-shadow: var(--resplandor-acento);
+}
+.ob-lateral__nav:not([data-ob-listo]) .ob-lateral__enlace[aria-current="page"] {
+  background: var(--lateral-activo);
+  box-shadow: inset 0 1px 0 var(--lateral-realce);
+}
+.ob-lateral__nav:not([data-ob-listo]) .ob-lateral__enlace[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: -1px;
+  width: 2px;
+  border-radius: var(--r-pildora);
+  background: var(--lateral-acento);
+  box-shadow: var(--resplandor-acento);
+}
+
+/* Pie de la barra */
+.ob-lateral__pie {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  margin-top: auto;
+  padding: var(--esp-3) 0;
+  border-top: 1px solid var(--lateral-linea);
+}
+.ob-lateral__nota {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-2-5);
+  padding: 0 var(--esp-2-5) 6px;
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+}
+.ob-lateral__nota > :first-child {
+  margin-top: 2px;
+  color: var(--lateral-texto-3);
+}
+.ob-lateral__nota-titulo {
+  display: block;
+  font-weight: 500;
+  color: var(--lateral-texto-2);
+}
+.ob-lateral__nota-texto {
+  display: block;
+  color: var(--lateral-texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-lateral__accion {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2-5);
+  height: 32px;
+  padding: 0 var(--esp-2-5);
+  border-radius: var(--r-control);
+  font-weight: 500;
+  color: var(--lateral-texto-3);
+  transition:
+    background-color var(--t-hover) ease,
+    color var(--t-hover) ease;
+}
+.ob-lateral__accion:hover {
+  background: var(--lateral-lavado);
+  color: var(--lateral-texto-1);
+}
+
+/* Separador de grupos con la barra plegada */
+.ob-lateral__separador {
+  display: none;
+  width: 20px;
+  height: 1px;
+  margin: 0 auto 6px;
+  background: var(--lateral-linea);
+}
+
+/* Elementos que solo existen en un modo */
+.ob-lateral [data-solo="plegada"] {
+  display: none;
+}
+
+/* --- Barra plegada --- */
+:is(.ob-app[data-lateral="plegada"] .ob-lateral, .ob-lateral[data-plegada]) .ob-lateral__marca {
+  justify-content: center;
+  padding: 0;
+}
+:is(.ob-app[data-lateral="plegada"] .ob-lateral, .ob-lateral[data-plegada])
+  :is(.ob-lateral__logo-texto, .ob-lateral__grupo-titulo, .ob-lateral__texto, .ob-lateral__nota-cuerpo, .ob-lateral__accion-texto, [data-solo="desplegada"]) {
+  display: none;
+}
+:is(.ob-app[data-lateral="plegada"] .ob-lateral, .ob-lateral[data-plegada]) [data-solo="plegada"] {
+  display: grid;
+}
+:is(.ob-app[data-lateral="plegada"] .ob-lateral, .ob-lateral[data-plegada]) .ob-lateral__separador {
+  display: block;
+}
+:is(.ob-app[data-lateral="plegada"] .ob-lateral, .ob-lateral[data-plegada])
+  .ob-lateral__grupo:first-child
+  .ob-lateral__separador {
+  display: none;
+}
+:is(.ob-app[data-lateral="plegada"] .ob-lateral, .ob-lateral[data-plegada]) .ob-lateral__enlace {
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  width: 44px;
+  height: 44px;
+  margin: 0 auto;
+  padding: 0;
+}
+:is(.ob-app[data-lateral="plegada"] .ob-lateral, .ob-lateral[data-plegada]) .ob-lateral__contador {
+  margin: 0;
+  padding: 0;
+  background: none;
+  font-size: var(--txt-micro);
+  line-height: var(--txt-micro-alto);
+  letter-spacing: var(--txt-micro-espacio);
+}
+:is(.ob-app[data-lateral="plegada"] .ob-lateral, .ob-lateral[data-plegada])
+  .ob-lateral__enlace[aria-current="page"]
+  .ob-lateral__contador {
+  color: var(--lateral-texto-2);
+}
+:is(.ob-app[data-lateral="plegada"] .ob-lateral, .ob-lateral[data-plegada]) .ob-lateral__nota {
+  justify-content: center;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+  align-items: center;
+}
+:is(.ob-app[data-lateral="plegada"] .ob-lateral, .ob-lateral[data-plegada]) .ob-lateral__nota > :first-child {
+  margin: 0;
+}
+:is(.ob-app[data-lateral="plegada"] .ob-lateral, .ob-lateral[data-plegada])
+  :is(.ob-lateral__accion, .ob-lateral__plegar[data-solo="plegada"]) {
+  justify-content: center;
+  place-items: center;
+  width: 36px;
+  height: 32px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Barra superior (56 px): miga · buscador · acciones                                           */
+/* ------------------------------------------------------------------------------------------ */
+.ob-superior {
+  position: relative;
+  z-index: var(--z-superior);
+  display: grid;
+  flex: none;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--esp-6);
+  height: var(--alto-superior);
+  padding: 0 20px 0 var(--relleno-pagina);
+  border-bottom: 1px solid var(--linea);
+}
+.ob-superior__acciones {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--esp-2);
+}
+.ob-superior__divisor {
+  width: 1px;
+  height: 20px;
+  margin: 0 var(--esp-1);
+  background: var(--linea);
+}
+
+/* Buscador que abre la paleta de comandos, con el atajo visible */
+.ob-buscador {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2-5);
+  width: var(--ancho-buscador);
+  height: var(--alto-control);
+  padding: 0 6px 0 var(--esp-2-5);
+  border: 1px solid var(--linea);
+  border-radius: var(--r-control);
+  background: var(--lavado);
+  color: var(--texto-3);
+  transition:
+    background-color var(--t-hover) ease,
+    border-color var(--t-hover) ease,
+    color var(--t-hover) ease;
+}
+.ob-buscador:hover {
+  border-color: var(--linea-fuerte);
+  background: var(--lavado-2);
+  color: var(--texto-2);
+}
+.ob-buscador__texto {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ob-buscador__atajo {
+  display: flex;
+  gap: 2px;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Página: márgenes del área de trabajo y encabezado                                            */
+/* ------------------------------------------------------------------------------------------ */
+.ob-pagina {
+  width: 100%;
+  max-width: var(--ancho-trabajo-max);
+  margin: 0 auto;
+  padding: var(--esp-7) var(--relleno-pagina) var(--esp-14);
+}
+.ob-pagina__encabezado {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--esp-4);
+  min-height: 40px;
+  margin-bottom: var(--esp-6);
+}
+.ob-pagina__titulos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+.ob-pagina__titulo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--txt-titulo);
+  line-height: var(--txt-titulo-alto);
+  font-weight: var(--txt-titulo-peso);
+  letter-spacing: var(--txt-titulo-espacio);
+  color: var(--texto-1);
+}
+.ob-pagina__contexto {
+  color: var(--texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+}
+.ob-pagina__acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  margin-left: auto;
+}
+/* Pila vertical de la pantalla de trabajo: título · pestañas · tira · barra · tabla */
+.ob-pila {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+}
+.ob-rejilla {
+  display: grid;
+  grid-template-columns: repeat(var(--columnas, 3), minmax(0, 1fr));
+  gap: var(--esp-4);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Subnavegación de sección (44 px, fija bajo la barra superior)                                */
+/* ------------------------------------------------------------------------------------------ */
+.ob-subnav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-pegajoso);
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+  height: var(--alto-subnav);
+  padding: 0 calc(var(--relleno-pagina) - 6px);
+  border-bottom: 1px solid var(--linea);
+  background: color-mix(in oklab, var(--lienzo) 92%, transparent);
+}
+.ob-subnav__enlace {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 6px;
+  border-radius: var(--r-elemento);
+  font-weight: 500;
+  color: var(--texto-2);
+  transition:
+    color var(--t-hover) ease,
+    background-color var(--t-hover) ease;
+}
+.ob-subnav__enlace:hover {
+  color: var(--texto-1);
+  background: var(--lavado-2);
+}
+.ob-subnav__enlace[aria-current="true"],
+.ob-subnav__enlace[aria-current="page"] {
+  color: var(--texto-1);
+}

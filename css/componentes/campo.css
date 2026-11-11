@@ -1,0 +1,109 @@
+/*
+ * Obsidiana · campo de formulario: etiqueta, control y una línea de ayuda o de error.
+ *
+ *   <div class="ob-campo">
+ *     <div class="ob-campo__cabeza">
+ *       <label class="ob-etiqueta" for="valor">Valor del pedido</label>
+ *       <span class="ob-campo__marca">Opcional</span>
+ *     </div>
+ *     <input class="ob-entrada" id="valor" aria-describedby="valor-ayuda">
+ *     <p class="ob-campo__ayuda" id="valor-ayuda">En dólares, sin impuestos</p>
+ *   </div>
+ *
+ * Error: <p class="ob-campo__error" role="alert"> y aria-invalid="true" en el control.
+ * Control en línea con su texto: .ob-control (casilla, radio, interruptor).
+ * Formulario en rejilla: .ob-formulario con style="--columnas: 2".
+ */
+.ob-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.ob-campo__cabeza {
+  display: flex;
+  align-items: baseline;
+  gap: var(--esp-2);
+}
+.ob-etiqueta {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  letter-spacing: var(--txt-etiqueta-espacio);
+  font-weight: 500;
+  color: var(--texto-2);
+  user-select: none;
+}
+.ob-campo__marca {
+  margin-left: auto;
+  font-size: var(--txt-mini);
+  line-height: var(--txt-mini-alto);
+  color: var(--texto-3);
+}
+.ob-campo__ayuda,
+.ob-campo__error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-campo__error {
+  color: var(--rojo-texto);
+  animation: ob-aparecer var(--t-hover) var(--curva);
+}
+.ob-campo:has(:disabled) .ob-etiqueta {
+  opacity: 0.5;
+}
+
+/* Control en línea con su texto */
+.ob-control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2-5);
+  min-height: 24px;
+  color: var(--texto-1);
+  cursor: pointer;
+  user-select: none;
+}
+.ob-control:has(:disabled) {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.ob-control__texto {
+  display: flex;
+  flex-direction: column;
+}
+.ob-control__descripcion {
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  color: var(--texto-3);
+}
+.ob-control:has(.ob-control__descripcion) {
+  align-items: flex-start;
+}
+.ob-control:has(.ob-control__descripcion) > :first-child {
+  margin-top: 2px;
+}
+.ob-grupo-controles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.ob-grupo-controles > legend {
+  margin-bottom: var(--esp-1);
+  padding: 0;
+}
+
+.ob-formulario {
+  display: grid;
+  grid-template-columns: repeat(var(--columnas, 1), minmax(0, 1fr));
+  gap: var(--esp-4);
+}
+.ob-formulario__ancho {
+  grid-column: 1 / -1;
+}

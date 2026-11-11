@@ -1,0 +1,873 @@
+/*
+ * Obsidiana: estilos base (docs/DISENO.md).
+ * Tipografías locales de Fontsource (sin red), reglas globales, recetas de superficie,
+ * foco, barras de desplazamiento, movimiento reducido y microanimaciones de iconos.
+ */
+@import "tailwindcss";
+@import "./tokens.css";
+/* Inter variable con eje óptico (opsz + wght) y Geist Mono variable, ambos locales. */
+@import "@fontsource-variable/inter/opsz.css";
+@import "@fontsource-variable/geist-mono/index.css";
+/* Microanimaciones del juego de iconos ampliado (design-system/iconos/iconos.css, copia literal). */
+@import "./iconos.css";
+
+/* ------------------------------------------------------------------------------------------ */
+/* Base                                                                                         */
+/* ------------------------------------------------------------------------------------------ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: la prohibición de cursivas debe ganar a cualquier estilo (DISENO.md). */
+    font-style: normal !important;
+    border-color: var(--linea);
+  }
+
+  em,
+  i,
+  cite,
+  var,
+  dfn,
+  address {
+    /* biome-ignore lint/complexity/noImportantStyles: la prohibición de cursivas debe ganar a cualquier estilo (DISENO.md). */
+    font-style: normal !important;
+  }
+
+  html {
+    height: 100%;
+    background: var(--lienzo);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    height: 100%;
+    margin: 0;
+    min-width: var(--ancho-trabajo-min);
+    overflow: hidden;
+    background: var(--lienzo);
+    color: var(--texto-1);
+    font-family: var(--fuente-texto);
+    font-size: 13px;
+    line-height: 20px;
+    font-optical-sizing: auto;
+    font-feature-settings: var(--rasgos-texto);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  #raiz {
+    height: 100%;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+    font-feature-settings: inherit;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 600;
+  }
+
+  ::selection {
+    background: var(--seleccion-texto);
+  }
+
+  ::placeholder {
+    color: var(--texto-3);
+    opacity: 1;
+  }
+
+  /* Foco visible: anillo de acento separado del control */
+  :focus {
+    outline: none;
+  }
+  :focus-visible {
+    outline: 2px solid var(--acento);
+    outline-offset: 2px;
+  }
+
+  /* Barras de desplazamiento finas y con el tono del tema */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--barra-desplazamiento) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--barra-desplazamiento);
+    border: 3px solid transparent;
+    border-radius: 10px;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--barra-desplazamiento-hover);
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* Campos de fecha y número del navegador: sin adornos propios */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Recetas reutilizables                                                                        */
+/* ------------------------------------------------------------------------------------------ */
+@layer components {
+  /* Cifras: numerales tabulares y rasgos de Inter */
+  .cifras {
+    font-feature-settings: var(--rasgos-cifras);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Código: números de pedido, referencias, lotes */
+  .codigo {
+    font-family: var(--fuente-codigo);
+    font-size: 12.5px;
+    line-height: 18px;
+    font-weight: 450;
+    letter-spacing: 0;
+    font-feature-settings: normal;
+  }
+
+  /* Tarjeta: sup-1 + degradado vertical + borde de 1 px + realce interior */
+  .superficie {
+    background-color: var(--sup-1);
+    background-image: var(--sup-degradado);
+    border: 1px solid var(--linea);
+    border-radius: var(--r-tarjeta);
+    box-shadow: var(--sombra-tarjeta);
+  }
+
+  /* Elemento elevado dentro de una tarjeta */
+  .superficie-2 {
+    background-color: var(--sup-2);
+    border: 1px solid var(--linea);
+    border-radius: var(--r-interno);
+  }
+
+  /* Flotantes: menús, popovers, ventanas, paleta */
+  .flotante {
+    background-color: var(--sup-3);
+    background-image: var(--sup-degradado);
+    border: 1px solid var(--linea-fuerte);
+    box-shadow: var(--sombra-flotante);
+  }
+
+  /*
+   * Filo de luz: borde de 1 px en degradado (acento a transparente) recortado con mask-composite.
+   * Se enciende con data-filo="encendido", con la clase .filo-on o al recibir foco visible.
+   */
+  .filo-luz {
+    position: relative;
+  }
+  .filo-luz::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: 1;
+    padding: 1px;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(135deg, var(--acento) 0%, var(--acento-suave) 30%, transparent 60%);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity var(--t-estado) var(--curva);
+  }
+  .filo-luz[data-filo="encendido"]::before,
+  .filo-luz.filo-on::before,
+  .filo-luz:focus-visible::before,
+  .filo-luz:has(:focus-visible)::before {
+    opacity: 1;
+  }
+  .filo-luz:focus-visible {
+    outline: none;
+  }
+
+  /* Lienzo: luz ambiental superior fija */
+  .lienzo-luz {
+    background-image: var(--lienzo-luz);
+    background-repeat: no-repeat;
+  }
+
+  /* Grano del 2 % sobre el lienzo */
+  .grano {
+    pointer-events: none;
+    background-image: var(--grano);
+    background-size: 180px 180px;
+    opacity: var(--grano-opacidad);
+    mix-blend-mode: overlay;
+  }
+
+  /* Esqueleto con brillo que recorre */
+  .esqueleto {
+    position: relative;
+    overflow: hidden;
+    background: var(--esqueleto);
+    border-radius: var(--r-mini);
+  }
+  .esqueleto::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, var(--esqueleto-brillo), transparent);
+    animation: brillo-esqueleto var(--t-brillo) var(--curva-media) infinite;
+  }
+
+  /* Pulso mínimo de algo en curso (única animación en bucle permitida) */
+  .pulso-vivo {
+    animation: pulso-vivo var(--t-pulso) ease-in-out infinite;
+  }
+
+  /*
+   * Línea de ruta (LineaRuta): el tramo recorrido se dibuja de 0 a --ruta-p y una luz lo recorre
+   * una vez. Animación CSS, sin JavaScript por cuadro (una lista puede tener decenas).
+   */
+  .trazo-ruta {
+    animation: trazar-ruta var(--t-ruta) var(--curva) both;
+  }
+  .luz-ruta {
+    stroke-dasharray: 0.06 2;
+    animation: luz-ruta 1100ms var(--curva-media) 150ms both;
+  }
+
+  /* Entrada de una tarjeta de una lista; el retraso escalonado va en línea. */
+  .entrar-tarjeta {
+    animation: entrar-tarjeta 220ms var(--curva) both;
+  }
+
+  /*
+   * Tarjeta de una lista larga: fuera de la vista el navegador no calcula su estilo ni
+   * su layout, así que abrir una ventana, cambiar de año o filtrar no recalcula las tarjetas que no
+   * se ven. El alto estimado se sustituye por el real en cuanto la tarjeta se pinta una vez (auto).
+   * El margen de recorte deja ver el filo de luz (.filo-luz, 1 px por fuera del borde).
+   */
+  .diferir-fuera-de-vista {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 20rem;
+    overflow-clip-margin: 2px;
+  }
+
+  /* Ocultar a la vista, no al lector de pantalla */
+  .solo-lector {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+@keyframes brillo-esqueleto {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes trazar-ruta {
+  from {
+    stroke-dashoffset: var(--ruta-p);
+  }
+}
+
+@keyframes luz-ruta {
+  0% {
+    stroke-dashoffset: 0.06;
+    opacity: 0;
+  }
+  15%,
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    stroke-dashoffset: calc(0.03 - var(--ruta-p));
+    opacity: 0;
+  }
+}
+
+@keyframes entrar-tarjeta {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+@keyframes pulso-vivo {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Iconos: microanimaciones al pasar el cursor (heredadas del prototipo)                         */
+/* Se activan sobre cualquier botón, enlace, opción de menú o elemento con .icono-vivo.          */
+/* ------------------------------------------------------------------------------------------ */
+@keyframes ic-caer {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  38% {
+    transform: translateY(5px);
+    opacity: 0;
+  }
+  39% {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes ic-subir {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  38% {
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+  39% {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes ic-trazar {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes ic-girar-cuarto {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(90deg);
+  }
+}
+@keyframes ic-rayos {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(45deg);
+  }
+}
+@keyframes ic-inclinar {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  45% {
+    transform: rotate(-16deg);
+  }
+}
+@keyframes ic-empujar {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: translateX(3px);
+  }
+}
+@keyframes ic-asomar {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: translate(-1.5px, -1.5px);
+  }
+}
+@keyframes ic-navegar {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: translateX(2.5px);
+  }
+}
+@keyframes ic-reloj {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ic-barras {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@keyframes ic-salir {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: translate(2px, -2px);
+  }
+}
+@keyframes ic-ruta {
+  from {
+    stroke-dashoffset: 9.6;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes ic-encoger {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: scaleX(0.6);
+  }
+}
+@keyframes ic-encender {
+  0%,
+  100% {
+    transform: none;
+  }
+  45% {
+    transform: translateY(-1.5px);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(button, a, [role="menuitem"], [role="option"], [role="tab"], .icono-vivo):hover {
+    --ia-caer: ic-caer 560ms var(--curva) both;
+    --ia-subir: ic-subir 560ms var(--curva) both;
+    --ia-trazo-1: ic-trazar 420ms var(--curva) both;
+    --ia-trazo-2: ic-trazar 420ms var(--curva) 90ms both;
+    --ia-girar: ic-girar-cuarto 320ms var(--curva) both;
+    --ia-rayos: ic-rayos 420ms var(--curva) both;
+    --ia-inclinar: ic-inclinar 480ms var(--curva) both;
+    --ia-empujar: ic-empujar 420ms var(--curva) both;
+    --ia-asomar: ic-asomar 380ms var(--curva) both;
+    --ia-navegar: ic-navegar 520ms var(--curva) both;
+    --ia-reloj: ic-reloj 700ms var(--curva) both;
+    --ia-barras: ic-barras 420ms var(--curva) both;
+    --ia-salir: ic-salir 400ms var(--curva) both;
+    --ia-ruta: ic-ruta 600ms linear both;
+    --ia-encoger-1: ic-encoger 420ms var(--curva) both;
+    --ia-encoger-2: ic-encoger 420ms var(--curva) 60ms both;
+    --ia-encender: ic-encender 380ms var(--curva) both;
+  }
+}
+
+/* Reproducción manual (página Sistema): la clase fuerza la animación una vez */
+.icono-reproducir {
+  --ia-caer: ic-caer 560ms var(--curva) both;
+  --ia-subir: ic-subir 560ms var(--curva) both;
+  --ia-trazo-1: ic-trazar 420ms var(--curva) both;
+  --ia-trazo-2: ic-trazar 420ms var(--curva) 90ms both;
+  --ia-girar: ic-girar-cuarto 320ms var(--curva) both;
+  --ia-rayos: ic-rayos 420ms var(--curva) both;
+  --ia-inclinar: ic-inclinar 480ms var(--curva) both;
+  --ia-empujar: ic-empujar 420ms var(--curva) both;
+  --ia-asomar: ic-asomar 380ms var(--curva) both;
+  --ia-navegar: ic-navegar 520ms var(--curva) both;
+  --ia-reloj: ic-reloj 700ms var(--curva) both;
+  --ia-barras: ic-barras 420ms var(--curva) both;
+  --ia-salir: ic-salir 400ms var(--curva) both;
+  --ia-ruta: ic-ruta 600ms linear both;
+  --ia-encoger-1: ic-encoger 420ms var(--curva) both;
+  --ia-encoger-2: ic-encoger 420ms var(--curva) 60ms both;
+  --ia-encender: ic-encender 380ms var(--curva) both;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Movimiento reducido: menos y más suave, nunca desplazamientos                                 */
+/* ------------------------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: el movimiento reducido debe ganar a cualquier animación. */
+    animation-duration: 1ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: el movimiento reducido debe ganar a cualquier animación. */
+    animation-iteration-count: 1 !important;
+    /* biome-ignore lint/complexity/noImportantStyles: el movimiento reducido debe ganar a cualquier animación. */
+    transition-duration: 60ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: el movimiento reducido debe ganar a cualquier animación. */
+    scroll-behavior: auto !important;
+  }
+  .esqueleto::after {
+    /* biome-ignore lint/complexity/noImportantStyles: el movimiento reducido debe ganar a cualquier animación. */
+    animation: none !important;
+  }
+  .pulso-vivo {
+    /* biome-ignore lint/complexity/noImportantStyles: el movimiento reducido debe ganar a cualquier animación. */
+    animation: none !important;
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Aparición de flotantes y ventanas (Radix expone data-state; Presence espera a la salida)     */
+/* ------------------------------------------------------------------------------------------ */
+/* Se anima la propiedad `scale` (no `transform`) para no pisar el `translate` de Tailwind. */
+@keyframes entrar-flotante {
+  from {
+    opacity: 0;
+    scale: 0.97;
+  }
+}
+@keyframes salir-flotante {
+  to {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+@keyframes entrar-ventana {
+  from {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+@keyframes salir-ventana {
+  to {
+    opacity: 0;
+    scale: 0.985;
+  }
+}
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes desaparecer {
+  to {
+    opacity: 0;
+  }
+}
+
+.anim-flotante {
+  transform-origin: var(
+    --radix-popover-content-transform-origin,
+    var(
+      --radix-dropdown-menu-content-transform-origin,
+      var(
+        --radix-select-content-transform-origin,
+        var(--radix-tooltip-content-transform-origin, top)
+      )
+    )
+  );
+}
+.anim-flotante:is([data-state="open"], [data-state="delayed-open"], [data-state="instant-open"]) {
+  animation: entrar-flotante var(--t-menu) var(--curva);
+}
+.anim-flotante[data-state="closed"] {
+  animation: salir-flotante 100ms ease-out forwards;
+}
+.anim-ventana[data-state="open"] {
+  animation: entrar-ventana var(--t-ventana) var(--curva);
+}
+.anim-ventana[data-state="closed"] {
+  animation: salir-ventana 140ms ease-out forwards;
+}
+.anim-oscurecer[data-state="open"] {
+  animation: aparecer var(--t-ventana) var(--curva);
+}
+.anim-oscurecer[data-state="closed"] {
+  animation: desaparecer 140ms ease-out forwards;
+}
+/* Un único desenfoque de fondo en toda la herramienta: detrás de las ventanas modales. */
+.oscurecer-modal {
+  background: var(--oscurecer);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Tabla de datos                                                                               */
+/* ------------------------------------------------------------------------------------------ */
+/*
+ * Los numerales tabulares solo van en columnas numéricas (derecha o centro): en Inter, "tnum"
+ * también ensancha el guion, y los códigos y fechas con guiones ("PED-2611-108") quedarían
+ * espaciados.
+ */
+.tabla-datos {
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-feature-settings: var(--rasgos-texto);
+}
+.tabla-datos th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: var(--alto-encabezado-tabla);
+  background: var(--fondo-tabla, var(--sup-1));
+  border-bottom: 1px solid var(--linea);
+  font-size: 11.5px;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  color: var(--texto-3);
+  text-align: left;
+  white-space: nowrap;
+}
+.tabla-datos td {
+  height: var(--alto-fila);
+  background: var(--fondo-tabla, var(--sup-1));
+  border-bottom: 1px solid var(--linea);
+  color: var(--texto-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background-image var(--t-hover) ease;
+}
+.tabla-datos :is(td, th):is([data-alineacion="derecha"], [data-alineacion="centro"]) {
+  font-feature-settings: var(--rasgos-cifras);
+}
+.tabla-datos td[data-tono="secundario"] {
+  color: var(--texto-2);
+}
+.tabla-datos td[data-tono="tenue"] {
+  color: var(--texto-3);
+}
+.tabla-datos td[data-codigo] {
+  font-family: var(--fuente-codigo);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  font-feature-settings: normal;
+}
+.tabla-datos[data-densidad="compacta"] td {
+  height: var(--alto-fila-compacta);
+}
+.tabla-datos :is(th, td) {
+  padding: 0 12px;
+}
+.tabla-datos :is(th, td):first-child {
+  padding-left: 18px;
+}
+.tabla-datos :is(th, td):last-child {
+  padding-right: 18px;
+}
+.tabla-datos tbody tr:last-child td {
+  border-bottom-color: transparent;
+}
+.tabla-datos tbody tr[data-fila]:hover td,
+.tabla-datos tbody tr[data-fila]:focus-visible td {
+  background-image: linear-gradient(var(--lavado), var(--lavado));
+}
+.tabla-datos tbody tr[data-fila] {
+  outline: none;
+}
+/* Filo de acento: tenue al pasar el cursor, pleno en la fila seleccionada o con foco */
+.tabla-datos tbody tr[data-fila] td:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--filo-hover);
+  opacity: 0;
+  transition: opacity var(--t-hover) ease;
+  pointer-events: none;
+}
+.tabla-datos tbody tr[data-fila]:hover td:first-child::before {
+  opacity: 1;
+}
+.tabla-datos tbody tr[data-fila]:focus-visible td:first-child::before {
+  opacity: 1;
+  background: var(--acento);
+}
+.tabla-datos tbody tr[data-fila][data-seleccionada] td {
+  background-image: linear-gradient(var(--acento-tenue), var(--acento-tenue));
+}
+.tabla-datos tbody tr[data-fila][data-seleccionada]:hover td {
+  background-image:
+    linear-gradient(var(--acento-tenue), var(--acento-tenue)),
+    linear-gradient(var(--lavado), var(--lavado));
+}
+/* Filo de luz a la izquierda de la fila seleccionada */
+.tabla-datos tbody tr[data-fila][data-seleccionada] td:first-child::before {
+  top: 6px;
+  bottom: 6px;
+  opacity: 1;
+  background: linear-gradient(180deg, var(--acento), var(--acento-suave));
+  box-shadow: var(--resplandor-acento);
+}
+/* Primera columna fija con sombra de borde al desplazar */
+.tabla-datos :is(th, td)[data-fija] {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+.tabla-datos th[data-fija] {
+  z-index: 3;
+}
+/*
+ * Sombra de borde: pseudo-elemento fuera de la celda. La celda fija no recorta (overflow visible);
+ * su contenido se recorta en un envoltorio interno (.celda-fija) con puntos suspensivos.
+ */
+.tabla-datos td[data-fija] {
+  overflow: visible;
+}
+.tabla-datos .celda-fija {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tabla-datos :is(th, td)[data-fija]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: -1px;
+  right: -14px;
+  width: 14px;
+  pointer-events: none;
+  border-left: 1px solid var(--linea);
+  background: linear-gradient(90deg, var(--sombra-fija), transparent);
+  opacity: 0;
+  transition: opacity var(--t-estado) ease;
+}
+[data-desplazada] .tabla-datos :is(th, td)[data-fija]::after {
+  opacity: 1;
+}
+.tabla-datos td[data-alineacion="derecha"],
+.tabla-datos th[data-alineacion="derecha"] {
+  text-align: right;
+}
+.tabla-datos td[data-alineacion="centro"],
+.tabla-datos th[data-alineacion="centro"] {
+  text-align: center;
+}
+/* Asa para redimensionar columnas */
+.tabla-datos .asa-columna {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  z-index: 4;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  touch-action: none;
+  user-select: none;
+}
+.tabla-datos .asa-columna::after {
+  content: "";
+  position: absolute;
+  top: 9px;
+  bottom: 9px;
+  left: 3.5px;
+  width: 1px;
+  background: var(--linea-fuerte);
+  opacity: 0;
+  transition: opacity var(--t-hover) ease;
+}
+/* El asa de la última columna no sobresale de la tabla: si no, crea 4 px de desplazamiento. */
+.tabla-datos th:last-child .asa-columna {
+  right: 0;
+}
+.tabla-datos th:hover .asa-columna::after {
+  opacity: 1;
+}
+/* Sombra de borde derecho cuando la tabla tiene más columnas fuera de la vista. */
+.sombra-mas-derecha {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  width: 14px;
+  pointer-events: none;
+  background: linear-gradient(270deg, var(--sombra-fija), transparent);
+  opacity: 0;
+  transition: opacity var(--t-estado) ease;
+}
+.sombra-mas-derecha[data-visible] {
+  opacity: 1;
+}
+.tabla-datos .asa-columna[data-activa]::after {
+  opacity: 1;
+  top: 0;
+  bottom: 0;
+  background: var(--acento);
+}
+
+/* Avisos (Sonner) con los tokens de Obsidiana */
+[data-sonner-toaster] {
+  --width: 360px;
+  font-family: var(--fuente-texto);
+}
+/*
+ * Con una ventana modal abierta, Radix pone `pointer-events: none` en <body> y los avisos lo
+ * heredan: su botón de acción ("Deshacer") no se podía pulsar. Se habilitan solo los botones del
+ * aviso; el resto del aviso sigue sin interceptar clics, para no tapar los botones de la ventana
+ * que queden debajo. Las ventanas no se cierran al pulsar un aviso (ver `esDeAvisos`).
+ */
+[data-sonner-toast]:not([data-visible="false"]) :is([data-button], [data-close-button]) {
+  pointer-events: auto;
+}

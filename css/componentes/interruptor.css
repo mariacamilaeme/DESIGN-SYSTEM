@@ -1,0 +1,68 @@
+/*
+ * Obsidiana · interruptor (switch). Casilla nativa con role="switch": funciona sin JS.
+ *
+ *   <label class="ob-control">
+ *     <span class="ob-interruptor"><input type="checkbox" role="switch"><span class="ob-interruptor__pulgar"></span></span>
+ *     Avisos por correo
+ *   </label>
+ */
+.ob-interruptor {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  width: 32px;
+  height: 18px;
+}
+.ob-interruptor > input {
+  grid-area: 1 / 1;
+  width: 32px;
+  height: 18px;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--r-pildora);
+  background: var(--lavado-3);
+  cursor: pointer;
+  transition:
+    background-color var(--t-estado) var(--curva),
+    border-color var(--t-estado) var(--curva);
+}
+.ob-interruptor > input:hover:not(:disabled, :checked) {
+  border-color: var(--linea-hover);
+}
+.ob-interruptor > input:checked {
+  border-color: transparent;
+  background: var(--acento-relleno);
+}
+.ob-interruptor > input:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.ob-interruptor > input:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+.ob-interruptor__pulgar {
+  grid-area: 1 / 1;
+  align-self: center;
+  width: 14px;
+  height: 14px;
+  margin-left: 2px;
+  border-radius: var(--r-pildora);
+  background: var(--interruptor-pulgar);
+  box-shadow:
+    var(--sombra-control),
+    0 0 0 1px var(--interruptor-borde);
+  pointer-events: none;
+  transition:
+    transform var(--t-estado) var(--curva),
+    background-color var(--t-estado) var(--curva);
+}
+.ob-interruptor > input:checked + .ob-interruptor__pulgar {
+  transform: translateX(14px);
+  background: var(--sobre-acento);
+}
+.ob-interruptor > input:disabled + .ob-interruptor__pulgar {
+  opacity: 0.6;
+}

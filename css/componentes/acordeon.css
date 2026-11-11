@@ -1,0 +1,81 @@
+/*
+ * Obsidiana · acordeón.
+ *
+ *   <div class="ob-acordeon" data-ob-acordeon>          (data-ob-acordeon="uno": solo uno abierto)
+ *     <div class="ob-acordeon__elemento">
+ *       <h3><button class="ob-acordeon__disparador" aria-expanded="false" aria-controls="a1">
+ *         Condiciones de pago <span class="ob-acordeon__chevron" data-icono="chevron-abajo"></span>
+ *       </button></h3>
+ *       <div class="ob-acordeon__panel" id="a1" role="region"><div class="ob-acordeon__contenido">…</div></div>
+ *     </div>
+ *   </div>
+ *
+ * El panel se abre con una rejilla de 0fr a 1fr (la única animación de altura del sistema: no tiene
+ * equivalente en transform) y el contenido entra con un fundido.
+ */
+.ob-acordeon {
+  display: flex;
+  flex-direction: column;
+}
+.ob-acordeon__elemento {
+  border-bottom: 1px solid var(--linea);
+}
+.ob-acordeon__elemento:last-child {
+  border-bottom-color: transparent;
+}
+.ob-acordeon__elemento > :is(h2, h3, h4) {
+  margin: 0;
+  font: inherit;
+}
+.ob-acordeon__disparador {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  width: 100%;
+  min-height: 48px;
+  padding: var(--esp-3) var(--esp-1);
+  border-radius: var(--r-control);
+  text-align: left;
+  font-weight: 500;
+  color: var(--texto-1);
+  transition: color var(--t-hover) ease;
+}
+.ob-acordeon__disparador:hover {
+  color: var(--texto-1);
+}
+.ob-acordeon__disparador:focus-visible {
+  outline-offset: -2px;
+}
+.ob-acordeon__chevron {
+  margin-left: auto;
+  color: var(--texto-3);
+  transition: transform var(--t-estado) var(--curva);
+}
+.ob-acordeon__disparador[aria-expanded="true"] .ob-acordeon__chevron {
+  transform: rotate(180deg);
+}
+.ob-acordeon__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--t-estado) var(--curva);
+}
+.ob-acordeon__panel > * {
+  min-height: 0;
+  overflow: hidden;
+}
+.ob-acordeon__disparador[aria-expanded="true"] + .ob-acordeon__panel,
+.ob-acordeon__elemento:has(> :is(h2, h3, h4) > [aria-expanded="true"]) > .ob-acordeon__panel {
+  grid-template-rows: 1fr;
+}
+.ob-acordeon__contenido {
+  color: var(--texto-2);
+  opacity: 0;
+  transition: opacity var(--t-estado) var(--curva);
+}
+.ob-acordeon__contenido > * {
+  padding: 0 var(--esp-1) var(--esp-4);
+}
+:is(.ob-acordeon__disparador[aria-expanded="true"] + .ob-acordeon__panel, .ob-acordeon__elemento:has(> :is(h2, h3, h4) > [aria-expanded="true"]) > .ob-acordeon__panel)
+  .ob-acordeon__contenido {
+  opacity: 1;
+}

@@ -1,0 +1,70 @@
+/*
+ * Obsidiana · pista (tooltip) y popover.
+ *
+ * Pista: data-ob-pista="Texto" en cualquier elemento (también SVG). Opcional:
+ *   data-pista-atajo="Ctrl B"  teclas junto al texto
+ *   data-pista-lado="top|bottom|left|right" (por defecto top)
+ *   data-pista-solo="plegada"  solo con la barra lateral plegada
+ * Aparece a los 450 ms; mientras se recorre una barra de iconos, las siguientes salen al instante.
+ * Una única pista viva en el documento (role="tooltip", enlazada con aria-describedby).
+ *
+ * Popover: <button data-ob-popover="id"> + <div class="ob-popover" id="id" role="dialog" hidden>.
+ * El foco entra en el popover y vuelve al disparador al cerrar (Escape o clic fuera).
+ */
+.ob-pista {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-pista);
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  max-width: 280px;
+  padding: var(--esp-1) var(--esp-2);
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--r-control);
+  background-color: var(--sup-3);
+  background-image: var(--sup-degradado);
+  box-shadow: var(--sombra-flotante);
+  font-size: var(--txt-etiqueta);
+  line-height: var(--txt-etiqueta-alto);
+  font-weight: 500;
+  color: var(--texto-1);
+  pointer-events: none;
+  transform-origin: var(--ob-origen, bottom center);
+}
+.ob-pista .ob-pista__secundario + .ob-pista__secundario {
+  margin-left: 0;
+}
+.ob-pista__secundario {
+  margin-left: 2px;
+  font-weight: 400;
+  color: var(--texto-3);
+  font-feature-settings: var(--rasgos-cifras);
+}
+
+.ob-popover {
+  min-width: 220px;
+  max-width: min(420px, calc(100vw - 24px));
+  padding: var(--esp-4);
+}
+.ob-popover--sin-relleno {
+  padding: 0;
+}
+.ob-popover__titulo {
+  font-size: var(--txt-titulo-tarjeta);
+  line-height: var(--txt-titulo-tarjeta-alto);
+  font-weight: var(--txt-titulo-tarjeta-peso);
+  letter-spacing: var(--txt-titulo-tarjeta-espacio);
+  color: var(--texto-1);
+}
+.ob-popover__texto {
+  margin-top: var(--esp-1);
+  color: var(--texto-2);
+}
+.ob-popover__pie {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--esp-2);
+  margin-top: var(--esp-4);
+}

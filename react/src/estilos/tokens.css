@@ -1,0 +1,440 @@
+/*
+ * Obsidiana: tokens del sistema de diseño (docs/DISENO.md).
+ *
+ * Única fuente de color, radio, sombra, tipografía y movimiento de la interfaz. Ningún componente
+ * escribe un color o una medida a mano: usa estas variables, directamente o a través de las
+ * utilidades de Tailwind generadas en `@theme inline` al final del archivo
+ * (bg-sup-1, text-texto-2, border-linea, rounded-tarjeta, shadow-flotante, text-cifra…).
+ *
+ * Temas: `data-theme="oscuro"` (nativo, por defecto) y `data-theme="claro"` en <html>. Los mismos
+ * atributos en un contenedor reescriben los tokens dentro de él (la página Sistema los usa para
+ * mostrar los dos temas lado a lado).
+ * Variante de comparación para la barra lateral en tema claro: `data-lateral="media"` en <html>.
+ */
+
+/* ------------------------------------------------------------------------------------------ */
+/* Constantes comunes a los dos temas                                                          */
+/* ------------------------------------------------------------------------------------------ */
+:root {
+  /* Forma: 8 controles · 12 dentro de tarjeta · 14 tarjetas · 18 ventanas */
+  --r-mini: 5px;
+  --r-elemento: 6px;
+  --r-control: 8px;
+  --r-interno: 12px;
+  --r-tarjeta: 14px;
+  --r-ventana: 18px;
+  --r-pildora: 999px;
+
+  /* Medidas del armazón y de los controles */
+  --ancho-lateral: 232px;
+  --ancho-lateral-plegada: 64px;
+  --alto-superior: 56px;
+  --alto-control: 32px;
+  --alto-control-compacto: 28px;
+  --alto-fila: 44px;
+  --alto-fila-compacta: 36px;
+  --alto-encabezado-tabla: 36px;
+  --ancho-ventana: 920px;
+  --ancho-dialogo: 480px;
+  --ancho-carril: 212px;
+  --ancho-paleta: 640px;
+  --alto-paleta-lista: 440px;
+  --ancho-filtros: 540px;
+  --ancho-categorias-filtro: 188px;
+  --alto-ventana: 640px;
+  --ancho-trabajo-min: 1180px;
+  --ancho-trabajo-max: 1680px;
+
+  /* Tipografía */
+  --fuente-texto:
+    "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fuente-codigo:
+    "Geist Mono Variable", "Geist Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
+  --rasgos-texto: "cv11", "ss03";
+  --rasgos-cifras: "cv11", "ss03", "tnum";
+
+  /* Movimiento */
+  --curva: cubic-bezier(0.16, 1, 0.3, 1);
+  --curva-media: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-hover: 120ms;
+  --t-menu: 140ms;
+  --t-vista: 180ms;
+  --t-ventana: 220ms;
+  --t-estado: 240ms;
+  --t-ruta: 900ms;
+  --t-pulso: 2400ms;
+  --t-brillo: 1400ms;
+
+  /* Grano: ruido fractal fijo sobre el lienzo, para que los degradados no hagan bandas */
+  --grano: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --grano-opacidad: 0.02;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Tema oscuro (nativo)                                                                        */
+/* ------------------------------------------------------------------------------------------ */
+:root,
+[data-theme="oscuro"] {
+  color-scheme: dark;
+
+  --lienzo: #06070a;
+  --lienzo-luz: radial-gradient(
+    1200px 520px at 50% -120px,
+    rgba(76, 141, 255, 0.09),
+    transparent 70%
+  );
+  --sup-1: #0b0d12;
+  --sup-2: #10131a;
+  --sup-3: #161a23;
+  --lateral: #050609;
+
+  --linea: rgba(255, 255, 255, 0.06);
+  --linea-fuerte: rgba(255, 255, 255, 0.11);
+  --linea-hover: rgba(255, 255, 255, 0.18);
+  --realce: rgba(255, 255, 255, 0.05);
+
+  --texto-1: #f2f4f8;
+  --texto-2: #a2aaba;
+  --texto-3: #7a8294;
+  --texto-4: #4a5160;
+
+  --acento: #4c8dff;
+  --acento-fuerte: #6aa1ff;
+  --acento-suave: rgba(76, 141, 255, 0.14);
+  --acento-tenue: rgba(76, 141, 255, 0.08);
+  --acento-relleno: #2f6be6;
+  --acento-relleno-hover: #3b78f2;
+  --acento-texto: #6aa1ff;
+  --sobre-acento: #ffffff;
+  --filo-hover: rgba(76, 141, 255, 0.45);
+
+  --vivo: #35d6c0;
+  --ambar: #f2b34b;
+  --rojo: #ff6b6b;
+  --verde: #4ade80;
+  --gris-estado: #7b8494;
+  --vivo-texto: #35d6c0;
+  --ambar-texto: #f2b34b;
+  --rojo-texto: #ff8585;
+  --verde-texto: #4ade80;
+  --gris-texto: #959dac;
+  --rojo-relleno: #d64545;
+  --rojo-relleno-hover: #e05252;
+  --tinte-estado: 12%;
+
+  /* Lavados para hover y selección */
+  --lavado: rgba(255, 255, 255, 0.035);
+  --lavado-2: rgba(255, 255, 255, 0.06);
+  --lavado-3: rgba(255, 255, 255, 0.09);
+
+  /* Superficies con profundidad */
+  --sup-degradado: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0));
+  --campo: #0a0c11;
+  --campo-hover: #0d1016;
+  --pulgar: #1d222c;
+  --boton-2: rgba(255, 255, 255, 0.045);
+  --boton-2-hover: rgba(255, 255, 255, 0.075);
+  --carril: rgba(255, 255, 255, 0.018);
+  --carril-indicador: rgba(255, 255, 255, 0.06);
+  --sombra-carril-indicador: inset 0 0 0 1px var(--linea), inset 0 1px 0 var(--realce);
+  --interruptor-pulgar: #a2aaba;
+  --interruptor-borde: transparent;
+  --sombra-tarjeta: inset 0 1px 0 var(--realce);
+  --sombra-flotante:
+    inset 0 1px 0 var(--realce), 0 24px 64px -16px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --sombra-control: inset 0 1px 0 var(--realce), 0 1px 2px rgba(0, 0, 0, 0.25);
+  --sombra-boton-acento:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.35);
+  --sombra-fija: rgba(0, 0, 0, 0.7);
+  --oscurecer: rgba(3, 4, 6, 0.62);
+  --esqueleto: rgba(255, 255, 255, 0.045);
+  --esqueleto-brillo: rgba(255, 255, 255, 0.06);
+  --barra-desplazamiento: rgba(255, 255, 255, 0.1);
+  --barra-desplazamiento-hover: rgba(255, 255, 255, 0.18);
+  --seleccion-texto: rgba(76, 141, 255, 0.35);
+  --punto-mapa: rgba(162, 170, 186, 0.16);
+  --luz-ruta: #ffffff;
+  --resplandor-acento: 0 0 10px rgba(76, 141, 255, 0.6);
+
+  /* Barra lateral: en el tema oscuro apunta a los valores generales */
+  --lateral-texto-1: var(--texto-1);
+  --lateral-texto-2: var(--texto-2);
+  --lateral-texto-3: var(--texto-3);
+  --lateral-linea: var(--linea);
+  --lateral-lavado: var(--lavado);
+  --lateral-activo: rgba(76, 141, 255, 0.09);
+  --lateral-acento: var(--acento);
+  --lateral-contador: rgba(255, 255, 255, 0.05);
+  --lateral-realce: var(--realce);
+  --lateral-foco: var(--acento);
+
+  /* Marca: sobre fondo oscuro la tinta pasa a un neutro claro; el acento se conserva */
+  --logo-tinta: #c9ced8;
+  --logo-acento: #4c8dff;
+  --lateral-logo-tinta: #c9ced8;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Tema claro                                                                                  */
+/* ------------------------------------------------------------------------------------------ */
+[data-theme="claro"] {
+  color-scheme: light;
+
+  --lienzo: #f1f3f7;
+  --lienzo-luz: radial-gradient(
+    1200px 520px at 50% -120px,
+    rgba(37, 99, 235, 0.05),
+    transparent 70%
+  );
+  --sup-1: #ffffff;
+  --sup-2: #f6f7fa;
+  --sup-3: #ffffff;
+  --lateral: #0c0f15;
+
+  --linea: rgba(12, 16, 24, 0.08);
+  --linea-fuerte: rgba(12, 16, 24, 0.14);
+  --linea-hover: rgba(12, 16, 24, 0.24);
+  --realce: rgba(255, 255, 255, 0.9);
+
+  --texto-1: #0a0c10;
+  --texto-2: #4a5262;
+  --texto-3: #636b7c;
+  --texto-4: #a3aab6;
+
+  --acento: #2563eb;
+  --acento-fuerte: #1d4fd7;
+  --acento-suave: rgba(37, 99, 235, 0.1);
+  --acento-tenue: rgba(37, 99, 235, 0.06);
+  --acento-relleno: #2563eb;
+  --acento-relleno-hover: #1d4fd7;
+  --acento-texto: #1d4fd7;
+  --sobre-acento: #ffffff;
+  --filo-hover: rgba(37, 99, 235, 0.4);
+
+  --vivo: #0b9484;
+  --ambar: #b7791f;
+  --rojo: #d43f3f;
+  --verde: #1f9254;
+  --gris-estado: #6b7384;
+  --vivo-texto: #087568;
+  --ambar-texto: #8a5a12;
+  --rojo-texto: #b53131;
+  --verde-texto: #17713f;
+  --gris-texto: #586070;
+  --rojo-relleno: #d43f3f;
+  --rojo-relleno-hover: #bf3434;
+  --tinte-estado: 10%;
+
+  --lavado: rgba(12, 16, 24, 0.03);
+  --lavado-2: rgba(12, 16, 24, 0.05);
+  --lavado-3: rgba(12, 16, 24, 0.08);
+
+  --sup-degradado: none;
+  --campo: #ffffff;
+  --campo-hover: #ffffff;
+  --pulgar: #ffffff;
+  --boton-2: #ffffff;
+  --boton-2-hover: #f6f7fa;
+  --carril: #f6f7fa;
+  --carril-indicador: #ffffff;
+  --sombra-carril-indicador: 0 0 0 1px var(--linea), 0 1px 2px rgba(12, 16, 24, 0.05);
+  --interruptor-pulgar: #ffffff;
+  --interruptor-borde: rgba(12, 16, 24, 0.14);
+  --sombra-tarjeta: 0 1px 2px rgba(12, 16, 24, 0.04), 0 8px 24px -12px rgba(12, 16, 24, 0.1);
+  --sombra-flotante:
+    0 0 0 1px rgba(12, 16, 24, 0.02), 0 24px 64px -16px rgba(12, 16, 24, 0.24),
+    0 2px 6px rgba(12, 16, 24, 0.06);
+  --sombra-control: 0 1px 2px rgba(12, 16, 24, 0.05);
+  --sombra-boton-acento:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 0 1px rgba(29, 79, 215, 0.6),
+    0 1px 2px rgba(12, 16, 24, 0.12);
+  --sombra-fija: rgba(12, 16, 24, 0.1);
+  --oscurecer: rgba(12, 16, 24, 0.3);
+  --esqueleto: rgba(12, 16, 24, 0.055);
+  --esqueleto-brillo: rgba(255, 255, 255, 0.75);
+  --barra-desplazamiento: rgba(12, 16, 24, 0.14);
+  --barra-desplazamiento-hover: rgba(12, 16, 24, 0.24);
+  --seleccion-texto: rgba(37, 99, 235, 0.2);
+  --punto-mapa: rgba(74, 82, 98, 0.16);
+  --luz-ruta: #2563eb;
+  --resplandor-acento: 0 0 10px rgba(76, 141, 255, 0.55);
+
+  /* Barra lateral oscura: contraste e identidad sobre un contenido claro */
+  --lateral-texto-1: #eef0f4;
+  --lateral-texto-2: #9aa2b1;
+  --lateral-texto-3: #7a8291;
+  --lateral-linea: rgba(255, 255, 255, 0.07);
+  --lateral-lavado: rgba(255, 255, 255, 0.04);
+  --lateral-activo: rgba(76, 141, 255, 0.14);
+  --lateral-acento: #4c8dff;
+  --lateral-contador: rgba(255, 255, 255, 0.06);
+  --lateral-realce: rgba(255, 255, 255, 0.05);
+  --lateral-foco: #6aa1ff;
+
+  --logo-tinta: #5a5c63;
+  --logo-acento: #2563eb;
+  --lateral-logo-tinta: #c9ced8;
+}
+
+/* Alternativa de comparación: barra lateral gris azulado medio en tema claro */
+:root[data-theme="claro"][data-lateral="media"] {
+  --lateral: #dfe4ec;
+  --lateral-texto-1: #0a0c10;
+  --lateral-texto-2: #4a5262;
+  --lateral-texto-3: #636b7c;
+  --lateral-linea: rgba(12, 16, 24, 0.1);
+  --lateral-lavado: rgba(12, 16, 24, 0.045);
+  --lateral-activo: rgba(255, 255, 255, 0.72);
+  --lateral-acento: #2563eb;
+  --lateral-contador: rgba(12, 16, 24, 0.06);
+  --lateral-realce: rgba(255, 255, 255, 0.8);
+  --lateral-foco: #2563eb;
+  --lateral-logo-tinta: #5a5c63;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Puente con Tailwind v4                                                                      */
+/* ------------------------------------------------------------------------------------------ */
+@theme {
+  /* Sin la paleta por defecto de Tailwind: solo existen los colores de Obsidiana. */
+  --color-*: initial;
+
+  /* Escala tipográfica (DISENO.md › Tipografía): text-titulo, text-cifra, text-etiqueta… */
+  --text-titulo: 22px;
+  --text-titulo--line-height: 28px;
+  --text-titulo--letter-spacing: -0.018em;
+  --text-titulo--font-weight: 600;
+
+  --text-titulo-ventana: 17px;
+  --text-titulo-ventana--line-height: 24px;
+  --text-titulo-ventana--letter-spacing: -0.012em;
+  --text-titulo-ventana--font-weight: 600;
+
+  --text-titulo-tarjeta: 14px;
+  --text-titulo-tarjeta--line-height: 20px;
+  --text-titulo-tarjeta--letter-spacing: -0.006em;
+  --text-titulo-tarjeta--font-weight: 600;
+
+  --text-cifra: 34px;
+  --text-cifra--line-height: 38px;
+  --text-cifra--letter-spacing: -0.028em;
+  --text-cifra--font-weight: 550;
+
+  --text-cifra-2: 20px;
+  --text-cifra-2--line-height: 26px;
+  --text-cifra-2--letter-spacing: -0.02em;
+  --text-cifra-2--font-weight: 600;
+
+  --text-cuerpo: 13px;
+  --text-cuerpo--line-height: 20px;
+  --text-cuerpo--letter-spacing: 0em;
+
+  --text-etiqueta: 12px;
+  --text-etiqueta--line-height: 16px;
+  --text-etiqueta--letter-spacing: 0.002em;
+
+  --text-columna: 11.5px;
+  --text-columna--line-height: 16px;
+  --text-columna--letter-spacing: 0.01em;
+
+  --text-codigo: 12.5px;
+  --text-codigo--line-height: 18px;
+
+  --text-paleta: 15px;
+  --text-paleta--line-height: 22px;
+
+  --text-mini: 11px;
+  --text-mini--line-height: 14px;
+  --text-mini--letter-spacing: 0.01em;
+
+  /* Contadores bajo los iconos de la barra lateral plegada. */
+  --text-micro: 10px;
+  --text-micro--line-height: 12px;
+  --text-micro--letter-spacing: 0.01em;
+}
+
+/* Utilidades que leen los tokens en tiempo de ejecución (cambian con el tema). */
+@theme inline {
+  --color-lienzo: var(--lienzo);
+  --color-sup-1: var(--sup-1);
+  --color-sup-2: var(--sup-2);
+  --color-sup-3: var(--sup-3);
+  --color-campo: var(--campo);
+  --color-campo-hover: var(--campo-hover);
+  --color-pulgar: var(--pulgar);
+  --color-boton-2: var(--boton-2);
+  --color-boton-2-hover: var(--boton-2-hover);
+  --color-carril: var(--carril);
+  --color-carril-indicador: var(--carril-indicador);
+  --color-interruptor-pulgar: var(--interruptor-pulgar);
+  --color-interruptor-borde: var(--interruptor-borde);
+  --color-lateral: var(--lateral);
+  --color-linea: var(--linea);
+  --color-linea-fuerte: var(--linea-fuerte);
+  --color-linea-hover: var(--linea-hover);
+  --color-realce: var(--realce);
+  --color-texto-1: var(--texto-1);
+  --color-texto-2: var(--texto-2);
+  --color-texto-3: var(--texto-3);
+  --color-texto-4: var(--texto-4);
+  --color-acento: var(--acento);
+  --color-acento-fuerte: var(--acento-fuerte);
+  --color-acento-suave: var(--acento-suave);
+  --color-acento-tenue: var(--acento-tenue);
+  --color-acento-relleno: var(--acento-relleno);
+  --color-acento-relleno-hover: var(--acento-relleno-hover);
+  --color-acento-texto: var(--acento-texto);
+  --color-sobre-acento: var(--sobre-acento);
+  --color-vivo: var(--vivo);
+  --color-ambar: var(--ambar);
+  --color-rojo: var(--rojo);
+  --color-verde: var(--verde);
+  --color-gris-estado: var(--gris-estado);
+  --color-vivo-texto: var(--vivo-texto);
+  --color-ambar-texto: var(--ambar-texto);
+  --color-rojo-texto: var(--rojo-texto);
+  --color-verde-texto: var(--verde-texto);
+  --color-gris-texto: var(--gris-texto);
+  --color-rojo-relleno: var(--rojo-relleno);
+  --color-rojo-relleno-hover: var(--rojo-relleno-hover);
+  --color-lavado: var(--lavado);
+  --color-lavado-2: var(--lavado-2);
+  --color-lavado-3: var(--lavado-3);
+  --color-esqueleto: var(--esqueleto);
+  --color-oscurecer: var(--oscurecer);
+  --color-lateral-texto-1: var(--lateral-texto-1);
+  --color-lateral-texto-2: var(--lateral-texto-2);
+  --color-lateral-texto-3: var(--lateral-texto-3);
+  --color-lateral-linea: var(--lateral-linea);
+  --color-lateral-lavado: var(--lateral-lavado);
+  --color-lateral-activo: var(--lateral-activo);
+  --color-lateral-acento: var(--lateral-acento);
+  --color-lateral-contador: var(--lateral-contador);
+
+  --radius-mini: var(--r-mini);
+  --radius-elemento: var(--r-elemento);
+  --radius-control: var(--r-control);
+  --radius-interno: var(--r-interno);
+  --radius-tarjeta: var(--r-tarjeta);
+  --radius-ventana: var(--r-ventana);
+  --radius-pildora: var(--r-pildora);
+
+  --shadow-tarjeta: var(--sombra-tarjeta);
+  --shadow-flotante: var(--sombra-flotante);
+  --shadow-control: var(--sombra-control);
+  --shadow-carril-indicador: var(--sombra-carril-indicador);
+  --shadow-boton-acento: var(--sombra-boton-acento);
+
+  --font-sans: var(--fuente-texto);
+  --font-mono: var(--fuente-codigo);
+
+  --ease-salida: var(--curva);
+  --ease-media: var(--curva-media);
+
+  --spacing-control: var(--alto-control);
+  --spacing-control-compacto: var(--alto-control-compacto);
+  --spacing-fila: var(--alto-fila);
+  --spacing-encabezado-tabla: var(--alto-encabezado-tabla);
+  --spacing-superior: var(--alto-superior);
+}
