@@ -79,6 +79,7 @@
 /* --- Píldora --- */
 .ob-pestanas--pildora {
   display: inline-flex;
+  align-self: flex-start;
   gap: 2px;
   height: var(--alto-control);
   padding: 2px;

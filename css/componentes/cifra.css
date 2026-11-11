@@ -36,7 +36,10 @@
 .ob-cifra {
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-width: 0;
+  /* la cifra baja un escalón en cajas estrechas (container query); width: 100% evita que la
+     contención de tamaño la colapse dentro de un flex que se ajusta al contenido */
   container-type: inline-size;
 }
 .ob-cifra__etiqueta {

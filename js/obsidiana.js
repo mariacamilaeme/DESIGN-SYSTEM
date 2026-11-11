@@ -1486,11 +1486,12 @@
   }
   function gruposPorDefecto() {
     var ir = $$(".ob-lateral__enlace[href]").map(function (a) {
-      var ic = a.querySelector(".ob-lateral__icono");
+      var ic = a.querySelector(".ob-lateral__icono") || a.querySelector("svg");
       var texto = a.querySelector(".ob-lateral__texto");
+      var htmlIcono = ic ? (ic.tagName.toLowerCase() === "svg" || !ic.innerHTML ? ic.outerHTML : ic.innerHTML) : "";
       return {
         titulo: (texto ? texto.textContent : a.textContent).trim(),
-        iconoHtml: ic ? ic.innerHTML : "",
+        iconoHtml: htmlIcono.replace(/\sclass="[^"]*"/, ' class="ob-paleta__svg"'),
         claves: a.getAttribute("data-claves") || "",
         detalle: icono("flecha", 14),
         alElegir: function () {

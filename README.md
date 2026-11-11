@@ -16,6 +16,7 @@ Abre `index.html` con doble clic. Es el catálogo vivo: tokens, tipografía, ico
 | `fuentes/` | Inter Variable y Geist Mono Variable con su `fuentes.css` y licencias |
 | `css/` | `obsidiana.css` (punto de entrada), `base.css`, `movimiento.css` y un archivo por componente en `componentes/` |
 | `js/` | `obsidiana.js`: comportamientos en JavaScript puro, sin dependencias (`window.Obsidiana`, atributos `data-ob-*`) |
+| `catalogo.js` | Datos ficticios y demos del catálogo `index.html`; no forma parte del sistema y no se copia |
 | `iconos/` | 158 iconos (135 con microanimación), glifos de estado e indicadores, en SVG suelto, sprite, JavaScript y React |
 | `ilustraciones/` | 12 ilustraciones de estado vacío, animadas una vez al entrar |
 | `react/` | Kit React 19 + Tailwind v4 con los componentes reales de IBC CORE 2.0 y una aplicación de muestra |
